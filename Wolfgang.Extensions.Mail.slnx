@@ -25,7 +25,9 @@
     <File Path=".github/workflows/release.yaml" />
   </Folder>
   <Folder Name="/benchmarks/" />
-  <Folder Name="/examples/" />
+  <Folder Name="/examples/">
+    <Project Path="Wolfgang.Extensions.IAsyncEnumerable.Example/Wolfgang.Extensions.IAsyncEnumerable.Example.csproj" Id="cad5a7dc-0754-45b7-8cb1-28c1b6b90adc" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Wolfgang.Extensions.Mail/Wolfgang.Extensions.Mail.csproj" />
   </Folder>
