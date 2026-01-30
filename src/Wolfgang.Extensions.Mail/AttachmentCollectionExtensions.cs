@@ -55,9 +55,9 @@ public static class AttachmentCollectionExtensions
             throw new ArgumentNullException(nameof(attachments));
         }
 
-        foreach (var address in attachments)
+        foreach (var attachment in attachments)
         {
-            source.Add(address);
+            source.Add(attachment);
         }
     }
 
