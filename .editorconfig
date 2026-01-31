@@ -20,7 +20,8 @@ dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggest
 resharper_csharp_wrap_lines = false
 resharper_local_function_body = expression_body
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
-tab_width = 4dotnet_style_prefer_compound_assignment = true:suggestion
+tab_width = 4
+dotnet_style_prefer_compound_assignment = true:suggestion
 dotnet_diagnostic.CA1707.severity = none
 dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
 
