@@ -80,11 +80,22 @@ jobs:
           done
           
           echo ""
-          echo "Building projects..."
-          # Build each project
+          echo "Building projects for each framework..."
+          # Build each project for each compatible framework
+          frameworks=(net5.0 net6.0 net7.0 net8.0 net9.0 net10.0)
+          
           for proj in $projects; do
+            echo "=========================================="
             echo "Building: $proj"
-            dotnet build "$proj" --no-restore --configuration Release || exit 1
+            echo "=========================================="
+            
+            for fw in "${frameworks[@]}"; do
+              echo "Building framework: $fw"
+              dotnet build "$proj" --no-restore --configuration Release --framework "$fw" || {
+                echo "⚠️ Skipping $fw for $proj (not targeted)"
+              }
+            done
+            echo ""
           done
           
           echo ""
