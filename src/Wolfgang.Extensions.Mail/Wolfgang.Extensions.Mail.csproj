@@ -12,9 +12,9 @@
 		<Version>0.1.0</Version>
 		<Title>$(AssemblyName)</Title>
 		<Authors>Chris Wolfgang</Authors>
-		<Description>A collection of extension methods for DateTime</Description>
+		<Description>A collection of extension methods for working with email and mail-related functionality.</Description>
 		<Copyright>Copyright 2026 Chris Wolfgang </Copyright>
-		<PackageProjectUrl>https://github.com/Chris-Wolfgang/Wolfgang.Extensions.DateTime</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/Chris-Wolfgang/Wolfgang.Extensions.Mail</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<AssemblyVersion>1.0.0</AssemblyVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
