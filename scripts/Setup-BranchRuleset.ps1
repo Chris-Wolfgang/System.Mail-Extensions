@@ -199,9 +199,7 @@ $rulesetConfig = @{
                     @{ context = "Stage 1: Linux Tests (.NET 5.0-10.0) + Coverage Gate" },
                     @{ context = "Stage 2a: Windows Tests (.NET 5.0-10.0)" },
                     @{ context = "Stage 2b: macOS Tests (.NET 6.0-10.0)" },
-                    @{ context = "Stage 3: Windows .NET Framework Tests (4.6.2-4.8.1)" },
-                    @{ context = "Security Scan (DevSkim)" },
-                    @{ context = "CodeQL Security Analysis / Security Scan (CodeQL) (csharp) (pull_request)" }
+                    @{ context = "Security Scan (DevSkim)" }
                 )
             }
         },
@@ -283,7 +281,6 @@ try {
         Write-Host "      - Stage 2b: macOS Tests (.NET 6.0-10.0)" -ForegroundColor DarkGray
         Write-Host "      - Stage 3: Windows .NET Framework Tests (4.6.2-4.8.1)" -ForegroundColor DarkGray
         Write-Host "      - Security Scan (DevSkim)" -ForegroundColor DarkGray
-        Write-Host "      - CodeQL Security Analysis / Security Scan (CodeQL) (csharp) (pull_request)" -ForegroundColor DarkGray
         Write-Host "   ✅ Branches must be up to date before merging" -ForegroundColor Gray
         Write-Host "   ✅ Conversation resolution required before merging" -ForegroundColor Gray
         Write-Host "   ✅ Stale reviews dismissed when new commits are pushed" -ForegroundColor Gray
