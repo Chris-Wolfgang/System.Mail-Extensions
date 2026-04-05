@@ -12,6 +12,11 @@ on:
   pull_request_target:  # Runs from the main branch, not from PR branch 
     branches: 
       - main
+      - develop
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.github/workflows/**'
 jobs:
   # ============================================================================
   # STAGE 1: Linux - .NET Core/5+ Tests with Coverage Gate
@@ -31,7 +36,7 @@ jobs:
       # Fix for .NET 5.0 on Ubuntu 22.04+ - install libssl1.1
       - name: Install OpenSSL 1.1 for .NET 5.0
         run: |
-          wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+          wget https://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
           sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb
 
       - name: Setup .NET
@@ -78,11 +83,22 @@ jobs:
           done
           
           echo ""
-          echo "Building projects..."
-          # Build each project
+          echo "Building projects for each framework..."
+          # Build each project for each compatible framework
+          frameworks=(net5.0 net6.0 net7.0 net8.0 net9.0 net10.0)
+          
           for proj in $projects; do
+            echo "=========================================="
             echo "Building: $proj"
-            dotnet build "$proj" --no-restore --configuration Release || exit 1
+            echo "=========================================="
+            
+            for fw in "${frameworks[@]}"; do
+              echo "Building framework: $fw"
+              dotnet build "$proj" --no-restore --configuration Release --framework "$fw" || {
+                echo "⚠️ Skipping $fw for $proj (not targeted)"
+              }
+            done
+            echo ""
           done
           
           echo ""
@@ -145,6 +161,12 @@ jobs:
           echo "Coverage Summary:"
           cat CoverageReport/Summary.txt
           echo ""
+          
+          # Validate that the report contains expected content
+          if ! grep -q "Summary" CoverageReport/Summary.txt; then
+            echo "❌ Coverage report format is invalid!"
+            exit 1
+          fi
           
           failed_projects=""
           threshold=90

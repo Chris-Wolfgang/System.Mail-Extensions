@@ -1,3 +1,4 @@
-# Repository Template
+# Wolfgang.Extensions.IAsynEnumerable
 
-This repository is intended to be used as a template for creating other repositories.
+A collection of extension methods for the `IAsynEnumerable`
+## Methods
