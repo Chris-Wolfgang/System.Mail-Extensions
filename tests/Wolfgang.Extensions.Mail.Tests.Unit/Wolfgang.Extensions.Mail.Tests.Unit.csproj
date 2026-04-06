@@ -1,305 +1,57 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-		<TargetFrameworks>
-			net462;net47;net471;net472;net48;net481;
-			net5.0;net6.0;net7.0;
-			net8.0;net9.0;net10.0
-		</TargetFrameworks>
-		<Version>1.0.0</Version>
-		<LangVersion>latest</LangVersion>
+    <TargetFrameworks>net462;net47;net471;net472;net48;net481;net5.0;net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
+    <Version>1.0.0</Version>
+    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-	<Copyright>Copyright 2026 Chris Wolfgang</Copyright>
-
+    <Copyright>Copyright 2026 Chris Wolfgang</Copyright>
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+    <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
 
 
 
-	<!-- .NET Framework 4.6.2 -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-
-		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.assert" Version="2.9.3" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.console" Version="2.9.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio" Version="[2.8.2,3.0.0)">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
+  <!-- All TFMs: xunit v2 + coverlet -->
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.assert" Version="2.9.3" />
+    <PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.console" Version="2.9.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.runner.visualstudio" Version="[2.8.2,3.0.0)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
 
 
-	<!-- .NET Framework 4.7.0 -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net47'">
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-
-		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.assert" Version="2.9.3" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.console" Version="2.9.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio" Version="[2.8.2,3.0.0)">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-
-
-	<!-- .NET Framework 4.7.1 -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net471'">
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-
-		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.assert" Version="2.9.3" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.console" Version="2.9.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio" Version="[2.8.2,3.0.0)">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
+  <!-- .NET Framework 4.x and .NET 5.0-7.0: pinned older Test.Sdk -->
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) OR '$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net7.0'">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.13.0]" />
+  </ItemGroup>
 
 
 
-	<!-- .NET Framework 4.7.2 -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-
-		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.assert" Version="2.9.3" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.console" Version="2.9.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-
-	<!-- .NET Framework 4.8.0 -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-
-		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.assert" Version="2.9.3" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.console" Version="2.9.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-
-
-	<!-- .NET Framework 4.8.1 -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net481'">
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-
-		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.assert" Version="2.9.3" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.console" Version="2.9.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
+  <!-- .NET 8.0+: latest Test.Sdk -->
+  <ItemGroup Condition="!$(TargetFramework.StartsWith('net4')) AND '$(TargetFramework)' != 'net5.0' AND '$(TargetFramework)' != 'net6.0' AND '$(TargetFramework)' != 'net7.0'">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+  </ItemGroup>
 
 
 
-	<!-- .NET Framework 5.0 -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.13.0]" />
-
-		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.assert" Version="2.9.3" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.console" Version="2.9.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-
-
-	<!-- .NET Framework 6.0 -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.13.0]" />
-
-		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.assert" Version="2.9.3" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.console" Version="2.9.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-
-	<!-- .NET Framework 7.0 -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.13.0]" />
-
-		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.assert" Version="2.9.3" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.console" Version="2.9.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-
-	<!-- .NET Framework 8.0 -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-
-		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.assert" Version="2.9.3" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.console" Version="2.9.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-
-
-	<!-- .NET Framework 9.0 -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-
-		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.assert" Version="2.9.3" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.console" Version="2.9.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-
-
-	<!-- .NET Framework 10.0 -->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-
-		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.assert" Version="2.9.3" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.console" Version="2.9.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\src\Wolfgang.Extensions.Mail\Wolfgang.Extensions.Mail.csproj" />
-	</ItemGroup>
-
-
-
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Wolfgang.Extensions.Mail\Wolfgang.Extensions.Mail.csproj" />
+  </ItemGroup>
 
 </Project>
