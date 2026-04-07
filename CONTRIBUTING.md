@@ -37,7 +37,7 @@ You can contribute in several ways:
    - Building the project
    - Running automated tests
    - Checking code style and linting
-   - Running static analysis with multiple static analyzers (see list below)
+   - Running static analysis
 
    **It is important to make sure that all CI steps pass before your PR can be merged.**
    - If any CI step fails, please review the error messages and update your PR as needed.
@@ -47,98 +47,32 @@ You can contribute in several ways:
 
 ## Code Quality Standards
 
-This project maintains **extremely high code quality standards** through multiple layers of static analysis and automated enforcement.
+This project aims to maintain **high code quality standards** through automated checks in the build and CI pipeline.
 
-### The 7 Analyzers
+### Static Analysis and CI Enforcement
 
-All code is analyzed by these tools during build:
+Code quality enforcement in this repository is based on the tools and checks that are actually configured in the project and workflow files.
 
-1. **Microsoft.CodeAnalysis.NetAnalyzers** (Built-in .NET SDK)
-   - Correctness, performance, and security rules
-   - Latest analysis level enabled
+Depending on the current repository configuration, pull requests may be validated with checks such as:
 
-2. **Roslynator.Analyzers**
-   - 500+ refactoring and code quality rules
-   - Advanced C# pattern detection
+1. **.NET SDK analyzers and compiler warnings**
+   - Correctness, reliability, and maintainability checks provided by the SDK
+   - Warnings surfaced during restore/build
 
-3. **AsyncFixer**
-   - Detects async/await anti-patterns
-   - Ensures proper `ConfigureAwait()` usage
-   - Prevents fire-and-forget async calls
+2. **Automated tests**
+   - Validation that changes do not break expected behavior
+   - Coverage and test execution requirements when configured
 
-4. **Microsoft.VisualStudio.Threading.Analyzers**
-   - Thread safety enforcement
-   - Async method naming conventions
-   - Deadlock prevention
+3. **Formatting, style, and linting rules**
+   - Enforcement driven by repository configuration such as `.editorconfig`
+   - Helps keep code consistent and reviewable
 
-5. **Microsoft.CodeAnalysis.BannedApiAnalyzers**
-   - Blocks usage of APIs listed in `BannedSymbols.txt`
-   - Enforces async-first patterns (see below)
+4. **CI and security scanning**
+   - Additional checks may run through the configured GitHub Actions workflows
+   - Contributors should treat the repository configuration and CI results as the source of truth for what is enforced
 
-6. **Meziantou.Analyzer**
-   - Comprehensive code quality checks
-   - Performance optimizations
-   - Best practice enforcement
-
-7. **SonarAnalyzer.CSharp**
-   - Industry-standard code analysis
-   - Security vulnerability detection
-   - Code smell identification
-
-### Async-First Enforcement
-
-This library **prohibits synchronous blocking calls** via `BannedSymbols.txt`. The following APIs are **banned**:
-
-#### Blocking Async Operations
-```csharp
-// Banned - blocks threads
-task.Wait();
-task.Result;
-Task.WaitAll(tasks);
-
-// Required - truly async
-await task;
-await Task.WhenAll(tasks);
-```
-
-#### Synchronous I/O
-```csharp
-// Banned
-File.ReadAllText(path);
-stream.Read(buffer, 0, count);
-streamReader.ReadLine();
-
-// Required
-await File.ReadAllTextAsync(path);
-await stream.ReadAsync(buffer, 0, count);
-await streamReader.ReadLineAsync();
-```
-
-#### Thread Blocking
-```csharp
-// Banned
-Thread.Sleep(1000);
-Console.ReadLine();
-
-// Required
-await Task.Delay(1000);
-// Avoid blocking console reads in async code
-```
-
-#### Obsolete/Insecure APIs
-```csharp
-// Banned
-var client = new WebClient();
-var formatter = new BinaryFormatter();
-var now = DateTime.Now; // Use DateTimeOffset
-
-// Required
-var client = new HttpClient();
-// Use System.Text.Json.JsonSerializer
-var now = DateTimeOffset.UtcNow;
-```
-
-**Why?** This ensures all code is **truly asynchronous** and **non-blocking**, providing optimal performance in async contexts.
+If a tool, analyzer, or banned API list is not configured in the repository, contributors should not assume it is enforced automatically.
+Always check the current project files and workflow definitions when in doubt.
 
 ---
 
@@ -154,11 +88,9 @@ var now = DateTimeOffset.UtcNow;
 # Restore NuGet packages
 dotnet restore
 
-# Build in Release configuration (enforces all analyzers)
+# Build in Release configuration
 dotnet build --configuration Release
 ```
-
-**Note:** Release builds treat all analyzer warnings as errors (`<TreatWarningsAsErrors>true</TreatWarningsAsErrors>`). Debug builds allow warnings to facilitate development.
 
 ### Run Tests
 
@@ -212,7 +144,7 @@ View the complete configuration in [.editorconfig](.editorconfig).
 - Write clear, concise commit messages.
 - Add relevant tests for new features or bug fixes.
 - Document any public APIs with XML documentation comments.
-- Ensure all analyzer warnings are addressed (they're treated as errors in Release builds).
+- Ensure all analyzer warnings are addressed.
 - Use async/await patterns - no blocking calls allowed.
 - Include `CancellationToken` parameters in async methods where appropriate.
 
