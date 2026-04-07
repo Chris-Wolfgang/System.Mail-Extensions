@@ -61,7 +61,9 @@ message.Bcc.AddRange(mailAddressList);
 
 - .NET Framework 4.6.2+
 - .NET Standard 2.0
-- .NET 6.0
+- .NET Standard 2.1
+- .NET 8.0
+- .NET 9.0
 - .NET 10.0
 
 ## License
