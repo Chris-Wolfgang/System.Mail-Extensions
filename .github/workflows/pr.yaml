@@ -638,12 +638,11 @@ jobs:
             9.0.x
             10.0.x
 
-      - name: Restore and build (exclude .NET Framework 4.x projects)
+      - name: Restore and build (macOS-compatible TFMs only)
         run: |
           echo "Finding all projects in solution..."
 
           # Find all .csproj, .vbproj, and .fsproj files
-          # Exclude those with 'dotnet4' or 'DotNet4' in the path (case-insensitive)
           projects=$(find . -type f \( -name "*.csproj" -o -name "*.vbproj" -o -name "*.fsproj" \) | grep -iv "dotnet4")
 
           if [ -z "$projects" ]; then
@@ -652,24 +651,27 @@ jobs:
           fi
 
           echo "=========================================="
-          echo "Projects to build (excluding .NET Framework 4.x):"
+          echo "Projects to build (macOS-compatible TFMs only):"
           echo "=========================================="
           echo "$projects"
           echo ""
 
-          # Restore each project
-          echo "Restoring projects..."
+          # macOS-compatible frameworks (net6.0+ and netstandard)
+          macos_frameworks=("net6.0" "net7.0" "net8.0" "net9.0" "net10.0" "netstandard2.0" "netstandard2.1")
+
           for proj in $projects; do
             echo "Restoring: $proj"
             dotnet restore "$proj" || exit 1
-          done
 
-          echo ""
-          echo "Building projects..."
-          # Build each project
-          for proj in $projects; do
-            echo "Building: $proj"
-            dotnet build "$proj" --no-restore --configuration Release || exit 1
+            # Extract TFMs from project file (macOS-compatible grep)
+            proj_tfms=$(perl -ne 'while (/<TargetFrameworks?>([^<]+)<\/TargetFrameworks?>/g) { print "$1\n"; }' "$proj" | tr ';' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | grep -v '^$' || true)
+
+            for fw in "${macos_frameworks[@]}"; do
+              if echo "$proj_tfms" | grep -qx "$fw"; then
+                echo "Building: $proj --framework $fw"
+                dotnet build "$proj" --no-restore --configuration Release --framework "$fw" || exit 1
+              fi
+            done
           done
 
           echo ""
@@ -702,7 +704,7 @@ jobs:
 
             # Extract target frameworks from the project file
             # Only include .NET 6.0+ (ARM64 compatible on macOS)
-            frameworks=$(grep -oP '<TargetFramework[s]?>\K[^<]+' "$test_proj" | tr ';' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | grep -E '^net(6\.0|7\.0|8\.0|9\.0|10\.0)$' || true)
+            frameworks=$(perl -ne 'while (/<TargetFrameworks?>([^<]+)<\/TargetFrameworks?>/g) { print "$1\n"; }' "$test_proj" | tr ';' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | grep -E '^net(6\.0|7\.0|8\.0|9\.0|10\.0)$' || true)
 
             if [ -z "$frameworks" ]; then
               echo "⊘ Skipping: No compatible .NET 6.0-10.0 target frameworks found (ARM64 required)"
@@ -903,7 +905,7 @@ jobs:
           $testProjects | ForEach-Object { Write-Host $_.FullName -ForegroundColor White }
           Write-Host ""
 
-          $frameworks = @('net462', 'net472', 'net48', 'net481')
+          $frameworks = @('net462', 'net47', 'net471', 'net472', 'net48', 'net481')
 
           foreach ($testProj in $testProjects) {
             Write-Host "==========================================" -ForegroundColor Cyan
