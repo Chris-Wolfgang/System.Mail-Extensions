@@ -20,6 +20,8 @@ public class MailAddressCollectionExtensionsTests
         Assert.Equal("source", ex.ParamName);
     }
 
+
+
     [Fact]
     public void AddRange_Enumerable_string_when_addresses_is_null_throws_ArgumentNullException()
     {
@@ -30,6 +32,8 @@ public class MailAddressCollectionExtensionsTests
         );
         Assert.Equal("addresses", ex.ParamName);
     }
+
+
 
     [Fact]
     public void AddRange_Enumerable_string_adds_all_in_order()
@@ -43,6 +47,8 @@ public class MailAddressCollectionExtensionsTests
         Assert.Equal("a2@example.com", actual[1].Address);
     }
 
+
+
     [Fact]
     public void AddRange_Enumerable_string_when_addresses_is_empty_does_not_change_source()
     {
@@ -50,6 +56,8 @@ public class MailAddressCollectionExtensionsTests
         MailAddressCollectionExtensions.AddRange(msg.To, Enumerable.Empty<string>());
         Assert.Equal(0, msg.To.Count);
     }
+
+
 
     // ---------- AddRange(params string[]) ----------
 
@@ -63,6 +71,8 @@ public class MailAddressCollectionExtensionsTests
         Assert.Equal("source", ex.ParamName);
     }
 
+
+
     [Fact]
     public void AddRange_params_string_when_addresses_is_null_throws_ArgumentNullException()
     {
@@ -73,6 +83,8 @@ public class MailAddressCollectionExtensionsTests
         );
         Assert.Equal("addresses", ex.ParamName);
     }
+
+
 
     [Fact]
     public void AddRange_params_string_adds_all_in_order()
@@ -86,6 +98,8 @@ public class MailAddressCollectionExtensionsTests
         Assert.Equal("a2@example.com", actual[1].Address);
     }
 
+
+
     [Fact]
     public void AddRange_params_string_when_passed_empty_list_does_not_change_source()
     {
@@ -93,6 +107,8 @@ public class MailAddressCollectionExtensionsTests
         MailAddressCollectionExtensions.AddRange(msg.To, Array.Empty<string>());
         Assert.Equal(0, msg.To.Count);
     }
+
+
 
     // ---------- AddRange(IEnumerable<MailAddress>) ----------
 
@@ -107,6 +123,8 @@ public class MailAddressCollectionExtensionsTests
         Assert.Equal("source", ex.ParamName);
     }
 
+
+
     [Fact]
     public void AddRange_Enumerable_MailAddress_when_addresses_is_null_throws_ArgumentNullException()
     {
@@ -117,6 +135,8 @@ public class MailAddressCollectionExtensionsTests
         );
         Assert.Equal("addresses", ex.ParamName);
     }
+
+
 
     [Fact]
     public void AddRange_Enumerable_MailAddress_adds_all_in_order()
@@ -133,6 +153,8 @@ public class MailAddressCollectionExtensionsTests
         Assert.Equal("a2@example.com", actual[1].Address);
     }
 
+
+
     [Fact]
     public void AddRange_Enumerable_MailAddress_when_addresses_is_empty_does_not_change_source()
     {
@@ -140,6 +162,8 @@ public class MailAddressCollectionExtensionsTests
         MailAddressCollectionExtensions.AddRange(msg.To, Enumerable.Empty<MailAddress>());
         Assert.Equal(0, msg.To.Count);
     }
+
+
 
     // ---------- AddRange(params MailAddress[]) ----------
 
@@ -154,6 +178,8 @@ public class MailAddressCollectionExtensionsTests
         Assert.Equal("source", ex.ParamName);
     }
 
+
+
     [Fact]
     public void AddRange_params_MailAddress_when_addresses_is_null_throws_ArgumentNullException()
     {
@@ -164,6 +190,8 @@ public class MailAddressCollectionExtensionsTests
         );
         Assert.Equal("addresses", ex.ParamName);
     }
+
+
 
     [Fact]
     public void AddRange_params_MailAddress_adds_all_in_order()
@@ -179,6 +207,8 @@ public class MailAddressCollectionExtensionsTests
         Assert.Equal("a1@example.com", actual[0].Address);
         Assert.Equal("a2@example.com", actual[1].Address);
     }
+
+
 
     [Fact]
     public void AddRange_params_MailAddress_when_passed_empty_list_does_not_change_source()

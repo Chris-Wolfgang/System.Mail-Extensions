@@ -37,7 +37,7 @@ public class AttachmentCollectionExtensionsTests
 
 
     [Fact]
-    public void AddRange_params_Attachment_Adds_All_In_Order()
+    public void AddRange_params_Attachment_adds_all_in_order()
     {
         using var msg = new MailMessage();
         using var a1 = CreateAttachment("a1.txt");
