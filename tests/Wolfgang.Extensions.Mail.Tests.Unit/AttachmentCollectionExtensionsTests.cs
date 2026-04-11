@@ -58,7 +58,7 @@ public class AttachmentCollectionExtensionsTests
     {
         using var msg = new MailMessage();
         msg.Attachments.AddRange(Array.Empty<Attachment>());
-        Assert.Equal(0, msg.Attachments.Count);
+        Assert.Empty(msg.Attachments);
     }
 
 
@@ -121,7 +121,7 @@ public class AttachmentCollectionExtensionsTests
     {
         using var msg = new MailMessage();
         msg.Attachments.AddRange(Array.Empty<string>());
-        Assert.Equal(0, msg.Attachments.Count);
+        Assert.Empty(msg.Attachments);
     }
 
 
@@ -177,7 +177,7 @@ public class AttachmentCollectionExtensionsTests
     {
         using var msg = new MailMessage();
         msg.Attachments.AddRange(Enumerable.Empty<Attachment>());
-        Assert.Equal(0, msg.Attachments.Count);
+        Assert.Empty(msg.Attachments);
     }
 
 
@@ -239,7 +239,7 @@ public class AttachmentCollectionExtensionsTests
     {
         using var msg = new MailMessage();
         msg.Attachments.AddRange(Enumerable.Empty<string>());
-        Assert.Equal(0, msg.Attachments.Count);
+        Assert.Empty(msg.Attachments);
     }
 
 

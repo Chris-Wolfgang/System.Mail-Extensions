@@ -54,7 +54,7 @@ public class MailAddressCollectionExtensionsTests
     {
         using var msg = new MailMessage();
         MailAddressCollectionExtensions.AddRange(msg.To, Enumerable.Empty<string>());
-        Assert.Equal(0, msg.To.Count);
+        Assert.Empty(msg.To);
     }
 
 
@@ -105,7 +105,7 @@ public class MailAddressCollectionExtensionsTests
     {
         using var msg = new MailMessage();
         MailAddressCollectionExtensions.AddRange(msg.To, Array.Empty<string>());
-        Assert.Equal(0, msg.To.Count);
+        Assert.Empty(msg.To);
     }
 
 
@@ -160,7 +160,7 @@ public class MailAddressCollectionExtensionsTests
     {
         using var msg = new MailMessage();
         MailAddressCollectionExtensions.AddRange(msg.To, Enumerable.Empty<MailAddress>());
-        Assert.Equal(0, msg.To.Count);
+        Assert.Empty(msg.To);
     }
 
 
@@ -215,6 +215,6 @@ public class MailAddressCollectionExtensionsTests
     {
         using var msg = new MailMessage();
         MailAddressCollectionExtensions.AddRange(msg.To, Array.Empty<MailAddress>());
-        Assert.Equal(0, msg.To.Count);
+        Assert.Empty(msg.To);
     }
 }
