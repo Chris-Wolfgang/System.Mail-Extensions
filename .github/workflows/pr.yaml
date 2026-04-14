@@ -26,7 +26,7 @@ env:
   CODECOV_MINIMUM: 90
   
 on:
-  pull_request_target:  # Runs from the main branch, not from PR branch
+  pull_request:
     branches:
       - main
       - develop
