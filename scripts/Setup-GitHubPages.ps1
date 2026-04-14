@@ -49,7 +49,7 @@
 [CmdletBinding()]
 param(
     [Parameter()]
-    [string]$Repository = "{{GITHUB_USERNAME}}/{{REPO_NAME}}",
+    [string]$Repository = "Chris-Wolfgang/System.Mail-Extensions",
     
     [Parameter()]
     [switch]$EnablePages,
@@ -211,7 +211,7 @@ try {
 }
 
 # Determine repository
-if ($Repository -eq "{{GITHUB_USERNAME}}/{{REPO_NAME}}" -or -not $Repository) {
+if ($Repository -eq "Chris-Wolfgang/System.Mail-Extensions" -or -not $Repository) {
     # Placeholders not replaced or no repository specified - auto-detect
     Write-Info "Detecting current repository..."
     try {
@@ -219,7 +219,7 @@ if ($Repository -eq "{{GITHUB_USERNAME}}/{{REPO_NAME}}" -or -not $Repository) {
         $Repository = $repoInfo.nameWithOwner
         Write-Success "Using repository: $Repository"
     } catch {
-        if ($Repository -eq "{{GITHUB_USERNAME}}/{{REPO_NAME}}") {
+        if ($Repository -eq "Chris-Wolfgang/System.Mail-Extensions") {
             Write-Error-Custom "Could not detect repository. Please run the setup script (scripts/setup.ps1 or scripts/setup.sh) first to replace placeholders, or specify -Repository parameter."
         } else {
             Write-Error-Custom "Could not detect repository. Please run from within a git repository or specify -Repository parameter."
@@ -321,11 +321,11 @@ if ($needsDocFxConfig) {
     
     # Create replacements hashtable
     $replacements = @{
-        '{{PROJECT_NAME}}' = $projectName
+        'Wolfgang.Extensions.Mail' = $projectName
         '{{PROJECT_DESCRIPTION}}' = $projectDescription
-        '{{PACKAGE_NAME}}' = $packageName
-        '{{GITHUB_REPO_URL}}' = $githubRepoUrl
-        '{{DOCS_URL}}' = $docsUrl
+        'Wolfgang.Extensions.Mail' = $packageName
+        'https://github.com/Chris-Wolfgang/System.Mail-Extensions' = $githubRepoUrl
+        'https://chris-wolfgang.github.io/System.Mail-Extensions' = $docsUrl
     }
     
     # Files to update
