@@ -25,7 +25,13 @@
     <File Path=".github/workflows/release.yaml" />
   </Folder>
   <Folder Name="/benchmarks/" />
-  <Folder Name="/examples/" />
-  <Folder Name="/src/" />
-  <Folder Name="/tests/" />
+  <Folder Name="/examples/">
+    <Project Path="Wolfgang.Extensions.IAsyncEnumerable.Example/Wolfgang.Extensions.IAsyncEnumerable.Example.csproj" Id="cad5a7dc-0754-45b7-8cb1-28c1b6b90adc" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Wolfgang.Extensions.Mail/Wolfgang.Extensions.Mail.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Wolfgang.Extensions.Mail.Tests.Unit/Wolfgang.Extensions.Mail.Tests.Unit.csproj" Id="f132f60b-87f5-4e4a-a13a-c49311d2586d" />
+  </Folder>
 </Solution>
