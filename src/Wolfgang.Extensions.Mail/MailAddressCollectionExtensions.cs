@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mail;
+using System.Text;
 
 namespace Wolfgang.Extensions.Mail;
 
@@ -113,5 +115,70 @@ public static class MailAddressCollectionExtensions
     )
     // ReSharper disable once InvokeAsExtensionMember
         => AddRange(source, (IEnumerable<MailAddress>)addresses);
+
+
+
+    /// <summary>
+    /// Returns a formatted string representation of all addresses in the
+    /// <see cref="MailAddressCollection"/>, using RFC 5322 display name quoting.
+    /// </summary>
+    /// <param name="source">The <see cref="MailAddressCollection"/> to format.</param>
+    /// <param name="separator">The separator between addresses. Defaults to <c>"; "</c>.</param>
+    /// <returns>A formatted string of all addresses.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+    /// <example>
+    /// <code>
+    /// using var message = new MailMessage();
+    /// message.To.Add(new MailAddress("alice@example.com", "Alice Smith"));
+    /// message.To.Add(new MailAddress("bob@example.com"));
+    /// string formatted = message.To.ToFormattedString();
+    /// // "Alice Smith" &lt;alice@example.com&gt;; bob@example.com
+    /// </code>
+    /// </example>
+    // ReSharper disable once UnusedMember.Global
+    public static string ToFormattedString
+    (
+        this MailAddressCollection source,
+        string separator = "; "
+    )
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        return string.Join
+        (
+            separator,
+            source.Select(FormatMailAddress)
+        );
+    }
+
+
+
+    /// <summary>
+    /// Returns a formatted RFC 5322 string representation of a single <see cref="MailAddress"/>.
+    /// </summary>
+    /// <param name="address">The <see cref="MailAddress"/> to format.</param>
+    /// <returns>A formatted string such as <c>"Display Name" &lt;email@example.com&gt;</c>.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="address"/> is null.</exception>
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static string FormatMailAddress
+    (
+        this MailAddress address
+    )
+    {
+        if (address == null)
+        {
+            throw new ArgumentNullException(nameof(address));
+        }
+
+        if (string.IsNullOrEmpty(address.DisplayName))
+        {
+            return address.Address;
+        }
+
+        return $"\"{address.DisplayName}\" <{address.Address}>";
+    }
 
 }
