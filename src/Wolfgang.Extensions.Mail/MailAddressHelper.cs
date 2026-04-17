@@ -58,7 +58,7 @@ public static class MailAddressHelper
             result = new MailAddress(address);
             return true;
         }
-        catch (FormatException)
+        catch (Exception ex) when (ex is FormatException || ex is ArgumentException)
         {
             result = null;
             return false;
@@ -103,7 +103,7 @@ public static class MailAddressHelper
             result = new MailAddress(address, displayName);
             return true;
         }
-        catch (FormatException)
+        catch (Exception ex) when (ex is FormatException || ex is ArgumentException)
         {
             result = null;
             return false;
