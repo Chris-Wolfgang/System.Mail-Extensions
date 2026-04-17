@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
-using System.Text;
 
 namespace Wolfgang.Extensions.Mail;
 
@@ -178,7 +177,10 @@ public static class MailAddressCollectionExtensions
             return address.Address;
         }
 
-        return $"\"{address.DisplayName}\" <{address.Address}>";
+        var escapedName = address.DisplayName
+            .Replace("\\", "\\\\")
+            .Replace("\"", "\\\"");
+        return $"\"{escapedName}\" <{address.Address}>";
     }
 
 }
