@@ -180,6 +180,26 @@ public class EmlParserTests
 
 
 
+    [Fact]
+    public void Parse_when_subject_is_q_encoded_decodes_it()
+    {
+        // "Héllo" in UTF-8 Q-encoding: H=C3=A9llo
+        var eml = BuildEml
+        (
+            "From: sender@example.com",
+            "To: to@example.com",
+            "Subject: =?UTF-8?Q?H=C3=A9llo?=",
+            "",
+            "Body"
+        );
+
+        using var msg = EmlParser.Parse(eml);
+
+        Assert.Equal("Héllo", msg.Subject);
+    }
+
+
+
     // ---------- Base64 body ----------
 
     [Fact]
