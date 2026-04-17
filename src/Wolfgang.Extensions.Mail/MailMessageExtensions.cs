@@ -383,11 +383,17 @@ public static class MailMessageExtensions
                 }
 
                 var closedMethod = sendAsyncMethod.MakeGenericMethod(syncAdapterType);
-                closedMethod.Invoke
+                var result = closedMethod.Invoke
                 (
                     source,
                     new[] { mailWriter, true, false, (object)CancellationToken.None }
                 );
+
+                // Handle the return value in case it's a Task/ValueTask
+                if (result is Task task)
+                {
+                    task.GetAwaiter().GetResult();
+                }
             }
         }
         finally
@@ -498,7 +504,7 @@ public static class MailMessageExtensions
     {
         var clonedStream = CloneStream(source.ContentStream);
 
-        var clone = new Attachment(clonedStream, source.ContentType)
+        var clone = new Attachment(clonedStream, new ContentType(source.ContentType.ToString()))
         {
             Name = source.Name,
             TransferEncoding = source.TransferEncoding
@@ -532,7 +538,7 @@ public static class MailMessageExtensions
     {
         var clonedStream = CloneStream(source.ContentStream);
 
-        var clone = new AlternateView(clonedStream, source.ContentType)
+        var clone = new AlternateView(clonedStream, new ContentType(source.ContentType.ToString()))
         {
             TransferEncoding = source.TransferEncoding,
             BaseUri = source.BaseUri
@@ -560,7 +566,7 @@ public static class MailMessageExtensions
     {
         var clonedStream = CloneStream(source.ContentStream);
 
-        var clone = new LinkedResource(clonedStream, source.ContentType)
+        var clone = new LinkedResource(clonedStream, new ContentType(source.ContentType.ToString()))
         {
             TransferEncoding = source.TransferEncoding,
             ContentLink = source.ContentLink
