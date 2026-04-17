@@ -349,7 +349,8 @@ public static class EmlParser
                 var fileName = ExtractFileName(contentDisposition, partContentType) ?? "attachment.bin";
                 var attachmentBytes = DecodeBodyBytes(partBody, partTransferEncoding);
                 var stream = new MemoryStream(attachmentBytes, writable: false);
-                var attachment = new Attachment(stream, fileName);
+                var mimeType = partContentType.Split(';')[0].Trim();
+                var attachment = new Attachment(stream, fileName, mimeType);
 
                 if (partHeaders.TryGetValue("content-id", out var cid))
                 {
@@ -539,17 +540,29 @@ public static class EmlParser
                         var bytes = Convert.FromBase64String(encodedText);
                         return enc.GetString(bytes);
                     }
-                    else // Q encoding
+                    else // Q encoding — collect bytes for proper multi-byte decoding
                     {
-                        var decoded = encodedText
-                            .Replace('_', ' ');
-                        decoded = Regex.Replace
-                        (
-                            decoded,
-                            @"=([0-9A-Fa-f]{2})",
-                            hex => ((char)Convert.ToByte(hex.Groups[1].Value, 16)).ToString()
-                        );
-                        return decoded;
+                        var qText = encodedText.Replace('_', ' ');
+                        var byteList = new List<byte>();
+
+                        for (var i = 0; i < qText.Length; i++)
+                        {
+                            if (qText[i] == '=' && i + 2 < qText.Length
+                                && IsHexChar(qText[i + 1]) && IsHexChar(qText[i + 2]))
+                            {
+                                byteList.Add(Convert.ToByte(qText.Substring(i + 1, 2), 16));
+                                i += 2;
+                            }
+                            else
+                            {
+                                foreach (var b in enc.GetBytes(new[] { qText[i] }))
+                                {
+                                    byteList.Add(b);
+                                }
+                            }
+                        }
+
+                        return enc.GetString(byteList.ToArray());
                     }
                 }
                 catch
