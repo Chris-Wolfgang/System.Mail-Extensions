@@ -10,7 +10,9 @@ namespace Wolfgang.Extensions.Mail.Validation;
 public sealed class ValidationResult
 {
 
-    private readonly List<ValidationIssue> _issues;
+    private readonly IReadOnlyList<ValidationIssue> _errors;
+    private readonly IReadOnlyList<ValidationIssue> _warnings;
+    private readonly IReadOnlyList<ValidationIssue> _allIssues;
 
 
 
@@ -23,7 +25,10 @@ public sealed class ValidationResult
         List<ValidationIssue> issues
     )
     {
-        _issues = issues ?? new List<ValidationIssue>();
+        var allIssues = issues ?? new List<ValidationIssue>();
+        _allIssues = allIssues.AsReadOnly();
+        _errors = allIssues.Where(i => i.Severity == ValidationSeverity.Error).ToList().AsReadOnly();
+        _warnings = allIssues.Where(i => i.Severity == ValidationSeverity.Warning).ToList().AsReadOnly();
     }
 
 
@@ -32,28 +37,26 @@ public sealed class ValidationResult
     /// Gets a value indicating whether the message passed validation.
     /// Returns <c>true</c> when there are no errors (warnings do not affect validity).
     /// </summary>
-    public bool IsValid => !Errors.Any();
+    public bool IsValid => _errors.Count == 0;
 
 
 
     /// <summary>
     /// Gets all validation issues with <see cref="ValidationSeverity.Error"/> severity.
     /// </summary>
-    public IReadOnlyList<ValidationIssue> Errors =>
-        _issues.Where(i => i.Severity == ValidationSeverity.Error).ToList().AsReadOnly();
+    public IReadOnlyList<ValidationIssue> Errors => _errors;
 
 
 
     /// <summary>
     /// Gets all validation issues with <see cref="ValidationSeverity.Warning"/> severity.
     /// </summary>
-    public IReadOnlyList<ValidationIssue> Warnings =>
-        _issues.Where(i => i.Severity == ValidationSeverity.Warning).ToList().AsReadOnly();
+    public IReadOnlyList<ValidationIssue> Warnings => _warnings;
 
 
 
     /// <summary>
     /// Gets all validation issues regardless of severity.
     /// </summary>
-    public IReadOnlyList<ValidationIssue> AllIssues => _issues.AsReadOnly();
+    public IReadOnlyList<ValidationIssue> AllIssues => _allIssues;
 }
