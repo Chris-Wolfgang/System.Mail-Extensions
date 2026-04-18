@@ -219,58 +219,11 @@ public static class MailMessageExtensions
 
         var clone = new MailMessage();
 
-        // Scalar properties
-        clone.Subject = source.Subject;
-        clone.Body = source.Body;
-        clone.IsBodyHtml = source.IsBodyHtml;
-        clone.Priority = source.Priority;
-        clone.DeliveryNotificationOptions = source.DeliveryNotificationOptions;
-        clone.BodyEncoding = source.BodyEncoding;
-        clone.SubjectEncoding = source.SubjectEncoding;
-        clone.HeadersEncoding = source.HeadersEncoding;
-        clone.BodyTransferEncoding = source.BodyTransferEncoding;
-
-        // MailAddress properties
-        if (source.From != null)
-        {
-            clone.From = CloneMailAddress(source.From)!;
-        }
-
-        if (source.Sender != null)
-        {
-            clone.Sender = CloneMailAddress(source.Sender)!;
-        }
-
-        // Address collections
-        CopyAddressCollection(source.To, clone.To);
-        CopyAddressCollection(source.CC, clone.CC);
-        CopyAddressCollection(source.Bcc, clone.Bcc);
-        CopyAddressCollection(source.ReplyToList, clone.ReplyToList);
-
-        // Headers
-        foreach (string key in source.Headers)
-        {
-            var values = source.Headers.GetValues(key);
-            if (values != null)
-            {
-                foreach (var value in values)
-                {
-                    clone.Headers.Add(key, value);
-                }
-            }
-        }
-
-        // Attachments
-        foreach (var attachment in source.Attachments)
-        {
-            clone.Attachments.Add(CloneAttachment(attachment));
-        }
-
-        // AlternateViews
-        foreach (var view in source.AlternateViews)
-        {
-            clone.AlternateViews.Add(CloneAlternateView(view));
-        }
+        CopyScalarProperties(source, clone);
+        CopyAddresses(source, clone);
+        CopyHeaders(source, clone);
+        CopyAttachments(source, clone);
+        CopyAlternateViews(source, clone);
 
         return clone;
     }
@@ -319,95 +272,8 @@ public static class MailMessageExtensions
             );
         }
 
-        var mailWriterType = typeof(SmtpClient).Assembly.GetType("System.Net.Mail.MailWriter");
-        if (mailWriterType == null)
-        {
-            throw new InvalidOperationException
-            (
-                "Unable to locate the internal MailWriter type. " +
-                "This runtime version may not support MIME serialization via reflection."
-            );
-        }
-
         using var stream = new MemoryStream();
-
-        // Create MailWriter instance — constructor signature varies by runtime
-        var mailWriter = CreateMailWriter(mailWriterType, stream);
-
-        try
-        {
-            // Try synchronous Send first (.NET Framework / .NET Core / .NET 5-9)
-            var sendMethod = typeof(MailMessage).GetMethod
-            (
-                "Send",
-                BindingFlags.Instance | BindingFlags.NonPublic
-            );
-
-            if (sendMethod != null)
-            {
-                sendMethod.Invoke(source, new[] { mailWriter, true, false });
-            }
-            else
-            {
-                // Fall back to SendAsync<TIOAdapter> (.NET 10+)
-                // SendAsync is generic over TIOAdapter : IReadWriteAdapter
-                // Use SyncReadWriteAdapter for synchronous invocation
-                var sendAsyncMethod = typeof(MailMessage).GetMethod
-                (
-                    "SendAsync",
-                    BindingFlags.Instance | BindingFlags.NonPublic
-                );
-
-                if (sendAsyncMethod == null)
-                {
-                    throw new InvalidOperationException
-                    (
-                        "Unable to locate the internal MailMessage.Send or SendAsync method. " +
-                        "This runtime version may not support MIME serialization via reflection."
-                    );
-                }
-
-                // Resolve the SyncReadWriteAdapter type for the generic parameter
-                var syncAdapterType = typeof(SmtpClient).Assembly.GetType
-                (
-                    "System.Net.SyncReadWriteAdapter"
-                );
-
-                if (syncAdapterType == null)
-                {
-                    throw new InvalidOperationException
-                    (
-                        "Unable to locate the internal SyncReadWriteAdapter type. " +
-                        "This runtime version may not support MIME serialization via reflection."
-                    );
-                }
-
-                var closedMethod = sendAsyncMethod.MakeGenericMethod(syncAdapterType);
-                var result = closedMethod.Invoke
-                (
-                    source,
-                    new[] { mailWriter, true, false, (object)CancellationToken.None }
-                );
-
-                // Handle the return value in case it's a Task/ValueTask
-                if (result is Task task)
-                {
-                    task.GetAwaiter().GetResult();
-                }
-            }
-        }
-        finally
-        {
-            // Close the MailWriter to flush content
-            var closeMethod = mailWriterType.GetMethod
-            (
-                "Close",
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
-            );
-
-            closeMethod?.Invoke(mailWriter, Array.Empty<object>());
-        }
-
+        SerializeToMimeStream(source, stream);
         return Encoding.UTF8.GetString(stream.ToArray());
     }
 
@@ -458,7 +324,207 @@ public static class MailMessageExtensions
 
 
     // ==========================================================================
-    // Private helpers
+    // Clone helpers
+    // ==========================================================================
+
+    private static void CopyScalarProperties
+    (
+        MailMessage source,
+        MailMessage clone
+    )
+    {
+        clone.Subject = source.Subject;
+        clone.Body = source.Body;
+        clone.IsBodyHtml = source.IsBodyHtml;
+        clone.Priority = source.Priority;
+        clone.DeliveryNotificationOptions = source.DeliveryNotificationOptions;
+        clone.BodyEncoding = source.BodyEncoding;
+        clone.SubjectEncoding = source.SubjectEncoding;
+        clone.HeadersEncoding = source.HeadersEncoding;
+        clone.BodyTransferEncoding = source.BodyTransferEncoding;
+    }
+
+
+
+    private static void CopyAddresses
+    (
+        MailMessage source,
+        MailMessage clone
+    )
+    {
+        if (source.From != null)
+        {
+            clone.From = CloneMailAddress(source.From)!;
+        }
+
+        if (source.Sender != null)
+        {
+            clone.Sender = CloneMailAddress(source.Sender)!;
+        }
+
+        CopyAddressCollection(source.To, clone.To);
+        CopyAddressCollection(source.CC, clone.CC);
+        CopyAddressCollection(source.Bcc, clone.Bcc);
+        CopyAddressCollection(source.ReplyToList, clone.ReplyToList);
+    }
+
+
+
+    private static void CopyHeaders
+    (
+        MailMessage source,
+        MailMessage clone
+    )
+    {
+        foreach (string key in source.Headers)
+        {
+            var values = source.Headers.GetValues(key);
+            if (values != null)
+            {
+                foreach (var value in values)
+                {
+                    clone.Headers.Add(key, value);
+                }
+            }
+        }
+    }
+
+
+
+    private static void CopyAttachments
+    (
+        MailMessage source,
+        MailMessage clone
+    )
+    {
+        foreach (var attachment in source.Attachments)
+        {
+            clone.Attachments.Add(CloneAttachment(attachment));
+        }
+    }
+
+
+
+    private static void CopyAlternateViews
+    (
+        MailMessage source,
+        MailMessage clone
+    )
+    {
+        foreach (var view in source.AlternateViews)
+        {
+            clone.AlternateViews.Add(CloneAlternateView(view));
+        }
+    }
+
+
+
+    // ==========================================================================
+    // ToMimeString helpers
+    // ==========================================================================
+
+    private static void SerializeToMimeStream
+    (
+        MailMessage source,
+        MemoryStream stream
+    )
+    {
+        var mailWriterType = typeof(SmtpClient).Assembly.GetType("System.Net.Mail.MailWriter");
+        if (mailWriterType == null)
+        {
+            throw new InvalidOperationException
+            (
+                "Unable to locate the internal MailWriter type. " +
+                "This runtime version may not support MIME serialization via reflection."
+            );
+        }
+
+        var mailWriter = CreateMailWriter(mailWriterType, stream);
+
+        try
+        {
+            InvokeMailMessageSend(source, mailWriter);
+        }
+        finally
+        {
+            var closeMethod = mailWriterType.GetMethod
+            (
+                "Close",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+            );
+
+            closeMethod?.Invoke(mailWriter, Array.Empty<object>());
+        }
+    }
+
+
+
+    private static void InvokeMailMessageSend
+    (
+        MailMessage source,
+        object mailWriter
+    )
+    {
+        // Try synchronous Send first (.NET Framework / .NET Core / .NET 5-9)
+        var sendMethod = typeof(MailMessage).GetMethod
+        (
+            "Send",
+            BindingFlags.Instance | BindingFlags.NonPublic
+        );
+
+        if (sendMethod != null)
+        {
+            sendMethod.Invoke(source, new[] { mailWriter, true, false });
+            return;
+        }
+
+        // Fall back to SendAsync<TIOAdapter> (.NET 10+)
+        var sendAsyncMethod = typeof(MailMessage).GetMethod
+        (
+            "SendAsync",
+            BindingFlags.Instance | BindingFlags.NonPublic
+        );
+
+        if (sendAsyncMethod == null)
+        {
+            throw new InvalidOperationException
+            (
+                "Unable to locate the internal MailMessage.Send or SendAsync method. " +
+                "This runtime version may not support MIME serialization via reflection."
+            );
+        }
+
+        var syncAdapterType = typeof(SmtpClient).Assembly.GetType
+        (
+            "System.Net.SyncReadWriteAdapter"
+        );
+
+        if (syncAdapterType == null)
+        {
+            throw new InvalidOperationException
+            (
+                "Unable to locate the internal SyncReadWriteAdapter type. " +
+                "This runtime version may not support MIME serialization via reflection."
+            );
+        }
+
+        var closedMethod = sendAsyncMethod.MakeGenericMethod(syncAdapterType);
+        var result = closedMethod.Invoke
+        (
+            source,
+            new[] { mailWriter, true, false, (object)CancellationToken.None }
+        );
+
+        if (result is Task task)
+        {
+            task.GetAwaiter().GetResult();
+        }
+    }
+
+
+
+    // ==========================================================================
+    // Shared helpers
     // ==========================================================================
 
     private static MailAddress? CloneMailAddress
