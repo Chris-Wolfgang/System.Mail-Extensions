@@ -38,7 +38,7 @@ public sealed class MailMessageBuilder
     private string? _htmlBody;
     private MailPriority _priority = MailPriority.Normal;
     private readonly List<Attachment> _attachments = new List<Attachment>();
-    private readonly Dictionary<string, string> _headers = new Dictionary<string, string>();
+    private readonly Dictionary<string, string> _headers = new Dictionary<string, string>(StringComparer.Ordinal);
     private Encoding? _bodyEncoding;
     private Encoding? _subjectEncoding;
     private DeliveryNotificationOptions _deliveryNotification = DeliveryNotificationOptions.None;
@@ -501,28 +501,37 @@ public sealed class MailMessageBuilder
             DeliveryNotificationOptions = _deliveryNotification
         };
 
-        if (_sender != null)
-        {
-            message.Sender = _sender;
-        }
+        ApplyOptionalProperties(message);
+        ApplyRecipients(message);
+        ApplyBody(message);
+        ApplyHeadersAndAttachments(message);
 
-        if (_bodyEncoding != null)
-        {
-            message.BodyEncoding = _bodyEncoding;
-        }
+        return message;
+    }
 
-        if (_subjectEncoding != null)
-        {
-            message.SubjectEncoding = _subjectEncoding;
-        }
 
-        // Recipients
+
+    private void ApplyOptionalProperties(MailMessage message)
+    {
+        if (_sender != null) { message.Sender = _sender; }
+        if (_bodyEncoding != null) { message.BodyEncoding = _bodyEncoding; }
+        if (_subjectEncoding != null) { message.SubjectEncoding = _subjectEncoding; }
+    }
+
+
+
+    private void ApplyRecipients(MailMessage message)
+    {
         foreach (var addr in _to) { message.To.Add(addr); }
         foreach (var addr in _cc) { message.CC.Add(addr); }
         foreach (var addr in _bcc) { message.Bcc.Add(addr); }
         foreach (var addr in _replyTo) { message.ReplyToList.Add(addr); }
+    }
 
-        // Body — if both HTML and plain text are set, use AlternateViews
+
+
+    private void ApplyBody(MailMessage message)
+    {
         if (_htmlBody != null && _textBody != null)
         {
             message.IsBodyHtml = false;
@@ -546,19 +555,13 @@ public sealed class MailMessageBuilder
             message.IsBodyHtml = false;
             message.Body = _textBody;
         }
+    }
 
-        // Headers
-        foreach (var kvp in _headers)
-        {
-            message.Headers[kvp.Key] = kvp.Value;
-        }
 
-        // Attachments
-        foreach (var attachment in _attachments)
-        {
-            message.Attachments.Add(attachment);
-        }
 
-        return message;
+    private void ApplyHeadersAndAttachments(MailMessage message)
+    {
+        foreach (var kvp in _headers) { message.Headers[kvp.Key] = kvp.Value; }
+        foreach (var attachment in _attachments) { message.Attachments.Add(attachment); }
     }
 }
