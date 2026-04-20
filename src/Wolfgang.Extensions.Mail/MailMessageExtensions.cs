@@ -142,42 +142,7 @@ public static class MailMessageExtensions
         // Attachment size checks
         if (options?.MaxAttachmentSizeBytes != null || options?.MaxTotalAttachmentSizeBytes != null)
         {
-            long totalSize = 0;
-
-            foreach (var attachment in source.Attachments)
-            {
-                if (attachment.ContentStream.CanSeek)
-                {
-                    var size = attachment.ContentStream.Length;
-                    totalSize += size;
-
-                    if (options.MaxAttachmentSizeBytes != null && size > options.MaxAttachmentSizeBytes.Value)
-                    {
-                        issues.Add
-                        (
-                            new ValidationIssue
-                            (
-                                ValidationSeverity.Warning,
-                                $"Attachment '{attachment.Name}' ({size:N0} bytes) exceeds the maximum allowed size of {options.MaxAttachmentSizeBytes.Value:N0} bytes.",
-                                "Attachments"
-                            )
-                        );
-                    }
-                }
-            }
-
-            if (options.MaxTotalAttachmentSizeBytes != null && totalSize > options.MaxTotalAttachmentSizeBytes.Value)
-            {
-                issues.Add
-                (
-                    new ValidationIssue
-                    (
-                        ValidationSeverity.Warning,
-                        $"Total attachment size ({totalSize:N0} bytes) exceeds the maximum allowed total of {options.MaxTotalAttachmentSizeBytes.Value:N0} bytes.",
-                        "Attachments"
-                    )
-                );
-            }
+            ValidateAttachmentSizes(source, options!, issues);
         }
 
         return new ValidationResult(issues);
@@ -292,7 +257,7 @@ public static class MailMessageExtensions
     /// The <see cref="MailMessage.From"/> property is not set.
     /// </exception>
     // ReSharper disable once UnusedMember.Global
-    public static async Task SaveToEmlAsync
+    public static Task SaveToEmlAsync
     (
         this MailMessage source,
         string filePath,
@@ -313,12 +278,64 @@ public static class MailMessageExtensions
 
 #if NETSTANDARD2_0 || NET462
         cancellationToken.ThrowIfCancellationRequested();
+#pragma warning disable RS0030 // File I/O — sync write on older TFMs that lack WriteAllTextAsync
         File.WriteAllText(filePath, mimeContent, Encoding.UTF8);
-        await Task.CompletedTask.ConfigureAwait(false);
+#pragma warning restore RS0030
+        return Task.CompletedTask;
 #else
-        await File.WriteAllTextAsync(filePath, mimeContent, Encoding.UTF8, cancellationToken)
-            .ConfigureAwait(false);
+        return File.WriteAllTextAsync(filePath, mimeContent, Encoding.UTF8, cancellationToken);
 #endif
+    }
+
+
+
+    // ==========================================================================
+    // Validate helpers
+    // ==========================================================================
+
+    private static void ValidateAttachmentSizes
+    (
+        MailMessage source,
+        ValidationOptions options,
+        List<ValidationIssue> issues
+    )
+    {
+        long totalSize = 0;
+
+        foreach (var attachment in source.Attachments)
+        {
+            if (attachment.ContentStream.CanSeek)
+            {
+                var size = attachment.ContentStream.Length;
+                totalSize += size;
+
+                if (options.MaxAttachmentSizeBytes != null && size > options.MaxAttachmentSizeBytes.Value)
+                {
+                    issues.Add
+                    (
+                        new ValidationIssue
+                        (
+                            ValidationSeverity.Warning,
+                            $"Attachment '{attachment.Name}' ({size:N0} bytes) exceeds the maximum allowed size of {options.MaxAttachmentSizeBytes.Value:N0} bytes.",
+                            "Attachments"
+                        )
+                    );
+                }
+            }
+        }
+
+        if (options.MaxTotalAttachmentSizeBytes != null && totalSize > options.MaxTotalAttachmentSizeBytes.Value)
+        {
+            issues.Add
+            (
+                new ValidationIssue
+                (
+                    ValidationSeverity.Warning,
+                    $"Total attachment size ({totalSize:N0} bytes) exceeds the maximum allowed total of {options.MaxTotalAttachmentSizeBytes.Value:N0} bytes.",
+                    "Attachments"
+                )
+            );
+        }
     }
 
 
@@ -423,6 +440,7 @@ public static class MailMessageExtensions
     // ToMimeString helpers
     // ==========================================================================
 
+#pragma warning disable S3011 // Reflection on non-public members is intentional for MIME serialization
     private static void SerializeToMimeStream
     (
         MailMessage source,
@@ -456,9 +474,12 @@ public static class MailMessageExtensions
             closeMethod?.Invoke(mailWriter, Array.Empty<object>());
         }
     }
+#pragma warning restore S3011
 
 
 
+#pragma warning disable S3011  // Reflection on non-public members is intentional for MIME serialization
+#pragma warning disable VSTHRD002 // Synchronous wait is intentional — SendAsync with SyncReadWriteAdapter completes synchronously
     private static void InvokeMailMessageSend
     (
         MailMessage source,
@@ -520,6 +541,8 @@ public static class MailMessageExtensions
             task.GetAwaiter().GetResult();
         }
     }
+#pragma warning restore VSTHRD002
+#pragma warning restore S3011
 
 
 
@@ -676,6 +699,7 @@ public static class MailMessageExtensions
 
 
 
+#pragma warning disable S3011 // Reflection on non-public members is intentional for MIME serialization
     private static object CreateMailWriter
     (
         Type mailWriterType,
@@ -716,4 +740,5 @@ public static class MailMessageExtensions
             "No supported constructor found for this runtime version."
         );
     }
+#pragma warning restore S3011
 }
