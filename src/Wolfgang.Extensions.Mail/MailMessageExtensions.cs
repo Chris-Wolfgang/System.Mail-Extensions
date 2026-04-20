@@ -75,71 +75,11 @@ public static class MailMessageExtensions
 
         var issues = new List<ValidationIssue>();
 
-        // From is required
-        if (source.From == null)
-        {
-            issues.Add
-            (
-                new ValidationIssue
-                (
-                    ValidationSeverity.Error,
-                    "From address is required.",
-                    "From"
-                )
-            );
-        }
+        ValidateFrom(source, issues);
+        ValidateRecipients(source, issues);
+        ValidateSubject(source, options, issues);
+        ValidateBody(source, options, issues);
 
-        // At least one recipient is required
-        if (source.To.Count == 0 && source.CC.Count == 0 && source.Bcc.Count == 0)
-        {
-            issues.Add
-            (
-                new ValidationIssue
-                (
-                    ValidationSeverity.Error,
-                    "At least one recipient (To, CC, or BCC) is required.",
-                    "To"
-                )
-            );
-        }
-
-        // Subject check
-        if (string.IsNullOrWhiteSpace(source.Subject))
-        {
-            var severity = options?.RequireSubject == true
-                ? ValidationSeverity.Error
-                : ValidationSeverity.Warning;
-
-            issues.Add
-            (
-                new ValidationIssue
-                (
-                    severity,
-                    "Subject is empty or missing.",
-                    "Subject"
-                )
-            );
-        }
-
-        // Body check
-        if (string.IsNullOrWhiteSpace(source.Body) && source.AlternateViews.Count == 0)
-        {
-            var severity = options?.RequireBody == true
-                ? ValidationSeverity.Error
-                : ValidationSeverity.Warning;
-
-            issues.Add
-            (
-                new ValidationIssue
-                (
-                    severity,
-                    "Body is empty and no alternate views are defined.",
-                    "Body"
-                )
-            );
-        }
-
-        // Attachment size checks
         if (options?.MaxAttachmentSizeBytes != null || options?.MaxTotalAttachmentSizeBytes != null)
         {
             ValidateAttachmentSizes(source, options!, issues);
@@ -292,6 +232,84 @@ public static class MailMessageExtensions
     // ==========================================================================
     // Validate helpers
     // ==========================================================================
+
+    private static void ValidateFrom
+    (
+        MailMessage source,
+        List<ValidationIssue> issues
+    )
+    {
+        if (source.From == null)
+        {
+            issues.Add
+            (
+                new ValidationIssue(ValidationSeverity.Error, "From address is required.", "From")
+            );
+        }
+    }
+
+
+
+    private static void ValidateRecipients
+    (
+        MailMessage source,
+        List<ValidationIssue> issues
+    )
+    {
+        if (source.To.Count == 0 && source.CC.Count == 0 && source.Bcc.Count == 0)
+        {
+            issues.Add
+            (
+                new ValidationIssue(ValidationSeverity.Error, "At least one recipient (To, CC, or BCC) is required.", "To")
+            );
+        }
+    }
+
+
+
+    private static void ValidateSubject
+    (
+        MailMessage source,
+        ValidationOptions? options,
+        List<ValidationIssue> issues
+    )
+    {
+        if (string.IsNullOrWhiteSpace(source.Subject))
+        {
+            var severity = options?.RequireSubject == true
+                ? ValidationSeverity.Error
+                : ValidationSeverity.Warning;
+
+            issues.Add
+            (
+                new ValidationIssue(severity, "Subject is empty or missing.", "Subject")
+            );
+        }
+    }
+
+
+
+    private static void ValidateBody
+    (
+        MailMessage source,
+        ValidationOptions? options,
+        List<ValidationIssue> issues
+    )
+    {
+        if (string.IsNullOrWhiteSpace(source.Body) && source.AlternateViews.Count == 0)
+        {
+            var severity = options?.RequireBody == true
+                ? ValidationSeverity.Error
+                : ValidationSeverity.Warning;
+
+            issues.Add
+            (
+                new ValidationIssue(severity, "Body is empty and no alternate views are defined.", "Body")
+            );
+        }
+    }
+
+
 
     private static void ValidateAttachmentSizes
     (
