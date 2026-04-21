@@ -8,6 +8,7 @@ using Xunit;
 using Assert = Xunit.Assert;
 // ReSharper disable InvokeAsExtensionMember
 #pragma warning disable CA1707
+#pragma warning disable MA0074 // xUnit Assert.Contains triggers this for string overloads
 
 namespace Wolfgang.Extensions.Mail.Tests.Unit;
 
