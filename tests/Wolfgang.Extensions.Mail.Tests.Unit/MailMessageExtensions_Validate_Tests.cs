@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net.Mail;
 using Wolfgang.Extensions.Mail.Validation;
@@ -260,7 +261,7 @@ public class MailMessageExtensions_Validate_Tests
 
         var result = msg.Validate(options);
 
-        Assert.Contains(result.Warnings, w => w.PropertyName == "Attachments" && w.Message.Contains("Total"));
+        Assert.Contains(result.Warnings, w => w.PropertyName == "Attachments" && w.Message.IndexOf("Total", StringComparison.Ordinal) >= 0);
     }
 
 

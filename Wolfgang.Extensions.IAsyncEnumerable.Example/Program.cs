@@ -1,3 +1,4 @@
+#pragma warning disable S3878 // Example deliberately shows array creation to demonstrate IEnumerable overload
 using System.Net.Mail;
 using System.Text;
 using Wolfgang.Extensions.Mail;
