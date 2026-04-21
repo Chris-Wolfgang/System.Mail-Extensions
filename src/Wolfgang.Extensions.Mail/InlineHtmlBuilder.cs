@@ -214,7 +214,7 @@ public sealed class InlineHtmlBuilder
             );
         }
 
-        var html = string.Format(_htmlTemplate, _contentIds.ToArray());
+        var html = string.Format(System.Globalization.CultureInfo.InvariantCulture, _htmlTemplate, _contentIds.ToArray());
 
         var view = AlternateView.CreateAlternateViewFromString
         (
