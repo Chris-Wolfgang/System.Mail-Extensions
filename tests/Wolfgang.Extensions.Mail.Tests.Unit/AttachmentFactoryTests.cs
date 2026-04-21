@@ -190,4 +190,121 @@ public class AttachmentFactoryTests
             () => AttachmentFactory.InferContentType(null!)
         );
     }
+
+
+
+    // ---------- RegisterContentType ----------
+
+    [Fact]
+    public void RegisterContentType_when_extension_null_throws_ArgumentNullException()
+    {
+        var ex = Assert.Throws<ArgumentNullException>
+        (
+            () => AttachmentFactory.RegisterContentType(null!, "application/custom")
+        );
+        Assert.Equal("extension", ex.ParamName);
+    }
+
+
+
+    [Fact]
+    public void RegisterContentType_when_contentType_null_throws_ArgumentNullException()
+    {
+        var ex = Assert.Throws<ArgumentNullException>
+        (
+            () => AttachmentFactory.RegisterContentType(".custom", null!)
+        );
+        Assert.Equal("contentType", ex.ParamName);
+    }
+
+
+
+    [Fact]
+    public void RegisterContentType_when_extension_does_not_start_with_dot_throws_ArgumentException()
+    {
+        var ex = Assert.Throws<ArgumentException>
+        (
+            () => AttachmentFactory.RegisterContentType("heic", "image/heic")
+        );
+        Assert.Equal("extension", ex.ParamName);
+    }
+
+
+
+    [Fact]
+    public void RegisterContentType_when_extension_empty_throws_ArgumentException()
+    {
+        Assert.Throws<ArgumentException>
+        (
+            () => AttachmentFactory.RegisterContentType("", "application/custom")
+        );
+    }
+
+
+
+    [Fact]
+    public void RegisterContentType_when_registered_InferContentType_returns_it()
+    {
+        AttachmentFactory.RegisterContentType(".test1", "application/x-test1");
+
+        Assert.Equal("application/x-test1", AttachmentFactory.InferContentType("file.test1"));
+    }
+
+
+
+    [Fact]
+    public void RegisterContentType_when_extension_already_exists_overrides_it()
+    {
+        AttachmentFactory.RegisterContentType(".test2", "application/x-test2-original");
+        AttachmentFactory.RegisterContentType(".test2", "application/x-test2-override");
+
+        Assert.Equal("application/x-test2-override", AttachmentFactory.InferContentType("file.test2"));
+    }
+
+
+
+    [Fact]
+    public void RegisterContentType_extension_matching_is_case_insensitive()
+    {
+        AttachmentFactory.RegisterContentType(".test3", "application/x-test3");
+
+        Assert.Equal("application/x-test3", AttachmentFactory.InferContentType("file.TEST3"));
+    }
+
+
+
+    // ---------- TryGetRegisteredContentType ----------
+
+    [Fact]
+    public void TryGetRegisteredContentType_when_extension_null_throws_ArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>
+        (
+            () => AttachmentFactory.TryGetRegisteredContentType(null!, out _)
+        );
+    }
+
+
+
+    [Fact]
+    public void TryGetRegisteredContentType_when_registered_returns_true()
+    {
+        AttachmentFactory.RegisterContentType(".test4", "application/x-test4");
+
+        var success = AttachmentFactory.TryGetRegisteredContentType(".test4", out var contentType);
+
+        Assert.True(success);
+        Assert.Equal("application/x-test4", contentType);
+    }
+
+
+
+    [Fact]
+    public void TryGetRegisteredContentType_when_not_registered_returns_false()
+    {
+        var success = AttachmentFactory.TryGetRegisteredContentType(".nonexistent-ext-xyz", out var contentType);
+
+        Assert.False(success);
+        Assert.Null(contentType);
+    }
 }

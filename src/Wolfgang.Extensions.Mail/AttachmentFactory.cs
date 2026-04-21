@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Mail;
@@ -15,42 +16,122 @@ namespace Wolfgang.Extensions.Mail;
 public static class AttachmentFactory
 {
 
-    private static readonly Dictionary<string, string> ContentTypeMap = new Dictionary<string, string>
+    private static readonly ConcurrentDictionary<string, string> ContentTypeMap =
+        new ConcurrentDictionary<string, string>
+        (
+            new[]
+            {
+                new KeyValuePair<string, string>(".pdf", "application/pdf"),
+                new KeyValuePair<string, string>(".zip", "application/zip"),
+                new KeyValuePair<string, string>(".gz", "application/gzip"),
+                new KeyValuePair<string, string>(".json", "application/json"),
+                new KeyValuePair<string, string>(".xml", "application/xml"),
+                new KeyValuePair<string, string>(".doc", "application/msword"),
+                new KeyValuePair<string, string>(".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+                new KeyValuePair<string, string>(".xls", "application/vnd.ms-excel"),
+                new KeyValuePair<string, string>(".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+                new KeyValuePair<string, string>(".ppt", "application/vnd.ms-powerpoint"),
+                new KeyValuePair<string, string>(".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+                new KeyValuePair<string, string>(".png", "image/png"),
+                new KeyValuePair<string, string>(".jpg", "image/jpeg"),
+                new KeyValuePair<string, string>(".jpeg", "image/jpeg"),
+                new KeyValuePair<string, string>(".gif", "image/gif"),
+                new KeyValuePair<string, string>(".svg", "image/svg+xml"),
+                new KeyValuePair<string, string>(".bmp", "image/bmp"),
+                new KeyValuePair<string, string>(".ico", "image/x-icon"),
+                new KeyValuePair<string, string>(".webp", "image/webp"),
+                new KeyValuePair<string, string>(".txt", "text/plain"),
+                new KeyValuePair<string, string>(".csv", "text/csv"),
+                new KeyValuePair<string, string>(".html", "text/html"),
+                new KeyValuePair<string, string>(".htm", "text/html"),
+                new KeyValuePair<string, string>(".css", "text/css"),
+                new KeyValuePair<string, string>(".js", "text/javascript"),
+                new KeyValuePair<string, string>(".mp3", "audio/mpeg"),
+                new KeyValuePair<string, string>(".wav", "audio/wav"),
+                new KeyValuePair<string, string>(".mp4", "video/mp4"),
+                new KeyValuePair<string, string>(".avi", "video/x-msvideo"),
+                new KeyValuePair<string, string>(".eml", "message/rfc822"),
+            },
+            StringComparer.OrdinalIgnoreCase
+        );
+
+
+
+    /// <summary>
+    /// Registers or overrides a custom content type mapping for a file extension.
+    /// Extension matching is case-insensitive. Registrations persist for the lifetime of the process.
+    /// </summary>
+    /// <param name="extension">The file extension (with leading dot, e.g. <c>".heic"</c>).</param>
+    /// <param name="contentType">The MIME content type to associate with the extension.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="extension"/> is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="contentType"/> is null.</exception>
+    /// <exception cref="ArgumentException"><paramref name="extension"/> is empty or does not start with <c>"."</c>.</exception>
+    /// <example>
+    /// <code>
+    /// AttachmentFactory.RegisterContentType(".heic", "image/heic");
+    /// var attachment = AttachmentFactory.FromBytes(data, "photo.heic");
+    /// // attachment.ContentType.MediaType == "image/heic"
+    /// </code>
+    /// </example>
+    // ReSharper disable once UnusedMember.Global
+    public static void RegisterContentType
     (
-        StringComparer.OrdinalIgnoreCase
+        string extension,
+        string contentType
     )
     {
-        { ".pdf", "application/pdf" },
-        { ".zip", "application/zip" },
-        { ".gz", "application/gzip" },
-        { ".json", "application/json" },
-        { ".xml", "application/xml" },
-        { ".doc", "application/msword" },
-        { ".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
-        { ".xls", "application/vnd.ms-excel" },
-        { ".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
-        { ".ppt", "application/vnd.ms-powerpoint" },
-        { ".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation" },
-        { ".png", "image/png" },
-        { ".jpg", "image/jpeg" },
-        { ".jpeg", "image/jpeg" },
-        { ".gif", "image/gif" },
-        { ".svg", "image/svg+xml" },
-        { ".bmp", "image/bmp" },
-        { ".ico", "image/x-icon" },
-        { ".webp", "image/webp" },
-        { ".txt", "text/plain" },
-        { ".csv", "text/csv" },
-        { ".html", "text/html" },
-        { ".htm", "text/html" },
-        { ".css", "text/css" },
-        { ".js", "text/javascript" },
-        { ".mp3", "audio/mpeg" },
-        { ".wav", "audio/wav" },
-        { ".mp4", "video/mp4" },
-        { ".avi", "video/x-msvideo" },
-        { ".eml", "message/rfc822" },
-    };
+        if (extension == null)
+        {
+            throw new ArgumentNullException(nameof(extension));
+        }
+
+        if (contentType == null)
+        {
+            throw new ArgumentNullException(nameof(contentType));
+        }
+
+        if (extension.Length == 0 || extension[0] != '.')
+        {
+            throw new ArgumentException
+            (
+                "Extension must start with '.' (for example, \".heic\").",
+                nameof(extension)
+            );
+        }
+
+        ContentTypeMap[extension] = contentType;
+    }
+
+
+
+    /// <summary>
+    /// Attempts to retrieve the registered content type for a file extension.
+    /// </summary>
+    /// <param name="extension">The file extension (with leading dot).</param>
+    /// <param name="contentType">When this method returns, contains the registered content type if found; otherwise, <c>null</c>.</param>
+    /// <returns><c>true</c> if a content type was registered for the extension; otherwise, <c>false</c>.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="extension"/> is null.</exception>
+    // ReSharper disable once UnusedMember.Global
+    public static bool TryGetRegisteredContentType
+    (
+        string extension,
+        out string? contentType
+    )
+    {
+        if (extension == null)
+        {
+            throw new ArgumentNullException(nameof(extension));
+        }
+
+        if (ContentTypeMap.TryGetValue(extension, out var value))
+        {
+            contentType = value;
+            return true;
+        }
+
+        contentType = null;
+        return false;
+    }
 
 
 
