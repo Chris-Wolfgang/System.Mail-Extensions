@@ -256,6 +256,67 @@ public class AttachmentCollectionExtensionsTests
 
 
 
+    // ---------- TotalSize ----------
+
+    [Fact]
+    public void TotalSize_when_source_is_null_throws_ArgumentNullException()
+    {
+        var ex = Assert.Throws<ArgumentNullException>
+        (
+            () => AttachmentCollectionExtensions.TotalSize(null!)
+        );
+        Assert.Equal("source", ex.ParamName);
+    }
+
+
+
+    [Fact]
+    public void TotalSize_when_no_attachments_returns_zero()
+    {
+        using var msg = new MailMessage();
+        Assert.Equal(0, msg.Attachments.TotalSize());
+    }
+
+
+
+    [Fact]
+    public void TotalSize_when_attachments_exist_returns_sum_of_stream_lengths()
+    {
+        using var msg = new MailMessage();
+        msg.Attachments.Add(new Attachment(new MemoryStream(new byte[100]), "a.bin"));
+        msg.Attachments.Add(new Attachment(new MemoryStream(new byte[200]), "b.bin"));
+
+        Assert.Equal(300, msg.Attachments.TotalSize());
+    }
+
+
+
+    // ---------- ExceedsLimit ----------
+
+    [Fact]
+    public void ExceedsLimit_when_total_exceeds_max_returns_true()
+    {
+        using var msg = new MailMessage();
+        msg.Attachments.Add(new Attachment(new MemoryStream(new byte[1024]), "large.bin"));
+
+        Assert.True(msg.Attachments.ExceedsLimit(512));
+    }
+
+
+
+    [Fact]
+    public void ExceedsLimit_when_total_within_max_returns_false()
+    {
+        using var msg = new MailMessage();
+        msg.Attachments.Add(new Attachment(new MemoryStream(new byte[100]), "small.bin"));
+
+        Assert.False(msg.Attachments.ExceedsLimit(512));
+    }
+
+
+
+    // ---------- Helpers ----------
+
     private static string CreateTempFile(string? prefix = null, string? extension = null)
     {
         var file = Path.Combine(
