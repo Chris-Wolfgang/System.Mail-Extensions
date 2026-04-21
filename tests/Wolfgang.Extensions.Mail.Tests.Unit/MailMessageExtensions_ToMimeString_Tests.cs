@@ -208,7 +208,11 @@ public class MailMessageExtensions_ToMimeString_Tests
             await msg.SaveToEmlAsync(filePath);
 
             Assert.True(File.Exists(filePath));
-            var content = File.ReadAllText(filePath);
+            string content;
+            using (var reader = new StreamReader(filePath, Encoding.UTF8))
+            {
+                content = await reader.ReadToEndAsync();
+            }
             Assert.Contains("from@example.com", content);
             Assert.Contains("EML Test", content);
         }

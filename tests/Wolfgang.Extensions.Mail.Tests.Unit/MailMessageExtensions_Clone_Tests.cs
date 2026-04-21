@@ -86,12 +86,12 @@ public class MailMessageExtensions_Clone_Tests
 
         using var clone = original.Clone();
 
-        Assert.Equal(1, clone.To.Count);
-        Assert.Equal("to@example.com", clone.To[0].Address);
-        Assert.Equal(1, clone.CC.Count);
-        Assert.Equal("cc@example.com", clone.CC[0].Address);
-        Assert.Equal(1, clone.Bcc.Count);
-        Assert.Equal("bcc@example.com", clone.Bcc[0].Address);
+        var toAddress = Assert.Single(clone.To);
+        Assert.Equal("to@example.com", toAddress.Address);
+        var ccAddress = Assert.Single(clone.CC);
+        Assert.Equal("cc@example.com", ccAddress.Address);
+        var bccAddress = Assert.Single(clone.Bcc);
+        Assert.Equal("bcc@example.com", bccAddress.Address);
     }
 
 
@@ -104,8 +104,8 @@ public class MailMessageExtensions_Clone_Tests
 
         using var clone = original.Clone();
 
-        Assert.Equal(1, clone.ReplyToList.Count);
-        Assert.Equal("reply@example.com", clone.ReplyToList[0].Address);
+        var replyAddress = Assert.Single(clone.ReplyToList);
+        Assert.Equal("reply@example.com", replyAddress.Address);
     }
 
 
@@ -187,13 +187,14 @@ public class MailMessageExtensions_Clone_Tests
 
         using var clone = original.Clone();
 
-        Assert.Equal(1, clone.Attachments.Count);
-        Assert.Equal("test.bin", clone.Attachments[0].Name);
+        var clonedAttachment = Assert.Single(clone.Attachments);
+        Assert.Equal("test.bin", clonedAttachment.Name);
 
         // Verify stream content is identical
-        var clonedStream = clone.Attachments[0].ContentStream;
-        var clonedBytes = new byte[clonedStream.Length];
-        clonedStream.Read(clonedBytes, 0, clonedBytes.Length);
+        var clonedStream = clonedAttachment.ContentStream;
+        using var ms = new MemoryStream();
+        clonedStream.CopyTo(ms);
+        var clonedBytes = ms.ToArray();
         Assert.Equal(content, clonedBytes);
     }
 
@@ -241,9 +242,9 @@ public class MailMessageExtensions_Clone_Tests
 
         using var clone = original.Clone();
 
-        Assert.Equal(1, clone.AlternateViews.Count);
-        Assert.Equal(1, clone.AlternateViews[0].LinkedResources.Count);
-        Assert.Equal("img1", clone.AlternateViews[0].LinkedResources[0].ContentId);
+        var clonedView = Assert.Single(clone.AlternateViews);
+        var clonedResource = Assert.Single(clonedView.LinkedResources);
+        Assert.Equal("img1", clonedResource.ContentId);
     }
 
 

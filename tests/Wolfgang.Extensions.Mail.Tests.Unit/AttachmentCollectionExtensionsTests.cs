@@ -133,9 +133,10 @@ public class AttachmentCollectionExtensionsTests
     public void AddRange_Enumerable_Attachments_when_source_is_null_throws_ArgumentNullException()
     {
         using var a = CreateAttachment("a.txt");
+        var list = new List<Attachment> { a };
         var ex = Assert.Throws<ArgumentNullException>
         (
-            () => AttachmentCollectionExtensions.AddRange(null!, a)
+            () => AttachmentCollectionExtensions.AddRange(null!, (IEnumerable<Attachment>)list)
         );
         Assert.Equal("source", ex.ParamName);
     }
