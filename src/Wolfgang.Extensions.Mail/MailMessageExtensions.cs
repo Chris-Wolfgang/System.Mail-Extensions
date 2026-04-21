@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -459,6 +460,7 @@ public static class MailMessageExtensions
     // ==========================================================================
 
 #pragma warning disable S3011 // Reflection on non-public members is intentional for MIME serialization
+    [ExcludeFromCodeCoverage] // Defensive null checks for runtime-specific reflection targets are unreachable on any single TFM
     private static void SerializeToMimeStream
     (
         MailMessage source,
@@ -498,6 +500,7 @@ public static class MailMessageExtensions
 
 #pragma warning disable S3011  // Reflection on non-public members is intentional for MIME serialization
 #pragma warning disable VSTHRD002 // Synchronous wait is intentional — SendAsync with SyncReadWriteAdapter completes synchronously
+    [ExcludeFromCodeCoverage] // Branches depend on runtime version; each TFM only exercises one path
     private static void InvokeMailMessageSend
     (
         MailMessage source,
@@ -718,6 +721,7 @@ public static class MailMessageExtensions
 
 
 #pragma warning disable S3011 // Reflection on non-public members is intentional for MIME serialization
+    [ExcludeFromCodeCoverage] // Constructor signature varies by runtime; only one path hit per TFM
     private static object CreateMailWriter
     (
         Type mailWriterType,
