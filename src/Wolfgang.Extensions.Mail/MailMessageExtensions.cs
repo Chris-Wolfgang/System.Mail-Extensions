@@ -185,51 +185,6 @@ public static class MailMessageExtensions
 
 
 
-    /// <summary>
-    /// Serializes the <see cref="MailMessage"/> to a raw MIME/EML format and saves it to a file.
-    /// </summary>
-    /// <param name="source">The <see cref="MailMessage"/> to serialize.</param>
-    /// <param name="filePath">The file path to write the EML content to.</param>
-    /// <param name="cancellationToken">A token to cancel the operation.</param>
-    /// <returns>A task representing the asynchronous save operation.</returns>
-    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
-    /// <exception cref="InvalidOperationException">
-    /// The <see cref="MailMessage.From"/> property is not set.
-    /// </exception>
-    // ReSharper disable once UnusedMember.Global
-    public static Task SaveToEmlAsync
-    (
-        this MailMessage source,
-        string filePath,
-        CancellationToken cancellationToken = default
-    )
-    {
-        if (source == null)
-        {
-            throw new ArgumentNullException(nameof(source));
-        }
-
-        if (filePath == null)
-        {
-            throw new ArgumentNullException(nameof(filePath));
-        }
-
-        var mimeContent = source.ToMimeString();
-
-#if NETSTANDARD2_0 || NET462
-        cancellationToken.ThrowIfCancellationRequested();
-#pragma warning disable RS0030 // File I/O — sync write on older TFMs that lack WriteAllTextAsync
-        File.WriteAllText(filePath, mimeContent, Encoding.UTF8);
-#pragma warning restore RS0030
-        return Task.CompletedTask;
-#else
-        return File.WriteAllTextAsync(filePath, mimeContent, Encoding.UTF8, cancellationToken);
-#endif
-    }
-
-
-
     // ==========================================================================
     // Validate helpers
     // ==========================================================================
