@@ -36,7 +36,7 @@ public class MailMessageExtensions_Validate_Tests
         var result = msg.Validate();
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == "From");
+        Assert.Contains(result.Errors, e => string.Equals(e.PropertyName, "From", StringComparison.Ordinal));
     }
 
 
@@ -52,7 +52,7 @@ public class MailMessageExtensions_Validate_Tests
         var result = msg.Validate();
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == "To");
+        Assert.Contains(result.Errors, e => string.Equals(e.PropertyName, "To", StringComparison.Ordinal));
     }
 
 
@@ -82,7 +82,7 @@ public class MailMessageExtensions_Validate_Tests
 
         var result = msg.Validate();
 
-        Assert.DoesNotContain(result.Errors, e => e.PropertyName == "To");
+        Assert.DoesNotContain(result.Errors, e => string.Equals(e.PropertyName, "To", StringComparison.Ordinal));
     }
 
 
@@ -98,7 +98,7 @@ public class MailMessageExtensions_Validate_Tests
 
         var result = msg.Validate();
 
-        Assert.DoesNotContain(result.Errors, e => e.PropertyName == "To");
+        Assert.DoesNotContain(result.Errors, e => string.Equals(e.PropertyName, "To", StringComparison.Ordinal));
     }
 
 
@@ -113,7 +113,7 @@ public class MailMessageExtensions_Validate_Tests
 
         var result = msg.Validate();
 
-        Assert.Contains(result.Warnings, w => w.PropertyName == "Subject");
+        Assert.Contains(result.Warnings, w => string.Equals(w.PropertyName, "Subject", StringComparison.Ordinal));
     }
 
 
@@ -127,7 +127,7 @@ public class MailMessageExtensions_Validate_Tests
 
         var result = msg.Validate();
 
-        Assert.Contains(result.Warnings, w => w.PropertyName == "Subject");
+        Assert.Contains(result.Warnings, w => string.Equals(w.PropertyName, "Subject", StringComparison.Ordinal));
     }
 
 
@@ -142,7 +142,7 @@ public class MailMessageExtensions_Validate_Tests
 
         var result = msg.Validate();
 
-        Assert.Contains(result.Warnings, w => w.PropertyName == "Body");
+        Assert.Contains(result.Warnings, w => string.Equals(w.PropertyName, "Body", StringComparison.Ordinal));
     }
 
 
@@ -162,7 +162,7 @@ public class MailMessageExtensions_Validate_Tests
 
         var result = msg.Validate();
 
-        Assert.DoesNotContain(result.Warnings, w => w.PropertyName == "Body");
+        Assert.DoesNotContain(result.Warnings, w => string.Equals(w.PropertyName, "Body", StringComparison.Ordinal));
     }
 
 
@@ -211,7 +211,7 @@ public class MailMessageExtensions_Validate_Tests
 
         var result = msg.Validate(options);
 
-        Assert.Contains(result.Errors, e => e.PropertyName == "Subject");
+        Assert.Contains(result.Errors, e => string.Equals(e.PropertyName, "Subject", StringComparison.Ordinal));
     }
 
 
@@ -225,7 +225,7 @@ public class MailMessageExtensions_Validate_Tests
 
         var result = msg.Validate(options);
 
-        Assert.Contains(result.Errors, e => e.PropertyName == "Body");
+        Assert.Contains(result.Errors, e => string.Equals(e.PropertyName, "Body", StringComparison.Ordinal));
     }
 
 
@@ -243,7 +243,7 @@ public class MailMessageExtensions_Validate_Tests
 
         var result = msg.Validate(options);
 
-        Assert.Contains(result.Warnings, w => w.PropertyName == "Attachments");
+        Assert.Contains(result.Warnings, w => string.Equals(w.PropertyName, "Attachments", StringComparison.Ordinal));
     }
 
 
@@ -261,7 +261,7 @@ public class MailMessageExtensions_Validate_Tests
 
         var result = msg.Validate(options);
 
-        Assert.Contains(result.Warnings, w => w.PropertyName == "Attachments" && w.Message.IndexOf("Total", StringComparison.Ordinal) >= 0);
+        Assert.Contains(result.Warnings, w => string.Equals(w.PropertyName, "Attachments", StringComparison.Ordinal) && w.Message.IndexOf("Total", StringComparison.Ordinal) >= 0);
     }
 
 
