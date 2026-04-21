@@ -280,4 +280,26 @@ public class MailMessageExtensions_Validate_Tests
         Assert.Equal("Body", msg.Body);
         Assert.Equal("from@example.com", msg.From!.Address);
     }
+
+
+
+    // ---------- ValidationIssue.ToString ----------
+
+    [Fact]
+    public void ValidationIssue_ToString_when_PropertyName_set_includes_property()
+    {
+        var issue = new ValidationIssue(ValidationSeverity.Error, "Test message", "TestProp");
+
+        Assert.Equal("Error: [TestProp] Test message", issue.ToString());
+    }
+
+
+
+    [Fact]
+    public void ValidationIssue_ToString_when_PropertyName_null_excludes_brackets()
+    {
+        var issue = new ValidationIssue(ValidationSeverity.Warning, "General warning");
+
+        Assert.Equal("Warning: General warning", issue.ToString());
+    }
 }
