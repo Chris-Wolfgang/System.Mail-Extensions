@@ -1,9 +1,6 @@
 using System;
 using System.IO;
 using System.Net.Mail;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 using Assert = Xunit.Assert;
 // ReSharper disable InvokeAsExtensionMember
@@ -161,68 +158,5 @@ public class MailMessageExtensions_ToMimeString_Tests
         var mime = msg.ToMimeString();
 
         Assert.Contains("cc@example.com", mime);
-    }
-
-
-
-    // ---------- SaveToEmlAsync ----------
-
-    [Fact]
-    public async Task SaveToEmlAsync_when_source_is_null_throws_ArgumentNullException()
-    {
-        var ex = await Assert.ThrowsAsync<ArgumentNullException>
-        (
-            () => MailMessageExtensions.SaveToEmlAsync(null!, "test.eml")
-        );
-        Assert.Equal("source", ex.ParamName);
-    }
-
-
-
-    [Fact]
-    public async Task SaveToEmlAsync_when_filePath_is_null_throws_ArgumentNullException()
-    {
-        using var msg = new MailMessage("from@example.com", "to@example.com");
-        msg.Subject = "Test";
-        msg.Body = "Body";
-
-        var ex = await Assert.ThrowsAsync<ArgumentNullException>
-        (
-            () => msg.SaveToEmlAsync(null!)
-        );
-        Assert.Equal("filePath", ex.ParamName);
-    }
-
-
-
-    [Fact]
-    public async Task SaveToEmlAsync_when_valid_message_writes_file_with_mime_content()
-    {
-        using var msg = new MailMessage("from@example.com", "to@example.com");
-        msg.Subject = "EML Test";
-        msg.Body = "Body content";
-
-        var filePath = Path.Combine(Path.GetTempPath(), $"test_{Guid.NewGuid():N}.eml");
-
-        try
-        {
-            await msg.SaveToEmlAsync(filePath);
-
-            Assert.True(File.Exists(filePath));
-            string content;
-            using (var reader = new StreamReader(filePath, Encoding.UTF8))
-            {
-                content = await reader.ReadToEndAsync();
-            }
-            Assert.Contains("from@example.com", content);
-            Assert.Contains("EML Test", content);
-        }
-        finally
-        {
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
-        }
     }
 }
