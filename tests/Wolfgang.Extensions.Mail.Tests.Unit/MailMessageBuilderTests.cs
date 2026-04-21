@@ -5,6 +5,8 @@ using System.Text;
 using Xunit;
 using Assert = Xunit.Assert;
 #pragma warning disable CA1707
+#pragma warning disable MA0074 // xUnit Assert.Contains triggers this for string overloads
+#pragma warning disable S3878 // Array creation is intentional to disambiguate To(IEnumerable) overload
 
 namespace Wolfgang.Extensions.Mail.Tests.Unit;
 
@@ -90,7 +92,7 @@ public class MailMessageBuilderTests
             .Cc("cc@example.com")
             .Build();
 
-        Assert.Equal(1, msg.CC.Count);
+        Assert.Single(msg.CC);
         Assert.Equal("cc@example.com", msg.CC[0].Address);
     }
 
@@ -105,7 +107,7 @@ public class MailMessageBuilderTests
             .Bcc("bcc@example.com")
             .Build();
 
-        Assert.Equal(1, msg.Bcc.Count);
+        Assert.Single(msg.Bcc);
     }
 
 
@@ -119,7 +121,7 @@ public class MailMessageBuilderTests
             .ReplyTo("reply@example.com")
             .Build();
 
-        Assert.Equal(1, msg.ReplyToList.Count);
+        Assert.Single(msg.ReplyToList);
     }
 
 
@@ -182,7 +184,7 @@ public class MailMessageBuilderTests
 
         Assert.Equal("Plain text", msg.Body);
         Assert.False(msg.IsBodyHtml);
-        Assert.Equal(1, msg.AlternateViews.Count);
+        Assert.Single(msg.AlternateViews);
         Assert.Contains("text/html", msg.AlternateViews[0].ContentType.MediaType);
     }
 
@@ -231,7 +233,7 @@ public class MailMessageBuilderTests
             .Attach(stream, "data.bin")
             .Build();
 
-        Assert.Equal(1, msg.Attachments.Count);
+        Assert.Single(msg.Attachments);
         Assert.Equal("data.bin", msg.Attachments[0].Name);
     }
 
@@ -246,7 +248,7 @@ public class MailMessageBuilderTests
             .Attach(new byte[] { 1, 2, 3 }, "report.pdf", "application/pdf")
             .Build();
 
-        Assert.Equal(1, msg.Attachments.Count);
+        Assert.Single(msg.Attachments);
         Assert.Equal("report.pdf", msg.Attachments[0].Name);
     }
 
@@ -307,15 +309,15 @@ public class MailMessageBuilderTests
             .Build();
 
         Assert.Equal("from@example.com", msg.From!.Address);
-        Assert.Equal(1, msg.To.Count);
-        Assert.Equal(1, msg.CC.Count);
-        Assert.Equal(1, msg.Bcc.Count);
-        Assert.Equal(1, msg.ReplyToList.Count);
+        Assert.Single(msg.To);
+        Assert.Single(msg.CC);
+        Assert.Single(msg.Bcc);
+        Assert.Single(msg.ReplyToList);
         Assert.Equal("Full Test", msg.Subject);
         Assert.Equal("Plain", msg.Body);
-        Assert.Equal(1, msg.AlternateViews.Count);
+        Assert.Single(msg.AlternateViews);
         Assert.Equal(MailPriority.High, msg.Priority);
         Assert.Equal("yes", msg.Headers["X-Test"]);
-        Assert.Equal(1, msg.Attachments.Count);
+        Assert.Single(msg.Attachments);
     }
 }
