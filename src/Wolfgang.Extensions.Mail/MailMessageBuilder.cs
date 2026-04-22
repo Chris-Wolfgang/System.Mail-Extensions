@@ -493,6 +493,15 @@ public sealed class MailMessageBuilder
             );
         }
 
+        if (_to.Count == 0 && _cc.Count == 0 && _bcc.Count == 0)
+        {
+            throw new InvalidOperationException
+            (
+                "At least one recipient (To, Cc, or Bcc) is required. " +
+                "Call To(), Cc(), or Bcc() before Build()."
+            );
+        }
+
         var message = new MailMessage
         {
             From = _from,

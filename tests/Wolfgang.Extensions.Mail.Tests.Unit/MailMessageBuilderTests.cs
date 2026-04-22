@@ -27,6 +27,47 @@ public class MailMessageBuilderTests
 
 
 
+    [Fact]
+    public void Build_when_no_recipients_throws_InvalidOperationException()
+    {
+        var builder = new MailMessageBuilder()
+            .From("from@example.com");
+
+        var ex = Assert.Throws<InvalidOperationException>
+        (
+            () => builder.Build()
+        );
+        Assert.Contains("recipient", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+
+
+    [Fact]
+    public void Build_when_only_Cc_recipient_is_set_succeeds()
+    {
+        using var msg = new MailMessageBuilder()
+            .From("from@example.com")
+            .Cc("cc@example.com")
+            .Build();
+
+        Assert.Single(msg.CC);
+    }
+
+
+
+    [Fact]
+    public void Build_when_only_Bcc_recipient_is_set_succeeds()
+    {
+        using var msg = new MailMessageBuilder()
+            .From("from@example.com")
+            .Bcc("bcc@example.com")
+            .Build();
+
+        Assert.Single(msg.Bcc);
+    }
+
+
+
     // ---------- From ----------
 
     [Fact]
