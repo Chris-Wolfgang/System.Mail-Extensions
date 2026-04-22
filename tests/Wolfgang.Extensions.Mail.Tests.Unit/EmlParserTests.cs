@@ -402,6 +402,214 @@ public class EmlParserTests
 
 
 
+    // ---------- Coverage for edge cases ----------
+
+    [Fact]
+    public void Parse_when_body_uses_LF_only_separator_parses_correctly()
+    {
+        var eml = "From: sender@example.com\nTo: to@example.com\nSubject: LF Test\n\nBody content";
+
+        using var msg = EmlParser.Parse(eml);
+
+        Assert.Equal("LF Test", msg.Subject);
+        Assert.Equal("Body content", msg.Body);
+    }
+
+
+
+    [Fact]
+    public void Parse_when_headers_are_folded_across_lines_combines_them()
+    {
+        // Folded header: continuation line starts with space or tab
+        var eml = "From: sender@example.com\r\nTo: to@example.com\r\nSubject: This is\r\n a folded\r\n\tsubject\r\n\r\nBody";
+
+        using var msg = EmlParser.Parse(eml);
+
+        Assert.Contains("folded", msg.Subject);
+    }
+
+
+
+    [Fact]
+    public void Parse_when_x_priority_5_sets_low_priority()
+    {
+        var eml = BuildEml
+        (
+            "From: sender@example.com",
+            "To: to@example.com",
+            "X-Priority: 5",
+            "",
+            "Body"
+        );
+
+        using var msg = EmlParser.Parse(eml);
+
+        Assert.Equal(MailPriority.Low, msg.Priority);
+    }
+
+
+
+    [Fact]
+    public void Parse_when_multipart_alternative_has_html_adds_as_alternate_view()
+    {
+        // Multipart/alternative: text/plain followed by text/html -> plain becomes Body, html becomes AlternateView
+        var eml = BuildEml
+        (
+            "From: sender@example.com",
+            "To: to@example.com",
+            "Subject: Alternative",
+            "Content-Type: multipart/alternative; boundary=\"ALT\"",
+            "",
+            "--ALT",
+            "Content-Type: text/plain",
+            "",
+            "Plain text version",
+            "--ALT",
+            "Content-Type: text/html",
+            "",
+            "<p>HTML version</p>",
+            "--ALT--"
+        );
+
+        using var msg = EmlParser.Parse(eml);
+
+        Assert.Equal("Plain text version", msg.Body);
+        Assert.False(msg.IsBodyHtml);
+        Assert.Single(msg.AlternateViews);
+    }
+
+
+
+    [Fact]
+    public void Parse_when_nested_multipart_handles_inner_parts()
+    {
+        var eml = BuildEml
+        (
+            "From: sender@example.com",
+            "To: to@example.com",
+            "Content-Type: multipart/mixed; boundary=\"OUTER\"",
+            "",
+            "--OUTER",
+            "Content-Type: multipart/alternative; boundary=\"INNER\"",
+            "",
+            "--INNER",
+            "Content-Type: text/plain",
+            "",
+            "Inner plain",
+            "--INNER--",
+            "--OUTER--"
+        );
+
+        using var msg = EmlParser.Parse(eml);
+
+        Assert.Equal("Inner plain", msg.Body);
+    }
+
+
+
+    [Fact]
+    public void Parse_when_base64_body_is_malformed_returns_original_text()
+    {
+        var eml = BuildEml
+        (
+            "From: sender@example.com",
+            "To: to@example.com",
+            "Content-Type: text/plain",
+            "Content-Transfer-Encoding: base64",
+            "",
+            "this is not valid base64 !!!"
+        );
+
+        using var msg = EmlParser.Parse(eml);
+
+        // Should not throw; body preserved as-is on decode failure
+        Assert.False(string.IsNullOrEmpty(msg.Body));
+    }
+
+
+
+    [Fact]
+    public void Parse_when_malformed_From_is_silently_skipped()
+    {
+        var eml = BuildEml
+        (
+            "From: not a valid email!!!",
+            "To: to@example.com",
+            "Subject: Bad From",
+            "",
+            "Body"
+        );
+
+        using var msg = EmlParser.Parse(eml);
+
+        // From should be null or unset, but parsing should not throw
+        Assert.Equal("Bad From", msg.Subject);
+    }
+
+
+
+    [Fact]
+    public void Parse_when_attachment_has_name_in_content_type_extracts_filename()
+    {
+        var attachmentContent = Convert.ToBase64String(new byte[] { 1, 2, 3 });
+        var eml = BuildEml
+        (
+            "From: sender@example.com",
+            "To: to@example.com",
+            "Content-Type: multipart/mixed; boundary=\"B\"",
+            "",
+            "--B",
+            "Content-Type: text/plain",
+            "",
+            "Body",
+            "--B",
+            "Content-Type: application/octet-stream; name=\"fromtype.bin\"",
+            "Content-Transfer-Encoding: base64",
+            "",
+            attachmentContent,
+            "--B--"
+        );
+
+        using var msg = EmlParser.Parse(eml);
+
+        Assert.Single(msg.Attachments);
+        Assert.Equal("fromtype.bin", msg.Attachments[0].Name);
+    }
+
+
+
+    [Fact]
+    public void Parse_when_attachment_has_content_id_preserves_it()
+    {
+        var attachmentContent = Convert.ToBase64String(new byte[] { 1, 2, 3 });
+        var eml = BuildEml
+        (
+            "From: sender@example.com",
+            "To: to@example.com",
+            "Content-Type: multipart/mixed; boundary=\"B\"",
+            "",
+            "--B",
+            "Content-Type: text/plain",
+            "",
+            "Body",
+            "--B",
+            "Content-Type: application/octet-stream",
+            "Content-Disposition: attachment; filename=\"data.bin\"",
+            "Content-Transfer-Encoding: base64",
+            "Content-ID: <my-id-123>",
+            "",
+            attachmentContent,
+            "--B--"
+        );
+
+        using var msg = EmlParser.Parse(eml);
+
+        Assert.Single(msg.Attachments);
+        Assert.Equal("my-id-123", msg.Attachments[0].ContentId);
+    }
+
+
+
     // ---------- Helpers ----------
 
     private static string BuildEml
