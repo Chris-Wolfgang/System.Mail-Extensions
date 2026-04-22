@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Assert = Xunit.Assert;
 #pragma warning disable CA1707
+#pragma warning disable MA0074 // xUnit Assert.Contains triggers this for string overloads
 
 namespace Wolfgang.Extensions.Mail.Tests.Unit;
 
@@ -68,7 +69,7 @@ public class EmlParserTests
         using var msg = EmlParser.Parse(eml);
 
         Assert.Equal("sender@example.com", msg.From!.Address);
-        Assert.Equal(1, msg.To.Count);
+        Assert.Single(msg.To);
         Assert.Equal("recipient@example.com", msg.To[0].Address);
         Assert.Equal("Test Subject", msg.Subject);
         Assert.Equal("Hello, World!", msg.Body);
@@ -152,8 +153,8 @@ public class EmlParserTests
 
         using var msg = EmlParser.Parse(eml);
 
-        Assert.Equal(1, msg.CC.Count);
-        Assert.Equal(1, msg.Bcc.Count);
+        Assert.Single(msg.CC);
+        Assert.Single(msg.Bcc);
     }
 
 
@@ -274,7 +275,7 @@ public class EmlParserTests
         using var msg = EmlParser.Parse(eml);
 
         Assert.Equal("Plain text body", msg.Body);
-        Assert.Equal(1, msg.Attachments.Count);
+        Assert.Single(msg.Attachments);
         Assert.Equal("data.bin", msg.Attachments[0].Name);
     }
 
@@ -335,7 +336,7 @@ public class EmlParserTests
         using var parsed = EmlParser.Parse(eml);
 
         Assert.Equal("from@example.com", parsed.From!.Address);
-        Assert.Contains(parsed.To, a => a.Address == "to@example.com");
+        Assert.Contains(parsed.To, a => string.Equals(a.Address, "to@example.com", StringComparison.Ordinal));
         Assert.Equal("Round Trip", parsed.Subject);
         Assert.Contains("Test body", parsed.Body);
     }
@@ -389,7 +390,12 @@ public class EmlParserTests
 
         try
         {
+#if NETSTANDARD2_0 || NETFRAMEWORK
             File.WriteAllText(filePath, eml);
+            await Task.CompletedTask;
+#else
+            await File.WriteAllTextAsync(filePath, eml);
+#endif
             using var msg = await EmlParser.ParseFileAsync(filePath);
 
             Assert.Equal("Async File Test", msg.Subject);
