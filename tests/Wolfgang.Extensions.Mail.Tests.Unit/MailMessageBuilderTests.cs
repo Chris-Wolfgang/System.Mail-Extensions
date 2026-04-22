@@ -361,4 +361,220 @@ public class MailMessageBuilderTests
         Assert.Equal("yes", msg.Headers["X-Test"]);
         Assert.Single(msg.Attachments);
     }
+
+
+
+    // ---------- Null guards ----------
+
+    [Fact]
+    public void SenderAddress_when_null_throws_ArgumentNullException()
+    {
+        var builder = new MailMessageBuilder();
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => builder.SenderAddress(null!)
+        );
+    }
+
+
+
+    [Fact]
+    public void To_params_when_null_throws_ArgumentNullException()
+    {
+        var builder = new MailMessageBuilder();
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => builder.To((string[])null!)
+        );
+    }
+
+
+
+    [Fact]
+    public void To_with_displayName_when_null_throws_ArgumentNullException()
+    {
+        var builder = new MailMessageBuilder();
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => builder.To(null!, "Name")
+        );
+    }
+
+
+
+    [Fact]
+    public void To_with_displayName_adds_recipient_with_name()
+    {
+        using var msg = new MailMessageBuilder()
+            .From("from@example.com")
+            .To("alice@example.com", "Alice Smith")
+            .Build();
+
+        var to = Assert.Single(msg.To);
+        Assert.Equal("alice@example.com", to.Address);
+        Assert.Equal("Alice Smith", to.DisplayName);
+    }
+
+
+
+    [Fact]
+    public void Cc_when_null_throws_ArgumentNullException()
+    {
+        var builder = new MailMessageBuilder();
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => builder.Cc(null!)
+        );
+    }
+
+
+
+    [Fact]
+    public void Bcc_when_null_throws_ArgumentNullException()
+    {
+        var builder = new MailMessageBuilder();
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => builder.Bcc(null!)
+        );
+    }
+
+
+
+    [Fact]
+    public void ReplyTo_when_null_throws_ArgumentNullException()
+    {
+        var builder = new MailMessageBuilder();
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => builder.ReplyTo(null!)
+        );
+    }
+
+
+
+    [Fact]
+    public void Header_when_name_null_throws_ArgumentNullException()
+    {
+        var builder = new MailMessageBuilder();
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => builder.Header(null!, "value")
+        );
+    }
+
+
+
+    [Fact]
+    public void Attach_filePath_when_null_throws_ArgumentNullException()
+    {
+        var builder = new MailMessageBuilder();
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => builder.Attach((string)null!)
+        );
+    }
+
+
+
+    [Fact]
+    public void Attach_stream_when_content_null_throws_ArgumentNullException()
+    {
+        var builder = new MailMessageBuilder();
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => builder.Attach((System.IO.Stream)null!, "name")
+        );
+    }
+
+
+
+    [Fact]
+    public void Attach_stream_when_name_null_throws_ArgumentNullException()
+    {
+        var builder = new MailMessageBuilder();
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => builder.Attach(new System.IO.MemoryStream(), null!)
+        );
+    }
+
+
+
+    [Fact]
+    public void Attach_bytes_when_content_null_throws_ArgumentNullException()
+    {
+        var builder = new MailMessageBuilder();
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => builder.Attach((byte[])null!, "name")
+        );
+    }
+
+
+
+    [Fact]
+    public void Attach_bytes_when_name_null_throws_ArgumentNullException()
+    {
+        var builder = new MailMessageBuilder();
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => builder.Attach(new byte[] { 1 }, null!)
+        );
+    }
+
+
+
+    // ---------- DeliveryNotification / Attach filePath ----------
+
+    [Fact]
+    public void Build_when_DeliveryNotification_set_applies_value()
+    {
+        using var msg = new MailMessageBuilder()
+            .From("from@example.com")
+            .To("to@example.com")
+            .DeliveryNotification(DeliveryNotificationOptions.OnFailure)
+            .Build();
+
+        Assert.Equal(DeliveryNotificationOptions.OnFailure, msg.DeliveryNotificationOptions);
+    }
+
+
+
+    [Fact]
+    public void Attach_filePath_adds_attachment_from_file()
+    {
+        var filePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"test_{Guid.NewGuid():N}.txt");
+        System.IO.File.WriteAllText(filePath, "test content");
+
+        try
+        {
+            using var msg = new MailMessageBuilder()
+                .From("from@example.com")
+                .To("to@example.com")
+                .Attach(filePath)
+                .Build();
+
+            Assert.Single(msg.Attachments);
+        }
+        finally
+        {
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+        }
+    }
 }
