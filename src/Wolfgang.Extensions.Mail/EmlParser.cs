@@ -25,6 +25,24 @@ namespace Wolfgang.Extensions.Mail;
 public static class EmlParser
 {
 
+    private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
+
+    private const RegexOptions DefaultRegexOptions =
+        RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
+
+    private const RegexOptions DefaultRegexOptionsNoCase =
+        RegexOptions.ExplicitCapture;
+
+    private static readonly HashSet<string> StandardHeaderNames =
+        new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        "from", "to", "cc", "bcc", "reply-to", "subject",
+        "content-type", "content-transfer-encoding", "mime-version",
+        "date", "message-id"
+    };
+
+
+
     /// <summary>
     /// Parses a raw EML/MIME string into a <see cref="MailMessage"/>.
     /// </summary>
@@ -53,96 +71,11 @@ public static class EmlParser
         var headers = ParseHeaders(headerSection);
         var message = new MailMessage();
 
-        // From
-        if (headers.TryGetValue("from", out var from) && !string.IsNullOrWhiteSpace(from))
-        {
-            try { message.From = ParseMailAddressSafe(from); }
-            catch (FormatException) { /* Skip malformed From */ }
-        }
-
-        // To
-        if (headers.TryGetValue("to", out var to))
-        {
-            AddAddresses(message.To, to);
-        }
-
-        // CC
-        if (headers.TryGetValue("cc", out var cc))
-        {
-            AddAddresses(message.CC, cc);
-        }
-
-        // BCC
-        if (headers.TryGetValue("bcc", out var bcc))
-        {
-            AddAddresses(message.Bcc, bcc);
-        }
-
-        // Reply-To
-        if (headers.TryGetValue("reply-to", out var replyTo))
-        {
-            AddAddresses(message.ReplyToList, replyTo);
-        }
-
-        // Subject — decode RFC 2047 encoded words
-        if (headers.TryGetValue("subject", out var subject))
-        {
-            message.Subject = DecodeEncodedWords(subject);
-        }
-
-        // Content-Type
-        var contentType = headers.TryGetValue("content-type", out var ct) ? ct : "text/plain";
-        var isMultipart = contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0;
-
-        // Content-Transfer-Encoding
-        var transferEncoding = headers.TryGetValue("content-transfer-encoding", out var cte)
-            ? cte.Trim().ToLowerInvariant()
-            : "7bit";
-
-        if (isMultipart)
-        {
-            var boundary = ExtractBoundary(contentType);
-            if (boundary != null)
-            {
-                ParseMultipart(message, bodySection, boundary);
-            }
-        }
-        else
-        {
-            // Simple single-part message
-            var isHtml = contentType.IndexOf("text/html", StringComparison.OrdinalIgnoreCase) >= 0;
-            message.IsBodyHtml = isHtml;
-            message.Body = DecodeBody(bodySection, transferEncoding);
-        }
-
-        // Custom headers (skip standard ones)
-        var standardHeaders = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-        {
-            "from", "to", "cc", "bcc", "reply-to", "subject",
-            "content-type", "content-transfer-encoding", "mime-version",
-            "date", "message-id"
-        };
-
-        foreach (var kvp in headers)
-        {
-            if (!standardHeaders.Contains(kvp.Key))
-            {
-                message.Headers[kvp.Key] = kvp.Value;
-            }
-        }
-
-        // Priority
-        if (headers.TryGetValue("x-priority", out var priority))
-        {
-            if (priority.Trim().StartsWith("1") || priority.Trim().StartsWith("2"))
-            {
-                message.Priority = MailPriority.High;
-            }
-            else if (priority.Trim().StartsWith("4") || priority.Trim().StartsWith("5"))
-            {
-                message.Priority = MailPriority.Low;
-            }
-        }
+        ApplyAddressHeaders(message, headers);
+        ApplySubject(message, headers);
+        ApplyBodyOrMultipart(message, headers, bodySection);
+        ApplyCustomHeaders(message, headers);
+        ApplyPriority(message, headers);
 
         return message;
     }
@@ -196,7 +129,9 @@ public static class EmlParser
 
 #if NETSTANDARD2_0 || NET462
         cancellationToken.ThrowIfCancellationRequested();
+#pragma warning disable RS0030
         var content = File.ReadAllText(filePath, Encoding.UTF8);
+#pragma warning restore RS0030
         await Task.CompletedTask.ConfigureAwait(false);
 #else
         var content = await File.ReadAllTextAsync(filePath, Encoding.UTF8, cancellationToken)
@@ -209,8 +144,134 @@ public static class EmlParser
 
 
     // ==========================================================================
-    // Private helpers
+    // Parse helpers
     // ==========================================================================
+
+    private static void ApplyAddressHeaders
+    (
+        MailMessage message,
+        Dictionary<string, string> headers
+    )
+    {
+        if (headers.TryGetValue("from", out var from) && !string.IsNullOrWhiteSpace(from))
+        {
+            try { message.From = ParseMailAddressSafe(from); }
+            catch (FormatException) { /* Skip malformed From */ }
+        }
+
+        if (headers.TryGetValue("to", out var to))
+        {
+            AddAddresses(message.To, to);
+        }
+
+        if (headers.TryGetValue("cc", out var cc))
+        {
+            AddAddresses(message.CC, cc);
+        }
+
+        if (headers.TryGetValue("bcc", out var bcc))
+        {
+            AddAddresses(message.Bcc, bcc);
+        }
+
+        if (headers.TryGetValue("reply-to", out var replyTo))
+        {
+            AddAddresses(message.ReplyToList, replyTo);
+        }
+    }
+
+
+
+    private static void ApplySubject
+    (
+        MailMessage message,
+        Dictionary<string, string> headers
+    )
+    {
+        if (headers.TryGetValue("subject", out var subject))
+        {
+            message.Subject = DecodeEncodedWords(subject);
+        }
+    }
+
+
+
+    private static void ApplyBodyOrMultipart
+    (
+        MailMessage message,
+        Dictionary<string, string> headers,
+        string bodySection
+    )
+    {
+        var contentType = headers.TryGetValue("content-type", out var ct) ? ct : "text/plain";
+        var isMultipart = contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0;
+        var transferEncoding = headers.TryGetValue("content-transfer-encoding", out var cte)
+            ? cte.Trim().ToLowerInvariant()
+            : "7bit";
+
+        if (isMultipart)
+        {
+            var boundary = ExtractBoundary(contentType);
+            if (boundary != null)
+            {
+                ParseMultipart(message, bodySection, boundary);
+            }
+        }
+        else
+        {
+            var isHtml = contentType.IndexOf("text/html", StringComparison.OrdinalIgnoreCase) >= 0;
+            message.IsBodyHtml = isHtml;
+            message.Body = DecodeBody(bodySection, transferEncoding);
+        }
+    }
+
+
+
+    private static void ApplyCustomHeaders
+    (
+        MailMessage message,
+        Dictionary<string, string> headers
+    )
+    {
+        var customHeaders = headers.Where(kvp => !StandardHeaderNames.Contains(kvp.Key));
+
+        foreach (var kvp in customHeaders)
+        {
+            message.Headers[kvp.Key] = kvp.Value;
+        }
+    }
+
+
+
+    private static void ApplyPriority
+    (
+        MailMessage message,
+        Dictionary<string, string> headers
+    )
+    {
+        if (!headers.TryGetValue("x-priority", out var priority))
+        {
+            return;
+        }
+
+        var trimmed = priority.Trim();
+        if (trimmed.Length == 0)
+        {
+            return;
+        }
+
+        var firstChar = trimmed[0];
+        if (firstChar == '1' || firstChar == '2')
+        {
+            message.Priority = MailPriority.High;
+        }
+        else if (firstChar == '4' || firstChar == '5')
+        {
+            message.Priority = MailPriority.Low;
+        }
+    }
+
+
 
     private static int FindHeaderBodySeparator
     (
@@ -287,8 +348,14 @@ public static class EmlParser
         string contentType
     )
     {
-        var match = Regex.Match(contentType, @"boundary=""?([^"";\s]+)""?", RegexOptions.IgnoreCase);
-        return match.Success ? match.Groups[1].Value : null;
+        var match = Regex.Match
+        (
+            contentType,
+            @"boundary=""?(?<boundary>[^"";\s]+)""?",
+            DefaultRegexOptions,
+            RegexTimeout
+        );
+        return match.Success ? match.Groups["boundary"].Value : null;
     }
 
 
@@ -307,8 +374,7 @@ public static class EmlParser
         {
             var part = rawPart.Trim('\r', '\n');
 
-            // Skip empty parts and closing boundary
-            if (string.IsNullOrWhiteSpace(part) || part.StartsWith("--"))
+            if (string.IsNullOrWhiteSpace(part) || part.StartsWith("--", StringComparison.Ordinal))
             {
                 continue;
             }
@@ -324,69 +390,129 @@ public static class EmlParser
             var partTransferEncoding = partHeaders.TryGetValue("content-transfer-encoding", out var pcte)
                 ? pcte.Trim().ToLowerInvariant() : "7bit";
 
-            // Check for nested multipart
-            if (partContentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0)
+            if (TryHandleNestedMultipart(message, partContentType, partBody))
             {
-                var nestedBoundary = ExtractBoundary(partContentType);
-                if (nestedBoundary != null)
-                {
-                    ParseMultipart(message, partBody, nestedBoundary);
-                }
                 continue;
             }
 
-            var isTextPlain = partContentType.IndexOf("text/plain", StringComparison.OrdinalIgnoreCase) >= 0;
-            var isTextHtml = partContentType.IndexOf("text/html", StringComparison.OrdinalIgnoreCase) >= 0;
+            ProcessSinglePart
+            (
+                message,
+                partHeaders,
+                partContentType,
+                partTransferEncoding,
+                partBody
+            );
+        }
+    }
 
-            var contentDisposition = partHeaders.TryGetValue("content-disposition", out var cd)
-                ? cd : null;
-            var isAttachment = contentDisposition != null &&
-                contentDisposition.IndexOf("attachment", StringComparison.OrdinalIgnoreCase) >= 0;
 
-            if (isAttachment || (!isTextPlain && !isTextHtml))
-            {
-                // Treat as attachment
-                var fileName = ExtractFileName(contentDisposition, partContentType) ?? "attachment.bin";
-                var attachmentBytes = DecodeBodyBytes(partBody, partTransferEncoding);
-                var stream = new MemoryStream(attachmentBytes, writable: false);
-                var mimeType = partContentType.Split(';')[0].Trim();
-                var attachment = new Attachment(stream, fileName, mimeType);
 
-                if (partHeaders.TryGetValue("content-id", out var cid))
-                {
-                    attachment.ContentId = cid.Trim('<', '>', ' ');
-                }
+    private static bool TryHandleNestedMultipart
+    (
+        MailMessage message,
+        string partContentType,
+        string partBody
+    )
+    {
+        if (partContentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) < 0)
+        {
+            return false;
+        }
 
-                message.Attachments.Add(attachment);
-            }
-            else if (isTextHtml)
-            {
-                if (string.IsNullOrEmpty(message.Body))
-                {
-                    message.Body = DecodeBody(partBody, partTransferEncoding);
-                    message.IsBodyHtml = true;
-                }
-                else
-                {
-                    // Already have a body — add as alternate view
-                    var decodedHtml = DecodeBody(partBody, partTransferEncoding);
-                    var view = AlternateView.CreateAlternateViewFromString
-                    (
-                        decodedHtml,
-                        Encoding.UTF8,
-                        MediaTypeNames.Text.Html
-                    );
-                    message.AlternateViews.Add(view);
-                }
-            }
-            else if (isTextPlain)
-            {
-                if (string.IsNullOrEmpty(message.Body))
-                {
-                    message.Body = DecodeBody(partBody, partTransferEncoding);
-                    message.IsBodyHtml = false;
-                }
-            }
+        var nestedBoundary = ExtractBoundary(partContentType);
+        if (nestedBoundary != null)
+        {
+            ParseMultipart(message, partBody, nestedBoundary);
+        }
+
+        return true;
+    }
+
+
+
+    private static void ProcessSinglePart
+    (
+        MailMessage message,
+        Dictionary<string, string> partHeaders,
+        string partContentType,
+        string partTransferEncoding,
+        string partBody
+    )
+    {
+        var isTextPlain = partContentType.IndexOf("text/plain", StringComparison.OrdinalIgnoreCase) >= 0;
+        var isTextHtml = partContentType.IndexOf("text/html", StringComparison.OrdinalIgnoreCase) >= 0;
+
+        var contentDisposition = partHeaders.TryGetValue("content-disposition", out var cd)
+            ? cd : null;
+        var isAttachment = contentDisposition != null &&
+            contentDisposition.IndexOf("attachment", StringComparison.OrdinalIgnoreCase) >= 0;
+
+        if (isAttachment || (!isTextPlain && !isTextHtml))
+        {
+            AddAttachmentPart(message, partHeaders, partContentType, partTransferEncoding, partBody, contentDisposition);
+        }
+        else if (isTextHtml)
+        {
+            AddHtmlPart(message, partBody, partTransferEncoding);
+        }
+        else if (isTextPlain && string.IsNullOrEmpty(message.Body))
+        {
+            message.Body = DecodeBody(partBody, partTransferEncoding);
+            message.IsBodyHtml = false;
+        }
+    }
+
+
+
+    private static void AddAttachmentPart
+    (
+        MailMessage message,
+        Dictionary<string, string> partHeaders,
+        string partContentType,
+        string partTransferEncoding,
+        string partBody,
+        string? contentDisposition
+    )
+    {
+        var fileName = ExtractFileName(contentDisposition, partContentType) ?? "attachment.bin";
+        var attachmentBytes = DecodeBodyBytes(partBody, partTransferEncoding);
+        var stream = new MemoryStream(attachmentBytes, writable: false);
+        var mimeType = partContentType.Split(';')[0].Trim();
+        var attachment = new Attachment(stream, fileName, mimeType);
+
+        if (partHeaders.TryGetValue("content-id", out var cid))
+        {
+            attachment.ContentId = cid.Trim('<', '>', ' ');
+        }
+
+        message.Attachments.Add(attachment);
+    }
+
+
+
+    private static void AddHtmlPart
+    (
+        MailMessage message,
+        string partBody,
+        string partTransferEncoding
+    )
+    {
+        if (string.IsNullOrEmpty(message.Body))
+        {
+            message.Body = DecodeBody(partBody, partTransferEncoding);
+            message.IsBodyHtml = true;
+        }
+        else
+        {
+            var decodedHtml = DecodeBody(partBody, partTransferEncoding);
+            var view = AlternateView.CreateAlternateViewFromString
+            (
+                decodedHtml,
+                Encoding.UTF8,
+                MediaTypeNames.Text.Html
+            );
+            message.AlternateViews.Add(view);
         }
     }
 
@@ -400,12 +526,24 @@ public static class EmlParser
     {
         if (contentDisposition != null)
         {
-            var match = Regex.Match(contentDisposition, @"filename=""?([^"";\s]+)""?", RegexOptions.IgnoreCase);
-            if (match.Success) return match.Groups[1].Value;
+            var match = Regex.Match
+            (
+                contentDisposition,
+                @"filename=""?(?<filename>[^"";\s]+)""?",
+                DefaultRegexOptions,
+                RegexTimeout
+            );
+            if (match.Success) return match.Groups["filename"].Value;
         }
 
-        var nameMatch = Regex.Match(contentType, @"name=""?([^"";\s]+)""?", RegexOptions.IgnoreCase);
-        return nameMatch.Success ? nameMatch.Groups[1].Value : null;
+        var nameMatch = Regex.Match
+        (
+            contentType,
+            @"name=""?(?<name>[^"";\s]+)""?",
+            DefaultRegexOptions,
+            RegexTimeout
+        );
+        return nameMatch.Success ? nameMatch.Groups["name"].Value : null;
     }
 
 
@@ -421,7 +559,7 @@ public static class EmlParser
             case "base64":
                 try
                 {
-                    var cleaned = Regex.Replace(body, @"\s+", "");
+                    var cleaned = Regex.Replace(body, @"\s+", "", DefaultRegexOptionsNoCase, RegexTimeout);
                     var bytes = Convert.FromBase64String(cleaned);
                     return Encoding.UTF8.GetString(bytes);
                 }
@@ -451,7 +589,7 @@ public static class EmlParser
             case "base64":
                 try
                 {
-                    var cleaned = Regex.Replace(body, @"\s+", "");
+                    var cleaned = Regex.Replace(body, @"\s+", "", DefaultRegexOptionsNoCase, RegexTimeout);
                     return Convert.FromBase64String(cleaned);
                 }
                 catch (FormatException)
@@ -475,28 +613,30 @@ public static class EmlParser
     )
     {
         // Remove soft line breaks (= at end of line)
-        var cleaned = Regex.Replace(input, @"=\r?\n", "");
+        var cleaned = Regex.Replace(input, @"=\r?\n", "", DefaultRegexOptionsNoCase, RegexTimeout);
 
         // Collect bytes for proper multi-byte UTF-8 decoding
         var result = new List<byte>();
+        var i = 0;
 
-        for (var i = 0; i < cleaned.Length; i++)
+        while (i < cleaned.Length)
         {
             if (cleaned[i] == '=' && i + 2 < cleaned.Length
                 && IsHexChar(cleaned[i + 1]) && IsHexChar(cleaned[i + 2]))
             {
                 result.Add(Convert.ToByte(cleaned.Substring(i + 1, 2), 16));
-                i += 2;
+                i += 3;
             }
             else
             {
-                // Flush any pending bytes, then add the literal char
                 var ch = cleaned[i];
                 var charBytes = Encoding.UTF8.GetBytes(new[] { ch });
                 foreach (var b in charBytes)
                 {
                     result.Add(b);
                 }
+
+                i++;
             }
         }
 
@@ -524,53 +664,74 @@ public static class EmlParser
         return Regex.Replace
         (
             input,
-            @"=\?([^?]+)\?([BbQq])\?([^?]+)\?=",
-            m =>
-            {
-                var charset = m.Groups[1].Value;
-                var encoding = m.Groups[2].Value.ToUpperInvariant();
-                var encodedText = m.Groups[3].Value;
-
-                try
-                {
-                    var enc = Encoding.GetEncoding(charset);
-
-                    if (encoding == "B")
-                    {
-                        var bytes = Convert.FromBase64String(encodedText);
-                        return enc.GetString(bytes);
-                    }
-                    else // Q encoding — collect bytes for proper multi-byte decoding
-                    {
-                        var qText = encodedText.Replace('_', ' ');
-                        var byteList = new List<byte>();
-
-                        for (var i = 0; i < qText.Length; i++)
-                        {
-                            if (qText[i] == '=' && i + 2 < qText.Length
-                                && IsHexChar(qText[i + 1]) && IsHexChar(qText[i + 2]))
-                            {
-                                byteList.Add(Convert.ToByte(qText.Substring(i + 1, 2), 16));
-                                i += 2;
-                            }
-                            else
-                            {
-                                foreach (var b in enc.GetBytes(new[] { qText[i] }))
-                                {
-                                    byteList.Add(b);
-                                }
-                            }
-                        }
-
-                        return enc.GetString(byteList.ToArray());
-                    }
-                }
-                catch
-                {
-                    return m.Value;
-                }
-            }
+            @"=\?(?<charset>[^?]+)\?(?<encoding>[BbQq])\?(?<text>[^?]+)\?=",
+            DecodeEncodedWordMatch,
+            DefaultRegexOptionsNoCase,
+            RegexTimeout
         );
+    }
+
+
+
+    private static string DecodeEncodedWordMatch
+    (
+        Match m
+    )
+    {
+        var charset = m.Groups["charset"].Value;
+        var encoding = m.Groups["encoding"].Value.ToUpperInvariant();
+        var encodedText = m.Groups["text"].Value;
+
+        try
+        {
+            var enc = Encoding.GetEncoding(charset);
+
+            if (string.Equals(encoding, "B", StringComparison.Ordinal))
+            {
+                var bytes = Convert.FromBase64String(encodedText);
+                return enc.GetString(bytes);
+            }
+
+            return DecodeQEncoding(encodedText, enc);
+        }
+        catch (Exception ex) when (ex is FormatException || ex is ArgumentException)
+        {
+            return m.Value;
+        }
+    }
+
+
+
+    private static string DecodeQEncoding
+    (
+        string encodedText,
+        Encoding enc
+    )
+    {
+        var qText = encodedText.Replace('_', ' ');
+        var byteList = new List<byte>();
+        var i = 0;
+
+        while (i < qText.Length)
+        {
+            if (qText[i] == '=' && i + 2 < qText.Length
+                && IsHexChar(qText[i + 1]) && IsHexChar(qText[i + 2]))
+            {
+                byteList.Add(Convert.ToByte(qText.Substring(i + 1, 2), 16));
+                i += 3;
+            }
+            else
+            {
+                foreach (var b in enc.GetBytes(new[] { qText[i] }))
+                {
+                    byteList.Add(b);
+                }
+
+                i++;
+            }
+        }
+
+        return enc.GetString(byteList.ToArray());
     }
 
 
@@ -580,21 +741,35 @@ public static class EmlParser
         string addressString
     )
     {
+        var trimmed = addressString.Trim();
+
         // Handle "Display Name" <email@example.com> format
-        var match = Regex.Match(addressString.Trim(), @"^""?([^""<]+?)""?\s*<([^>]+)>$");
+        var match = Regex.Match
+        (
+            trimmed,
+            @"^""?(?<name>[^""<]+?)""?\s*<(?<email>[^>]+)>$",
+            DefaultRegexOptionsNoCase,
+            RegexTimeout
+        );
         if (match.Success)
         {
-            return new MailAddress(match.Groups[2].Value.Trim(), match.Groups[1].Value.Trim());
+            return new MailAddress(match.Groups["email"].Value.Trim(), match.Groups["name"].Value.Trim());
         }
 
         // Handle bare <email@example.com>
-        var angleBracket = Regex.Match(addressString.Trim(), @"^<([^>]+)>$");
+        var angleBracket = Regex.Match
+        (
+            trimmed,
+            @"^<(?<email>[^>]+)>$",
+            DefaultRegexOptionsNoCase,
+            RegexTimeout
+        );
         if (angleBracket.Success)
         {
-            return new MailAddress(angleBracket.Groups[1].Value.Trim());
+            return new MailAddress(angleBracket.Groups["email"].Value.Trim());
         }
 
-        return new MailAddress(addressString.Trim());
+        return new MailAddress(trimmed);
     }
 
 
