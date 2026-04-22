@@ -5,6 +5,7 @@ using System.Net.Mail;
 using Xunit;
 using Assert = Xunit.Assert;
 #pragma warning disable CA1707
+#pragma warning disable MA0074 // xUnit Assert.Contains/DoesNotContain triggers this for string overloads
 
 namespace Wolfgang.Extensions.Mail.Tests.Unit;
 
@@ -48,7 +49,7 @@ public class InlineHtmlBuilderTests
 
         using var view = builder.Build();
 
-        Assert.Equal(0, view.LinkedResources.Count);
+        Assert.Empty(view.LinkedResources);
         Assert.Contains("text/html", view.ContentType.MediaType);
     }
 
@@ -91,7 +92,7 @@ public class InlineHtmlBuilderTests
 
         using var view = builder.Build();
 
-        Assert.Equal(1, view.LinkedResources.Count);
+        Assert.Single(view.LinkedResources);
         Assert.False(string.IsNullOrEmpty(view.LinkedResources[0].ContentId));
         Assert.Equal("image/png", view.LinkedResources[0].ContentType.MediaType);
     }
@@ -127,7 +128,7 @@ public class InlineHtmlBuilderTests
 
         using var view = builder.Build();
 
-        Assert.Equal(1, view.LinkedResources.Count);
+        Assert.Single(view.LinkedResources);
         Assert.Equal("image/jpeg", view.LinkedResources[0].ContentType.MediaType);
     }
 
