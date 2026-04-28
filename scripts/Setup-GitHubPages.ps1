@@ -320,10 +320,11 @@ if ($needsDocFxConfig) {
     }
     
     # Create replacements hashtable
+    # Note: PROJECT_NAME and PACKAGE_NAME placeholders both resolve to the same
+    # value in this repo (Wolfgang.Extensions.Mail), so only one entry is needed.
     $replacements = @{
         'Wolfgang.Extensions.Mail' = $projectName
         '{{PROJECT_DESCRIPTION}}' = $projectDescription
-        'Wolfgang.Extensions.Mail' = $packageName
         'https://github.com/Chris-Wolfgang/System.Mail-Extensions' = $githubRepoUrl
         'https://chris-wolfgang.github.io/System.Mail-Extensions' = $docsUrl
     }
