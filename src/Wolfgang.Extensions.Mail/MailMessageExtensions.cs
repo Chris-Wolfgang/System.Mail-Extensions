@@ -48,7 +48,7 @@ public static class MailMessageExtensions
         this MailMessage source
     )
     {
-        return Validate(source, null);
+        return Validate(source, options: null);
     }
 
 
@@ -455,6 +455,7 @@ public static class MailMessageExtensions
 
 #pragma warning disable S3011  // Reflection on non-public members is intentional for MIME serialization
 #pragma warning disable VSTHRD002 // Synchronous wait is intentional — SendAsync with SyncReadWriteAdapter completes synchronously
+#pragma warning disable RS0030  // GetAwaiter().GetResult() is intentional — SyncReadWriteAdapter completes synchronously
     [ExcludeFromCodeCoverage] // Branches depend on runtime version; each TFM only exercises one path
     private static void InvokeMailMessageSend
     (
@@ -517,6 +518,7 @@ public static class MailMessageExtensions
             task.GetAwaiter().GetResult();
         }
     }
+#pragma warning restore RS0030
 #pragma warning restore VSTHRD002
 #pragma warning restore S3011
 
@@ -686,10 +688,10 @@ public static class MailMessageExtensions
         // Try 2-parameter constructor first (net6.0+): MailWriter(Stream, bool)
         var ctor = mailWriterType.GetConstructor
         (
-            BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
-            null,
-            new[] { typeof(Stream), typeof(bool) },
-            null
+            bindingAttr: BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
+            binder: null,
+            types: new[] { typeof(Stream), typeof(bool) },
+            modifiers: null
         );
 
         if (ctor != null)
@@ -700,10 +702,10 @@ public static class MailMessageExtensions
         // Fall back to 1-parameter constructor (net462): MailWriter(Stream)
         ctor = mailWriterType.GetConstructor
         (
-            BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
-            null,
-            new[] { typeof(Stream) },
-            null
+            bindingAttr: BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
+            binder: null,
+            types: new[] { typeof(Stream) },
+            modifiers: null
         );
 
         if (ctor != null)

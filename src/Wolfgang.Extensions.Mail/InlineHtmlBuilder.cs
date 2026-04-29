@@ -218,9 +218,9 @@ public sealed class InlineHtmlBuilder
 
         var view = AlternateView.CreateAlternateViewFromString
         (
-            html,
-            null,
-            MediaTypeNames.Text.Html
+            content: html,
+            contentEncoding: null,
+            mediaType: MediaTypeNames.Text.Html
         );
 
         foreach (var resource in _resources)
