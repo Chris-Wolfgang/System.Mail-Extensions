@@ -154,9 +154,9 @@ public class MailMessageExtensions_Validate_Tests
         msg.Subject = "Test";
         var view = AlternateView.CreateAlternateViewFromString
         (
-            "<h1>Hello</h1>",
-            null,
-            "text/html"
+            content: "<h1>Hello</h1>",
+            contentEncoding: null,
+            mediaType: "text/html"
         );
         msg.AlternateViews.Add(view);
 

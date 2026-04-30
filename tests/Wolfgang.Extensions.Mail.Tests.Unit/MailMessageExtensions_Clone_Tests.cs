@@ -227,9 +227,9 @@ public class MailMessageExtensions_Clone_Tests
         using var original = new MailMessage("from@example.com", "to@example.com");
         var view = AlternateView.CreateAlternateViewFromString
         (
-            "<h1>Hello</h1>",
-            null,
-            "text/html"
+            content: "<h1>Hello</h1>",
+            contentEncoding: null,
+            mediaType: "text/html"
         );
         var resource = new LinkedResource
         (
