@@ -1,0 +1,941 @@
+### YamlMime:XRefMap
+sorted: true
+references:
+- uid: Wolfgang.Extensions.Mail
+  name: Wolfgang.Extensions.Mail
+  href: api/Wolfgang.Extensions.Mail.html
+  commentId: N:Wolfgang.Extensions.Mail
+  fullName: Wolfgang.Extensions.Mail
+  nameWithType: Wolfgang.Extensions.Mail
+- uid: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions
+  name: AttachmentCollectionExtensions
+  href: api/Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.html
+  commentId: T:Wolfgang.Extensions.Mail.AttachmentCollectionExtensions
+  fullName: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions
+  nameWithType: AttachmentCollectionExtensions
+- uid: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection,System.Collections.Generic.IEnumerable{System.Net.Mail.Attachment})
+  name: AddRange(AttachmentCollection, IEnumerable<Attachment>)
+  href: api/Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.html#Wolfgang_Extensions_Mail_AttachmentCollectionExtensions_AddRange_System_Net_Mail_AttachmentCollection_System_Collections_Generic_IEnumerable_System_Net_Mail_Attachment__
+  commentId: M:Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection,System.Collections.Generic.IEnumerable{System.Net.Mail.Attachment})
+  name.vb: AddRange(AttachmentCollection, IEnumerable(Of Attachment))
+  fullName: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection, System.Collections.Generic.IEnumerable<System.Net.Mail.Attachment>)
+  fullName.vb: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection, System.Collections.Generic.IEnumerable(Of System.Net.Mail.Attachment))
+  nameWithType: AttachmentCollectionExtensions.AddRange(AttachmentCollection, IEnumerable<Attachment>)
+  nameWithType.vb: AttachmentCollectionExtensions.AddRange(AttachmentCollection, IEnumerable(Of Attachment))
+- uid: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection,System.Collections.Generic.IEnumerable{System.String})
+  name: AddRange(AttachmentCollection, IEnumerable<string>)
+  href: api/Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.html#Wolfgang_Extensions_Mail_AttachmentCollectionExtensions_AddRange_System_Net_Mail_AttachmentCollection_System_Collections_Generic_IEnumerable_System_String__
+  commentId: M:Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection,System.Collections.Generic.IEnumerable{System.String})
+  name.vb: AddRange(AttachmentCollection, IEnumerable(Of String))
+  fullName: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection, System.Collections.Generic.IEnumerable<string>)
+  fullName.vb: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection, System.Collections.Generic.IEnumerable(Of String))
+  nameWithType: AttachmentCollectionExtensions.AddRange(AttachmentCollection, IEnumerable<string>)
+  nameWithType.vb: AttachmentCollectionExtensions.AddRange(AttachmentCollection, IEnumerable(Of String))
+- uid: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection,System.Net.Mail.Attachment[])
+  name: AddRange(AttachmentCollection, params Attachment[])
+  href: api/Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.html#Wolfgang_Extensions_Mail_AttachmentCollectionExtensions_AddRange_System_Net_Mail_AttachmentCollection_System_Net_Mail_Attachment___
+  commentId: M:Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection,System.Net.Mail.Attachment[])
+  name.vb: AddRange(AttachmentCollection, ParamArray Attachment())
+  fullName: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection, params System.Net.Mail.Attachment[])
+  fullName.vb: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection, ParamArray System.Net.Mail.Attachment())
+  nameWithType: AttachmentCollectionExtensions.AddRange(AttachmentCollection, params Attachment[])
+  nameWithType.vb: AttachmentCollectionExtensions.AddRange(AttachmentCollection, ParamArray Attachment())
+- uid: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection,System.String[])
+  name: AddRange(AttachmentCollection, params string[])
+  href: api/Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.html#Wolfgang_Extensions_Mail_AttachmentCollectionExtensions_AddRange_System_Net_Mail_AttachmentCollection_System_String___
+  commentId: M:Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection,System.String[])
+  name.vb: AddRange(AttachmentCollection, ParamArray String())
+  fullName: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection, params string[])
+  fullName.vb: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange(System.Net.Mail.AttachmentCollection, ParamArray String())
+  nameWithType: AttachmentCollectionExtensions.AddRange(AttachmentCollection, params string[])
+  nameWithType.vb: AttachmentCollectionExtensions.AddRange(AttachmentCollection, ParamArray String())
+- uid: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange*
+  name: AddRange
+  href: api/Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.html#Wolfgang_Extensions_Mail_AttachmentCollectionExtensions_AddRange_
+  commentId: Overload:Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.AddRange
+  nameWithType: AttachmentCollectionExtensions.AddRange
+- uid: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.ExceedsLimit(System.Net.Mail.AttachmentCollection,System.Int64)
+  name: ExceedsLimit(AttachmentCollection, long)
+  href: api/Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.html#Wolfgang_Extensions_Mail_AttachmentCollectionExtensions_ExceedsLimit_System_Net_Mail_AttachmentCollection_System_Int64_
+  commentId: M:Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.ExceedsLimit(System.Net.Mail.AttachmentCollection,System.Int64)
+  name.vb: ExceedsLimit(AttachmentCollection, Long)
+  fullName: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.ExceedsLimit(System.Net.Mail.AttachmentCollection, long)
+  fullName.vb: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.ExceedsLimit(System.Net.Mail.AttachmentCollection, Long)
+  nameWithType: AttachmentCollectionExtensions.ExceedsLimit(AttachmentCollection, long)
+  nameWithType.vb: AttachmentCollectionExtensions.ExceedsLimit(AttachmentCollection, Long)
+- uid: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.ExceedsLimit*
+  name: ExceedsLimit
+  href: api/Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.html#Wolfgang_Extensions_Mail_AttachmentCollectionExtensions_ExceedsLimit_
+  commentId: Overload:Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.ExceedsLimit
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.ExceedsLimit
+  nameWithType: AttachmentCollectionExtensions.ExceedsLimit
+- uid: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.TotalSize(System.Net.Mail.AttachmentCollection)
+  name: TotalSize(AttachmentCollection)
+  href: api/Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.html#Wolfgang_Extensions_Mail_AttachmentCollectionExtensions_TotalSize_System_Net_Mail_AttachmentCollection_
+  commentId: M:Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.TotalSize(System.Net.Mail.AttachmentCollection)
+  fullName: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.TotalSize(System.Net.Mail.AttachmentCollection)
+  nameWithType: AttachmentCollectionExtensions.TotalSize(AttachmentCollection)
+- uid: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.TotalSize*
+  name: TotalSize
+  href: api/Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.html#Wolfgang_Extensions_Mail_AttachmentCollectionExtensions_TotalSize_
+  commentId: Overload:Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.TotalSize
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.TotalSize
+  nameWithType: AttachmentCollectionExtensions.TotalSize
+- uid: Wolfgang.Extensions.Mail.AttachmentFactory
+  name: AttachmentFactory
+  href: api/Wolfgang.Extensions.Mail.AttachmentFactory.html
+  commentId: T:Wolfgang.Extensions.Mail.AttachmentFactory
+  fullName: Wolfgang.Extensions.Mail.AttachmentFactory
+  nameWithType: AttachmentFactory
+- uid: Wolfgang.Extensions.Mail.AttachmentFactory.FromBase64(System.String,System.String,System.String)
+  name: FromBase64(string, string, string?)
+  href: api/Wolfgang.Extensions.Mail.AttachmentFactory.html#Wolfgang_Extensions_Mail_AttachmentFactory_FromBase64_System_String_System_String_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.AttachmentFactory.FromBase64(System.String,System.String,System.String)
+  name.vb: FromBase64(String, String, String)
+  fullName: Wolfgang.Extensions.Mail.AttachmentFactory.FromBase64(string, string, string?)
+  fullName.vb: Wolfgang.Extensions.Mail.AttachmentFactory.FromBase64(String, String, String)
+  nameWithType: AttachmentFactory.FromBase64(string, string, string?)
+  nameWithType.vb: AttachmentFactory.FromBase64(String, String, String)
+- uid: Wolfgang.Extensions.Mail.AttachmentFactory.FromBase64*
+  name: FromBase64
+  href: api/Wolfgang.Extensions.Mail.AttachmentFactory.html#Wolfgang_Extensions_Mail_AttachmentFactory_FromBase64_
+  commentId: Overload:Wolfgang.Extensions.Mail.AttachmentFactory.FromBase64
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.AttachmentFactory.FromBase64
+  nameWithType: AttachmentFactory.FromBase64
+- uid: Wolfgang.Extensions.Mail.AttachmentFactory.FromBytes(System.Byte[],System.String,System.String)
+  name: FromBytes(byte[], string, string?)
+  href: api/Wolfgang.Extensions.Mail.AttachmentFactory.html#Wolfgang_Extensions_Mail_AttachmentFactory_FromBytes_System_Byte___System_String_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.AttachmentFactory.FromBytes(System.Byte[],System.String,System.String)
+  name.vb: FromBytes(Byte(), String, String)
+  fullName: Wolfgang.Extensions.Mail.AttachmentFactory.FromBytes(byte[], string, string?)
+  fullName.vb: Wolfgang.Extensions.Mail.AttachmentFactory.FromBytes(Byte(), String, String)
+  nameWithType: AttachmentFactory.FromBytes(byte[], string, string?)
+  nameWithType.vb: AttachmentFactory.FromBytes(Byte(), String, String)
+- uid: Wolfgang.Extensions.Mail.AttachmentFactory.FromBytes*
+  name: FromBytes
+  href: api/Wolfgang.Extensions.Mail.AttachmentFactory.html#Wolfgang_Extensions_Mail_AttachmentFactory_FromBytes_
+  commentId: Overload:Wolfgang.Extensions.Mail.AttachmentFactory.FromBytes
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.AttachmentFactory.FromBytes
+  nameWithType: AttachmentFactory.FromBytes
+- uid: Wolfgang.Extensions.Mail.AttachmentFactory.FromStream(System.IO.Stream,System.String,System.String)
+  name: FromStream(Stream, string, string?)
+  href: api/Wolfgang.Extensions.Mail.AttachmentFactory.html#Wolfgang_Extensions_Mail_AttachmentFactory_FromStream_System_IO_Stream_System_String_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.AttachmentFactory.FromStream(System.IO.Stream,System.String,System.String)
+  name.vb: FromStream(Stream, String, String)
+  fullName: Wolfgang.Extensions.Mail.AttachmentFactory.FromStream(System.IO.Stream, string, string?)
+  fullName.vb: Wolfgang.Extensions.Mail.AttachmentFactory.FromStream(System.IO.Stream, String, String)
+  nameWithType: AttachmentFactory.FromStream(Stream, string, string?)
+  nameWithType.vb: AttachmentFactory.FromStream(Stream, String, String)
+- uid: Wolfgang.Extensions.Mail.AttachmentFactory.FromStream*
+  name: FromStream
+  href: api/Wolfgang.Extensions.Mail.AttachmentFactory.html#Wolfgang_Extensions_Mail_AttachmentFactory_FromStream_
+  commentId: Overload:Wolfgang.Extensions.Mail.AttachmentFactory.FromStream
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.AttachmentFactory.FromStream
+  nameWithType: AttachmentFactory.FromStream
+- uid: Wolfgang.Extensions.Mail.AttachmentFactory.InferContentType(System.String)
+  name: InferContentType(string)
+  href: api/Wolfgang.Extensions.Mail.AttachmentFactory.html#Wolfgang_Extensions_Mail_AttachmentFactory_InferContentType_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.AttachmentFactory.InferContentType(System.String)
+  name.vb: InferContentType(String)
+  fullName: Wolfgang.Extensions.Mail.AttachmentFactory.InferContentType(string)
+  fullName.vb: Wolfgang.Extensions.Mail.AttachmentFactory.InferContentType(String)
+  nameWithType: AttachmentFactory.InferContentType(string)
+  nameWithType.vb: AttachmentFactory.InferContentType(String)
+- uid: Wolfgang.Extensions.Mail.AttachmentFactory.InferContentType*
+  name: InferContentType
+  href: api/Wolfgang.Extensions.Mail.AttachmentFactory.html#Wolfgang_Extensions_Mail_AttachmentFactory_InferContentType_
+  commentId: Overload:Wolfgang.Extensions.Mail.AttachmentFactory.InferContentType
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.AttachmentFactory.InferContentType
+  nameWithType: AttachmentFactory.InferContentType
+- uid: Wolfgang.Extensions.Mail.AttachmentFactory.RegisterContentType(System.String,System.String)
+  name: RegisterContentType(string, string)
+  href: api/Wolfgang.Extensions.Mail.AttachmentFactory.html#Wolfgang_Extensions_Mail_AttachmentFactory_RegisterContentType_System_String_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.AttachmentFactory.RegisterContentType(System.String,System.String)
+  name.vb: RegisterContentType(String, String)
+  fullName: Wolfgang.Extensions.Mail.AttachmentFactory.RegisterContentType(string, string)
+  fullName.vb: Wolfgang.Extensions.Mail.AttachmentFactory.RegisterContentType(String, String)
+  nameWithType: AttachmentFactory.RegisterContentType(string, string)
+  nameWithType.vb: AttachmentFactory.RegisterContentType(String, String)
+- uid: Wolfgang.Extensions.Mail.AttachmentFactory.RegisterContentType*
+  name: RegisterContentType
+  href: api/Wolfgang.Extensions.Mail.AttachmentFactory.html#Wolfgang_Extensions_Mail_AttachmentFactory_RegisterContentType_
+  commentId: Overload:Wolfgang.Extensions.Mail.AttachmentFactory.RegisterContentType
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.AttachmentFactory.RegisterContentType
+  nameWithType: AttachmentFactory.RegisterContentType
+- uid: Wolfgang.Extensions.Mail.AttachmentFactory.TryGetRegisteredContentType(System.String,System.String@)
+  name: TryGetRegisteredContentType(string, out string?)
+  href: api/Wolfgang.Extensions.Mail.AttachmentFactory.html#Wolfgang_Extensions_Mail_AttachmentFactory_TryGetRegisteredContentType_System_String_System_String__
+  commentId: M:Wolfgang.Extensions.Mail.AttachmentFactory.TryGetRegisteredContentType(System.String,System.String@)
+  name.vb: TryGetRegisteredContentType(String, String)
+  fullName: Wolfgang.Extensions.Mail.AttachmentFactory.TryGetRegisteredContentType(string, out string?)
+  fullName.vb: Wolfgang.Extensions.Mail.AttachmentFactory.TryGetRegisteredContentType(String, String)
+  nameWithType: AttachmentFactory.TryGetRegisteredContentType(string, out string?)
+  nameWithType.vb: AttachmentFactory.TryGetRegisteredContentType(String, String)
+- uid: Wolfgang.Extensions.Mail.AttachmentFactory.TryGetRegisteredContentType*
+  name: TryGetRegisteredContentType
+  href: api/Wolfgang.Extensions.Mail.AttachmentFactory.html#Wolfgang_Extensions_Mail_AttachmentFactory_TryGetRegisteredContentType_
+  commentId: Overload:Wolfgang.Extensions.Mail.AttachmentFactory.TryGetRegisteredContentType
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.AttachmentFactory.TryGetRegisteredContentType
+  nameWithType: AttachmentFactory.TryGetRegisteredContentType
+- uid: Wolfgang.Extensions.Mail.EmlParser
+  name: EmlParser
+  href: api/Wolfgang.Extensions.Mail.EmlParser.html
+  commentId: T:Wolfgang.Extensions.Mail.EmlParser
+  fullName: Wolfgang.Extensions.Mail.EmlParser
+  nameWithType: EmlParser
+- uid: Wolfgang.Extensions.Mail.EmlParser.Parse(System.String)
+  name: Parse(string)
+  href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_Parse_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.EmlParser.Parse(System.String)
+  name.vb: Parse(String)
+  fullName: Wolfgang.Extensions.Mail.EmlParser.Parse(string)
+  fullName.vb: Wolfgang.Extensions.Mail.EmlParser.Parse(String)
+  nameWithType: EmlParser.Parse(string)
+  nameWithType.vb: EmlParser.Parse(String)
+- uid: Wolfgang.Extensions.Mail.EmlParser.Parse*
+  name: Parse
+  href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_Parse_
+  commentId: Overload:Wolfgang.Extensions.Mail.EmlParser.Parse
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.EmlParser.Parse
+  nameWithType: EmlParser.Parse
+- uid: Wolfgang.Extensions.Mail.EmlParser.ParseFile(System.String)
+  name: ParseFile(string)
+  href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_ParseFile_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.EmlParser.ParseFile(System.String)
+  name.vb: ParseFile(String)
+  fullName: Wolfgang.Extensions.Mail.EmlParser.ParseFile(string)
+  fullName.vb: Wolfgang.Extensions.Mail.EmlParser.ParseFile(String)
+  nameWithType: EmlParser.ParseFile(string)
+  nameWithType.vb: EmlParser.ParseFile(String)
+- uid: Wolfgang.Extensions.Mail.EmlParser.ParseFile*
+  name: ParseFile
+  href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_ParseFile_
+  commentId: Overload:Wolfgang.Extensions.Mail.EmlParser.ParseFile
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.EmlParser.ParseFile
+  nameWithType: EmlParser.ParseFile
+- uid: Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync(System.String,System.Threading.CancellationToken)
+  name: ParseFileAsync(string, CancellationToken)
+  href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_ParseFileAsync_System_String_System_Threading_CancellationToken_
+  commentId: M:Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync(System.String,System.Threading.CancellationToken)
+  name.vb: ParseFileAsync(String, CancellationToken)
+  fullName: Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync(string, System.Threading.CancellationToken)
+  fullName.vb: Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync(String, System.Threading.CancellationToken)
+  nameWithType: EmlParser.ParseFileAsync(string, CancellationToken)
+  nameWithType.vb: EmlParser.ParseFileAsync(String, CancellationToken)
+- uid: Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync*
+  name: ParseFileAsync
+  href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_ParseFileAsync_
+  commentId: Overload:Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync
+  nameWithType: EmlParser.ParseFileAsync
+- uid: Wolfgang.Extensions.Mail.InlineHtmlBuilder
+  name: InlineHtmlBuilder
+  href: api/Wolfgang.Extensions.Mail.InlineHtmlBuilder.html
+  commentId: T:Wolfgang.Extensions.Mail.InlineHtmlBuilder
+  fullName: Wolfgang.Extensions.Mail.InlineHtmlBuilder
+  nameWithType: InlineHtmlBuilder
+- uid: Wolfgang.Extensions.Mail.InlineHtmlBuilder.Build
+  name: Build()
+  href: api/Wolfgang.Extensions.Mail.InlineHtmlBuilder.html#Wolfgang_Extensions_Mail_InlineHtmlBuilder_Build
+  commentId: M:Wolfgang.Extensions.Mail.InlineHtmlBuilder.Build
+  fullName: Wolfgang.Extensions.Mail.InlineHtmlBuilder.Build()
+  nameWithType: InlineHtmlBuilder.Build()
+- uid: Wolfgang.Extensions.Mail.InlineHtmlBuilder.Build*
+  name: Build
+  href: api/Wolfgang.Extensions.Mail.InlineHtmlBuilder.html#Wolfgang_Extensions_Mail_InlineHtmlBuilder_Build_
+  commentId: Overload:Wolfgang.Extensions.Mail.InlineHtmlBuilder.Build
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.InlineHtmlBuilder.Build
+  nameWithType: InlineHtmlBuilder.Build
+- uid: Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage(System.Byte[],System.String,System.String)
+  name: EmbedImage(byte[], string, string?)
+  href: api/Wolfgang.Extensions.Mail.InlineHtmlBuilder.html#Wolfgang_Extensions_Mail_InlineHtmlBuilder_EmbedImage_System_Byte___System_String_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage(System.Byte[],System.String,System.String)
+  name.vb: EmbedImage(Byte(), String, String)
+  fullName: Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage(byte[], string, string?)
+  fullName.vb: Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage(Byte(), String, String)
+  nameWithType: InlineHtmlBuilder.EmbedImage(byte[], string, string?)
+  nameWithType.vb: InlineHtmlBuilder.EmbedImage(Byte(), String, String)
+- uid: Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage(System.IO.Stream,System.String,System.String)
+  name: EmbedImage(Stream, string, string?)
+  href: api/Wolfgang.Extensions.Mail.InlineHtmlBuilder.html#Wolfgang_Extensions_Mail_InlineHtmlBuilder_EmbedImage_System_IO_Stream_System_String_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage(System.IO.Stream,System.String,System.String)
+  name.vb: EmbedImage(Stream, String, String)
+  fullName: Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage(System.IO.Stream, string, string?)
+  fullName.vb: Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage(System.IO.Stream, String, String)
+  nameWithType: InlineHtmlBuilder.EmbedImage(Stream, string, string?)
+  nameWithType.vb: InlineHtmlBuilder.EmbedImage(Stream, String, String)
+- uid: Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage(System.String)
+  name: EmbedImage(string)
+  href: api/Wolfgang.Extensions.Mail.InlineHtmlBuilder.html#Wolfgang_Extensions_Mail_InlineHtmlBuilder_EmbedImage_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage(System.String)
+  name.vb: EmbedImage(String)
+  fullName: Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage(string)
+  fullName.vb: Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage(String)
+  nameWithType: InlineHtmlBuilder.EmbedImage(string)
+  nameWithType.vb: InlineHtmlBuilder.EmbedImage(String)
+- uid: Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage*
+  name: EmbedImage
+  href: api/Wolfgang.Extensions.Mail.InlineHtmlBuilder.html#Wolfgang_Extensions_Mail_InlineHtmlBuilder_EmbedImage_
+  commentId: Overload:Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage
+  nameWithType: InlineHtmlBuilder.EmbedImage
+- uid: Wolfgang.Extensions.Mail.InlineHtmlBuilder.Html(System.String)
+  name: Html(string)
+  href: api/Wolfgang.Extensions.Mail.InlineHtmlBuilder.html#Wolfgang_Extensions_Mail_InlineHtmlBuilder_Html_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.InlineHtmlBuilder.Html(System.String)
+  name.vb: Html(String)
+  fullName: Wolfgang.Extensions.Mail.InlineHtmlBuilder.Html(string)
+  fullName.vb: Wolfgang.Extensions.Mail.InlineHtmlBuilder.Html(String)
+  nameWithType: InlineHtmlBuilder.Html(string)
+  nameWithType.vb: InlineHtmlBuilder.Html(String)
+- uid: Wolfgang.Extensions.Mail.InlineHtmlBuilder.Html*
+  name: Html
+  href: api/Wolfgang.Extensions.Mail.InlineHtmlBuilder.html#Wolfgang_Extensions_Mail_InlineHtmlBuilder_Html_
+  commentId: Overload:Wolfgang.Extensions.Mail.InlineHtmlBuilder.Html
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.InlineHtmlBuilder.Html
+  nameWithType: InlineHtmlBuilder.Html
+- uid: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions
+  name: MailAddressCollectionExtensions
+  href: api/Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.html
+  commentId: T:Wolfgang.Extensions.Mail.MailAddressCollectionExtensions
+  fullName: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions
+  nameWithType: MailAddressCollectionExtensions
+- uid: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection,System.Collections.Generic.IEnumerable{System.Net.Mail.MailAddress})
+  name: AddRange(MailAddressCollection, IEnumerable<MailAddress>)
+  href: api/Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.html#Wolfgang_Extensions_Mail_MailAddressCollectionExtensions_AddRange_System_Net_Mail_MailAddressCollection_System_Collections_Generic_IEnumerable_System_Net_Mail_MailAddress__
+  commentId: M:Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection,System.Collections.Generic.IEnumerable{System.Net.Mail.MailAddress})
+  name.vb: AddRange(MailAddressCollection, IEnumerable(Of MailAddress))
+  fullName: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection, System.Collections.Generic.IEnumerable<System.Net.Mail.MailAddress>)
+  fullName.vb: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection, System.Collections.Generic.IEnumerable(Of System.Net.Mail.MailAddress))
+  nameWithType: MailAddressCollectionExtensions.AddRange(MailAddressCollection, IEnumerable<MailAddress>)
+  nameWithType.vb: MailAddressCollectionExtensions.AddRange(MailAddressCollection, IEnumerable(Of MailAddress))
+- uid: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection,System.Collections.Generic.IEnumerable{System.String})
+  name: AddRange(MailAddressCollection, IEnumerable<string>)
+  href: api/Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.html#Wolfgang_Extensions_Mail_MailAddressCollectionExtensions_AddRange_System_Net_Mail_MailAddressCollection_System_Collections_Generic_IEnumerable_System_String__
+  commentId: M:Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection,System.Collections.Generic.IEnumerable{System.String})
+  name.vb: AddRange(MailAddressCollection, IEnumerable(Of String))
+  fullName: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection, System.Collections.Generic.IEnumerable<string>)
+  fullName.vb: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection, System.Collections.Generic.IEnumerable(Of String))
+  nameWithType: MailAddressCollectionExtensions.AddRange(MailAddressCollection, IEnumerable<string>)
+  nameWithType.vb: MailAddressCollectionExtensions.AddRange(MailAddressCollection, IEnumerable(Of String))
+- uid: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection,System.Net.Mail.MailAddress[])
+  name: AddRange(MailAddressCollection, params MailAddress[])
+  href: api/Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.html#Wolfgang_Extensions_Mail_MailAddressCollectionExtensions_AddRange_System_Net_Mail_MailAddressCollection_System_Net_Mail_MailAddress___
+  commentId: M:Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection,System.Net.Mail.MailAddress[])
+  name.vb: AddRange(MailAddressCollection, ParamArray MailAddress())
+  fullName: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection, params System.Net.Mail.MailAddress[])
+  fullName.vb: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection, ParamArray System.Net.Mail.MailAddress())
+  nameWithType: MailAddressCollectionExtensions.AddRange(MailAddressCollection, params MailAddress[])
+  nameWithType.vb: MailAddressCollectionExtensions.AddRange(MailAddressCollection, ParamArray MailAddress())
+- uid: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection,System.String[])
+  name: AddRange(MailAddressCollection, params string[])
+  href: api/Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.html#Wolfgang_Extensions_Mail_MailAddressCollectionExtensions_AddRange_System_Net_Mail_MailAddressCollection_System_String___
+  commentId: M:Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection,System.String[])
+  name.vb: AddRange(MailAddressCollection, ParamArray String())
+  fullName: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection, params string[])
+  fullName.vb: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(System.Net.Mail.MailAddressCollection, ParamArray String())
+  nameWithType: MailAddressCollectionExtensions.AddRange(MailAddressCollection, params string[])
+  nameWithType.vb: MailAddressCollectionExtensions.AddRange(MailAddressCollection, ParamArray String())
+- uid: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange*
+  name: AddRange
+  href: api/Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.html#Wolfgang_Extensions_Mail_MailAddressCollectionExtensions_AddRange_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange
+  nameWithType: MailAddressCollectionExtensions.AddRange
+- uid: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.FormatMailAddress(System.Net.Mail.MailAddress)
+  name: FormatMailAddress(MailAddress)
+  href: api/Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.html#Wolfgang_Extensions_Mail_MailAddressCollectionExtensions_FormatMailAddress_System_Net_Mail_MailAddress_
+  commentId: M:Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.FormatMailAddress(System.Net.Mail.MailAddress)
+  fullName: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.FormatMailAddress(System.Net.Mail.MailAddress)
+  nameWithType: MailAddressCollectionExtensions.FormatMailAddress(MailAddress)
+- uid: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.FormatMailAddress*
+  name: FormatMailAddress
+  href: api/Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.html#Wolfgang_Extensions_Mail_MailAddressCollectionExtensions_FormatMailAddress_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.FormatMailAddress
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.FormatMailAddress
+  nameWithType: MailAddressCollectionExtensions.FormatMailAddress
+- uid: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.ToFormattedString(System.Net.Mail.MailAddressCollection,System.String)
+  name: ToFormattedString(MailAddressCollection, string)
+  href: api/Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.html#Wolfgang_Extensions_Mail_MailAddressCollectionExtensions_ToFormattedString_System_Net_Mail_MailAddressCollection_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.ToFormattedString(System.Net.Mail.MailAddressCollection,System.String)
+  name.vb: ToFormattedString(MailAddressCollection, String)
+  fullName: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.ToFormattedString(System.Net.Mail.MailAddressCollection, string)
+  fullName.vb: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.ToFormattedString(System.Net.Mail.MailAddressCollection, String)
+  nameWithType: MailAddressCollectionExtensions.ToFormattedString(MailAddressCollection, string)
+  nameWithType.vb: MailAddressCollectionExtensions.ToFormattedString(MailAddressCollection, String)
+- uid: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.ToFormattedString*
+  name: ToFormattedString
+  href: api/Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.html#Wolfgang_Extensions_Mail_MailAddressCollectionExtensions_ToFormattedString_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.ToFormattedString
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.ToFormattedString
+  nameWithType: MailAddressCollectionExtensions.ToFormattedString
+- uid: Wolfgang.Extensions.Mail.MailAddressExtensions
+  name: MailAddressExtensions
+  href: api/Wolfgang.Extensions.Mail.MailAddressExtensions.html
+  commentId: T:Wolfgang.Extensions.Mail.MailAddressExtensions
+  fullName: Wolfgang.Extensions.Mail.MailAddressExtensions
+  nameWithType: MailAddressExtensions
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder
+  name: MailMessageBuilder
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html
+  commentId: T:Wolfgang.Extensions.Mail.MailMessageBuilder
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder
+  nameWithType: MailMessageBuilder
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Attach(System.Byte[],System.String,System.String)
+  name: Attach(byte[], string, string?)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Attach_System_Byte___System_String_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.Attach(System.Byte[],System.String,System.String)
+  name.vb: Attach(Byte(), String, String)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Attach(byte[], string, string?)
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.Attach(Byte(), String, String)
+  nameWithType: MailMessageBuilder.Attach(byte[], string, string?)
+  nameWithType.vb: MailMessageBuilder.Attach(Byte(), String, String)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Attach(System.IO.Stream,System.String,System.String)
+  name: Attach(Stream, string, string?)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Attach_System_IO_Stream_System_String_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.Attach(System.IO.Stream,System.String,System.String)
+  name.vb: Attach(Stream, String, String)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Attach(System.IO.Stream, string, string?)
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.Attach(System.IO.Stream, String, String)
+  nameWithType: MailMessageBuilder.Attach(Stream, string, string?)
+  nameWithType.vb: MailMessageBuilder.Attach(Stream, String, String)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Attach(System.String)
+  name: Attach(string)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Attach_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.Attach(System.String)
+  name.vb: Attach(String)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Attach(string)
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.Attach(String)
+  nameWithType: MailMessageBuilder.Attach(string)
+  nameWithType.vb: MailMessageBuilder.Attach(String)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Attach*
+  name: Attach
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Attach_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.Attach
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Attach
+  nameWithType: MailMessageBuilder.Attach
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Bcc(System.String[])
+  name: Bcc(params string[])
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Bcc_System_String___
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.Bcc(System.String[])
+  name.vb: Bcc(ParamArray String())
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Bcc(params string[])
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.Bcc(ParamArray String())
+  nameWithType: MailMessageBuilder.Bcc(params string[])
+  nameWithType.vb: MailMessageBuilder.Bcc(ParamArray String())
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Bcc*
+  name: Bcc
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Bcc_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.Bcc
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Bcc
+  nameWithType: MailMessageBuilder.Bcc
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.BodyEncoding(System.Text.Encoding)
+  name: BodyEncoding(Encoding)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_BodyEncoding_System_Text_Encoding_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.BodyEncoding(System.Text.Encoding)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.BodyEncoding(System.Text.Encoding)
+  nameWithType: MailMessageBuilder.BodyEncoding(Encoding)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.BodyEncoding*
+  name: BodyEncoding
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_BodyEncoding_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.BodyEncoding
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.BodyEncoding
+  nameWithType: MailMessageBuilder.BodyEncoding
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Build
+  name: Build()
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Build
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.Build
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Build()
+  nameWithType: MailMessageBuilder.Build()
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Build*
+  name: Build
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Build_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.Build
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Build
+  nameWithType: MailMessageBuilder.Build
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Cc(System.String[])
+  name: Cc(params string[])
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Cc_System_String___
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.Cc(System.String[])
+  name.vb: Cc(ParamArray String())
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Cc(params string[])
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.Cc(ParamArray String())
+  nameWithType: MailMessageBuilder.Cc(params string[])
+  nameWithType.vb: MailMessageBuilder.Cc(ParamArray String())
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Cc*
+  name: Cc
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Cc_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.Cc
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Cc
+  nameWithType: MailMessageBuilder.Cc
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.DeliveryNotification(System.Net.Mail.DeliveryNotificationOptions)
+  name: DeliveryNotification(DeliveryNotificationOptions)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_DeliveryNotification_System_Net_Mail_DeliveryNotificationOptions_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.DeliveryNotification(System.Net.Mail.DeliveryNotificationOptions)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.DeliveryNotification(System.Net.Mail.DeliveryNotificationOptions)
+  nameWithType: MailMessageBuilder.DeliveryNotification(DeliveryNotificationOptions)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.DeliveryNotification*
+  name: DeliveryNotification
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_DeliveryNotification_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.DeliveryNotification
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.DeliveryNotification
+  nameWithType: MailMessageBuilder.DeliveryNotification
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.From(System.String,System.String)
+  name: From(string, string?)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_From_System_String_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.From(System.String,System.String)
+  name.vb: From(String, String)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.From(string, string?)
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.From(String, String)
+  nameWithType: MailMessageBuilder.From(string, string?)
+  nameWithType.vb: MailMessageBuilder.From(String, String)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.From*
+  name: From
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_From_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.From
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.From
+  nameWithType: MailMessageBuilder.From
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Header(System.String,System.String)
+  name: Header(string, string)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Header_System_String_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.Header(System.String,System.String)
+  name.vb: Header(String, String)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Header(string, string)
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.Header(String, String)
+  nameWithType: MailMessageBuilder.Header(string, string)
+  nameWithType.vb: MailMessageBuilder.Header(String, String)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Header*
+  name: Header
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Header_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.Header
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Header
+  nameWithType: MailMessageBuilder.Header
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.HtmlBody(System.String)
+  name: HtmlBody(string?)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_HtmlBody_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.HtmlBody(System.String)
+  name.vb: HtmlBody(String)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.HtmlBody(string?)
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.HtmlBody(String)
+  nameWithType: MailMessageBuilder.HtmlBody(string?)
+  nameWithType.vb: MailMessageBuilder.HtmlBody(String)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.HtmlBody*
+  name: HtmlBody
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_HtmlBody_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.HtmlBody
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.HtmlBody
+  nameWithType: MailMessageBuilder.HtmlBody
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.PlainTextBody(System.String)
+  name: PlainTextBody(string?)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_PlainTextBody_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.PlainTextBody(System.String)
+  name.vb: PlainTextBody(String)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.PlainTextBody(string?)
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.PlainTextBody(String)
+  nameWithType: MailMessageBuilder.PlainTextBody(string?)
+  nameWithType.vb: MailMessageBuilder.PlainTextBody(String)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.PlainTextBody*
+  name: PlainTextBody
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_PlainTextBody_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.PlainTextBody
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.PlainTextBody
+  nameWithType: MailMessageBuilder.PlainTextBody
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Priority(System.Net.Mail.MailPriority)
+  name: Priority(MailPriority)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Priority_System_Net_Mail_MailPriority_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.Priority(System.Net.Mail.MailPriority)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Priority(System.Net.Mail.MailPriority)
+  nameWithType: MailMessageBuilder.Priority(MailPriority)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Priority*
+  name: Priority
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Priority_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.Priority
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Priority
+  nameWithType: MailMessageBuilder.Priority
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.ReplyTo(System.String[])
+  name: ReplyTo(params string[])
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_ReplyTo_System_String___
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.ReplyTo(System.String[])
+  name.vb: ReplyTo(ParamArray String())
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.ReplyTo(params string[])
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.ReplyTo(ParamArray String())
+  nameWithType: MailMessageBuilder.ReplyTo(params string[])
+  nameWithType.vb: MailMessageBuilder.ReplyTo(ParamArray String())
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.ReplyTo*
+  name: ReplyTo
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_ReplyTo_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.ReplyTo
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.ReplyTo
+  nameWithType: MailMessageBuilder.ReplyTo
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.SenderAddress(System.String,System.String)
+  name: SenderAddress(string, string?)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_SenderAddress_System_String_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.SenderAddress(System.String,System.String)
+  name.vb: SenderAddress(String, String)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.SenderAddress(string, string?)
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.SenderAddress(String, String)
+  nameWithType: MailMessageBuilder.SenderAddress(string, string?)
+  nameWithType.vb: MailMessageBuilder.SenderAddress(String, String)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.SenderAddress*
+  name: SenderAddress
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_SenderAddress_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.SenderAddress
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.SenderAddress
+  nameWithType: MailMessageBuilder.SenderAddress
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Subject(System.String)
+  name: Subject(string?)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Subject_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.Subject(System.String)
+  name.vb: Subject(String)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Subject(string?)
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.Subject(String)
+  nameWithType: MailMessageBuilder.Subject(string?)
+  nameWithType.vb: MailMessageBuilder.Subject(String)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.Subject*
+  name: Subject
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_Subject_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.Subject
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.Subject
+  nameWithType: MailMessageBuilder.Subject
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.SubjectEncoding(System.Text.Encoding)
+  name: SubjectEncoding(Encoding)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_SubjectEncoding_System_Text_Encoding_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.SubjectEncoding(System.Text.Encoding)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.SubjectEncoding(System.Text.Encoding)
+  nameWithType: MailMessageBuilder.SubjectEncoding(Encoding)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.SubjectEncoding*
+  name: SubjectEncoding
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_SubjectEncoding_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.SubjectEncoding
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.SubjectEncoding
+  nameWithType: MailMessageBuilder.SubjectEncoding
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.To(System.String,System.String)
+  name: To(string, string)
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_To_System_String_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.To(System.String,System.String)
+  name.vb: To(String, String)
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.To(string, string)
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.To(String, String)
+  nameWithType: MailMessageBuilder.To(string, string)
+  nameWithType.vb: MailMessageBuilder.To(String, String)
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.To(System.String[])
+  name: To(params string[])
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_To_System_String___
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageBuilder.To(System.String[])
+  name.vb: To(ParamArray String())
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.To(params string[])
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageBuilder.To(ParamArray String())
+  nameWithType: MailMessageBuilder.To(params string[])
+  nameWithType.vb: MailMessageBuilder.To(ParamArray String())
+- uid: Wolfgang.Extensions.Mail.MailMessageBuilder.To*
+  name: To
+  href: api/Wolfgang.Extensions.Mail.MailMessageBuilder.html#Wolfgang_Extensions_Mail_MailMessageBuilder_To_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageBuilder.To
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageBuilder.To
+  nameWithType: MailMessageBuilder.To
+- uid: Wolfgang.Extensions.Mail.MailMessageExtensions
+  name: MailMessageExtensions
+  href: api/Wolfgang.Extensions.Mail.MailMessageExtensions.html
+  commentId: T:Wolfgang.Extensions.Mail.MailMessageExtensions
+  fullName: Wolfgang.Extensions.Mail.MailMessageExtensions
+  nameWithType: MailMessageExtensions
+- uid: Wolfgang.Extensions.Mail.MailMessageExtensions.Clone(System.Net.Mail.MailMessage)
+  name: Clone(MailMessage)
+  href: api/Wolfgang.Extensions.Mail.MailMessageExtensions.html#Wolfgang_Extensions_Mail_MailMessageExtensions_Clone_System_Net_Mail_MailMessage_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageExtensions.Clone(System.Net.Mail.MailMessage)
+  fullName: Wolfgang.Extensions.Mail.MailMessageExtensions.Clone(System.Net.Mail.MailMessage)
+  nameWithType: MailMessageExtensions.Clone(MailMessage)
+- uid: Wolfgang.Extensions.Mail.MailMessageExtensions.Clone*
+  name: Clone
+  href: api/Wolfgang.Extensions.Mail.MailMessageExtensions.html#Wolfgang_Extensions_Mail_MailMessageExtensions_Clone_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageExtensions.Clone
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageExtensions.Clone
+  nameWithType: MailMessageExtensions.Clone
+- uid: Wolfgang.Extensions.Mail.MailMessageExtensions.ToMimeString(System.Net.Mail.MailMessage)
+  name: ToMimeString(MailMessage)
+  href: api/Wolfgang.Extensions.Mail.MailMessageExtensions.html#Wolfgang_Extensions_Mail_MailMessageExtensions_ToMimeString_System_Net_Mail_MailMessage_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageExtensions.ToMimeString(System.Net.Mail.MailMessage)
+  fullName: Wolfgang.Extensions.Mail.MailMessageExtensions.ToMimeString(System.Net.Mail.MailMessage)
+  nameWithType: MailMessageExtensions.ToMimeString(MailMessage)
+- uid: Wolfgang.Extensions.Mail.MailMessageExtensions.ToMimeString*
+  name: ToMimeString
+  href: api/Wolfgang.Extensions.Mail.MailMessageExtensions.html#Wolfgang_Extensions_Mail_MailMessageExtensions_ToMimeString_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageExtensions.ToMimeString
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageExtensions.ToMimeString
+  nameWithType: MailMessageExtensions.ToMimeString
+- uid: Wolfgang.Extensions.Mail.MailMessageExtensions.Validate(System.Net.Mail.MailMessage)
+  name: Validate(MailMessage)
+  href: api/Wolfgang.Extensions.Mail.MailMessageExtensions.html#Wolfgang_Extensions_Mail_MailMessageExtensions_Validate_System_Net_Mail_MailMessage_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageExtensions.Validate(System.Net.Mail.MailMessage)
+  fullName: Wolfgang.Extensions.Mail.MailMessageExtensions.Validate(System.Net.Mail.MailMessage)
+  nameWithType: MailMessageExtensions.Validate(MailMessage)
+- uid: Wolfgang.Extensions.Mail.MailMessageExtensions.Validate(System.Net.Mail.MailMessage,Wolfgang.Extensions.Mail.Validation.ValidationOptions)
+  name: Validate(MailMessage, ValidationOptions?)
+  href: api/Wolfgang.Extensions.Mail.MailMessageExtensions.html#Wolfgang_Extensions_Mail_MailMessageExtensions_Validate_System_Net_Mail_MailMessage_Wolfgang_Extensions_Mail_Validation_ValidationOptions_
+  commentId: M:Wolfgang.Extensions.Mail.MailMessageExtensions.Validate(System.Net.Mail.MailMessage,Wolfgang.Extensions.Mail.Validation.ValidationOptions)
+  name.vb: Validate(MailMessage, ValidationOptions)
+  fullName: Wolfgang.Extensions.Mail.MailMessageExtensions.Validate(System.Net.Mail.MailMessage, Wolfgang.Extensions.Mail.Validation.ValidationOptions?)
+  fullName.vb: Wolfgang.Extensions.Mail.MailMessageExtensions.Validate(System.Net.Mail.MailMessage, Wolfgang.Extensions.Mail.Validation.ValidationOptions)
+  nameWithType: MailMessageExtensions.Validate(MailMessage, ValidationOptions?)
+  nameWithType.vb: MailMessageExtensions.Validate(MailMessage, ValidationOptions)
+- uid: Wolfgang.Extensions.Mail.MailMessageExtensions.Validate*
+  name: Validate
+  href: api/Wolfgang.Extensions.Mail.MailMessageExtensions.html#Wolfgang_Extensions_Mail_MailMessageExtensions_Validate_
+  commentId: Overload:Wolfgang.Extensions.Mail.MailMessageExtensions.Validate
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.MailMessageExtensions.Validate
+  nameWithType: MailMessageExtensions.Validate
+- uid: Wolfgang.Extensions.Mail.Validation
+  name: Wolfgang.Extensions.Mail.Validation
+  href: api/Wolfgang.Extensions.Mail.Validation.html
+  commentId: N:Wolfgang.Extensions.Mail.Validation
+  fullName: Wolfgang.Extensions.Mail.Validation
+  nameWithType: Wolfgang.Extensions.Mail.Validation
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationIssue
+  name: ValidationIssue
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.html
+  commentId: T:Wolfgang.Extensions.Mail.Validation.ValidationIssue
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationIssue
+  nameWithType: ValidationIssue
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationIssue.#ctor(Wolfgang.Extensions.Mail.Validation.ValidationSeverity,System.String,System.String)
+  name: ValidationIssue(ValidationSeverity, string, string?)
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.html#Wolfgang_Extensions_Mail_Validation_ValidationIssue__ctor_Wolfgang_Extensions_Mail_Validation_ValidationSeverity_System_String_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.Validation.ValidationIssue.#ctor(Wolfgang.Extensions.Mail.Validation.ValidationSeverity,System.String,System.String)
+  name.vb: New(ValidationSeverity, String, String)
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationIssue.ValidationIssue(Wolfgang.Extensions.Mail.Validation.ValidationSeverity, string, string?)
+  fullName.vb: Wolfgang.Extensions.Mail.Validation.ValidationIssue.New(Wolfgang.Extensions.Mail.Validation.ValidationSeverity, String, String)
+  nameWithType: ValidationIssue.ValidationIssue(ValidationSeverity, string, string?)
+  nameWithType.vb: ValidationIssue.New(ValidationSeverity, String, String)
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationIssue.#ctor*
+  name: ValidationIssue
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.html#Wolfgang_Extensions_Mail_Validation_ValidationIssue__ctor_
+  commentId: Overload:Wolfgang.Extensions.Mail.Validation.ValidationIssue.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationIssue.ValidationIssue
+  fullName.vb: Wolfgang.Extensions.Mail.Validation.ValidationIssue.New
+  nameWithType: ValidationIssue.ValidationIssue
+  nameWithType.vb: ValidationIssue.New
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationIssue.Message
+  name: Message
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.html#Wolfgang_Extensions_Mail_Validation_ValidationIssue_Message
+  commentId: P:Wolfgang.Extensions.Mail.Validation.ValidationIssue.Message
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationIssue.Message
+  nameWithType: ValidationIssue.Message
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationIssue.Message*
+  name: Message
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.html#Wolfgang_Extensions_Mail_Validation_ValidationIssue_Message_
+  commentId: Overload:Wolfgang.Extensions.Mail.Validation.ValidationIssue.Message
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationIssue.Message
+  nameWithType: ValidationIssue.Message
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationIssue.PropertyName
+  name: PropertyName
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.html#Wolfgang_Extensions_Mail_Validation_ValidationIssue_PropertyName
+  commentId: P:Wolfgang.Extensions.Mail.Validation.ValidationIssue.PropertyName
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationIssue.PropertyName
+  nameWithType: ValidationIssue.PropertyName
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationIssue.PropertyName*
+  name: PropertyName
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.html#Wolfgang_Extensions_Mail_Validation_ValidationIssue_PropertyName_
+  commentId: Overload:Wolfgang.Extensions.Mail.Validation.ValidationIssue.PropertyName
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationIssue.PropertyName
+  nameWithType: ValidationIssue.PropertyName
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationIssue.Severity
+  name: Severity
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.html#Wolfgang_Extensions_Mail_Validation_ValidationIssue_Severity
+  commentId: P:Wolfgang.Extensions.Mail.Validation.ValidationIssue.Severity
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationIssue.Severity
+  nameWithType: ValidationIssue.Severity
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationIssue.Severity*
+  name: Severity
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.html#Wolfgang_Extensions_Mail_Validation_ValidationIssue_Severity_
+  commentId: Overload:Wolfgang.Extensions.Mail.Validation.ValidationIssue.Severity
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationIssue.Severity
+  nameWithType: ValidationIssue.Severity
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationIssue.ToString
+  name: ToString()
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.html#Wolfgang_Extensions_Mail_Validation_ValidationIssue_ToString
+  commentId: M:Wolfgang.Extensions.Mail.Validation.ValidationIssue.ToString
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationIssue.ToString()
+  nameWithType: ValidationIssue.ToString()
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationIssue.ToString*
+  name: ToString
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.html#Wolfgang_Extensions_Mail_Validation_ValidationIssue_ToString_
+  commentId: Overload:Wolfgang.Extensions.Mail.Validation.ValidationIssue.ToString
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationIssue.ToString
+  nameWithType: ValidationIssue.ToString
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationOptions
+  name: ValidationOptions
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationOptions.html
+  commentId: T:Wolfgang.Extensions.Mail.Validation.ValidationOptions
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationOptions
+  nameWithType: ValidationOptions
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationOptions.MaxAttachmentSizeBytes
+  name: MaxAttachmentSizeBytes
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationOptions.html#Wolfgang_Extensions_Mail_Validation_ValidationOptions_MaxAttachmentSizeBytes
+  commentId: P:Wolfgang.Extensions.Mail.Validation.ValidationOptions.MaxAttachmentSizeBytes
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationOptions.MaxAttachmentSizeBytes
+  nameWithType: ValidationOptions.MaxAttachmentSizeBytes
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationOptions.MaxAttachmentSizeBytes*
+  name: MaxAttachmentSizeBytes
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationOptions.html#Wolfgang_Extensions_Mail_Validation_ValidationOptions_MaxAttachmentSizeBytes_
+  commentId: Overload:Wolfgang.Extensions.Mail.Validation.ValidationOptions.MaxAttachmentSizeBytes
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationOptions.MaxAttachmentSizeBytes
+  nameWithType: ValidationOptions.MaxAttachmentSizeBytes
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationOptions.MaxTotalAttachmentSizeBytes
+  name: MaxTotalAttachmentSizeBytes
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationOptions.html#Wolfgang_Extensions_Mail_Validation_ValidationOptions_MaxTotalAttachmentSizeBytes
+  commentId: P:Wolfgang.Extensions.Mail.Validation.ValidationOptions.MaxTotalAttachmentSizeBytes
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationOptions.MaxTotalAttachmentSizeBytes
+  nameWithType: ValidationOptions.MaxTotalAttachmentSizeBytes
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationOptions.MaxTotalAttachmentSizeBytes*
+  name: MaxTotalAttachmentSizeBytes
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationOptions.html#Wolfgang_Extensions_Mail_Validation_ValidationOptions_MaxTotalAttachmentSizeBytes_
+  commentId: Overload:Wolfgang.Extensions.Mail.Validation.ValidationOptions.MaxTotalAttachmentSizeBytes
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationOptions.MaxTotalAttachmentSizeBytes
+  nameWithType: ValidationOptions.MaxTotalAttachmentSizeBytes
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationOptions.RequireBody
+  name: RequireBody
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationOptions.html#Wolfgang_Extensions_Mail_Validation_ValidationOptions_RequireBody
+  commentId: P:Wolfgang.Extensions.Mail.Validation.ValidationOptions.RequireBody
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationOptions.RequireBody
+  nameWithType: ValidationOptions.RequireBody
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationOptions.RequireBody*
+  name: RequireBody
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationOptions.html#Wolfgang_Extensions_Mail_Validation_ValidationOptions_RequireBody_
+  commentId: Overload:Wolfgang.Extensions.Mail.Validation.ValidationOptions.RequireBody
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationOptions.RequireBody
+  nameWithType: ValidationOptions.RequireBody
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationOptions.RequireSubject
+  name: RequireSubject
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationOptions.html#Wolfgang_Extensions_Mail_Validation_ValidationOptions_RequireSubject
+  commentId: P:Wolfgang.Extensions.Mail.Validation.ValidationOptions.RequireSubject
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationOptions.RequireSubject
+  nameWithType: ValidationOptions.RequireSubject
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationOptions.RequireSubject*
+  name: RequireSubject
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationOptions.html#Wolfgang_Extensions_Mail_Validation_ValidationOptions_RequireSubject_
+  commentId: Overload:Wolfgang.Extensions.Mail.Validation.ValidationOptions.RequireSubject
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationOptions.RequireSubject
+  nameWithType: ValidationOptions.RequireSubject
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationResult
+  name: ValidationResult
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationResult.html
+  commentId: T:Wolfgang.Extensions.Mail.Validation.ValidationResult
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationResult
+  nameWithType: ValidationResult
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationResult.AllIssues
+  name: AllIssues
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationResult.html#Wolfgang_Extensions_Mail_Validation_ValidationResult_AllIssues
+  commentId: P:Wolfgang.Extensions.Mail.Validation.ValidationResult.AllIssues
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationResult.AllIssues
+  nameWithType: ValidationResult.AllIssues
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationResult.AllIssues*
+  name: AllIssues
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationResult.html#Wolfgang_Extensions_Mail_Validation_ValidationResult_AllIssues_
+  commentId: Overload:Wolfgang.Extensions.Mail.Validation.ValidationResult.AllIssues
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationResult.AllIssues
+  nameWithType: ValidationResult.AllIssues
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationResult.Errors
+  name: Errors
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationResult.html#Wolfgang_Extensions_Mail_Validation_ValidationResult_Errors
+  commentId: P:Wolfgang.Extensions.Mail.Validation.ValidationResult.Errors
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationResult.Errors
+  nameWithType: ValidationResult.Errors
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationResult.Errors*
+  name: Errors
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationResult.html#Wolfgang_Extensions_Mail_Validation_ValidationResult_Errors_
+  commentId: Overload:Wolfgang.Extensions.Mail.Validation.ValidationResult.Errors
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationResult.Errors
+  nameWithType: ValidationResult.Errors
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationResult.IsValid
+  name: IsValid
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationResult.html#Wolfgang_Extensions_Mail_Validation_ValidationResult_IsValid
+  commentId: P:Wolfgang.Extensions.Mail.Validation.ValidationResult.IsValid
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationResult.IsValid
+  nameWithType: ValidationResult.IsValid
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationResult.IsValid*
+  name: IsValid
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationResult.html#Wolfgang_Extensions_Mail_Validation_ValidationResult_IsValid_
+  commentId: Overload:Wolfgang.Extensions.Mail.Validation.ValidationResult.IsValid
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationResult.IsValid
+  nameWithType: ValidationResult.IsValid
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationResult.Warnings
+  name: Warnings
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationResult.html#Wolfgang_Extensions_Mail_Validation_ValidationResult_Warnings
+  commentId: P:Wolfgang.Extensions.Mail.Validation.ValidationResult.Warnings
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationResult.Warnings
+  nameWithType: ValidationResult.Warnings
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationResult.Warnings*
+  name: Warnings
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationResult.html#Wolfgang_Extensions_Mail_Validation_ValidationResult_Warnings_
+  commentId: Overload:Wolfgang.Extensions.Mail.Validation.ValidationResult.Warnings
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationResult.Warnings
+  nameWithType: ValidationResult.Warnings
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationSeverity
+  name: ValidationSeverity
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationSeverity.html
+  commentId: T:Wolfgang.Extensions.Mail.Validation.ValidationSeverity
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationSeverity
+  nameWithType: ValidationSeverity
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationSeverity.Error
+  name: Error
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationSeverity.html#Wolfgang_Extensions_Mail_Validation_ValidationSeverity_Error
+  commentId: F:Wolfgang.Extensions.Mail.Validation.ValidationSeverity.Error
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationSeverity.Error
+  nameWithType: ValidationSeverity.Error
+- uid: Wolfgang.Extensions.Mail.Validation.ValidationSeverity.Warning
+  name: Warning
+  href: api/Wolfgang.Extensions.Mail.Validation.ValidationSeverity.html#Wolfgang_Extensions_Mail_Validation_ValidationSeverity_Warning
+  commentId: F:Wolfgang.Extensions.Mail.Validation.ValidationSeverity.Warning
+  fullName: Wolfgang.Extensions.Mail.Validation.ValidationSeverity.Warning
+  nameWithType: ValidationSeverity.Warning

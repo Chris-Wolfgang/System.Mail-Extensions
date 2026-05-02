@@ -1,0 +1,294 @@
+{
+  "source_base_path": "D:/a/System.Mail-Extensions/System.Mail-Extensions/docfx_project",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.AttachmentCollectionExtensions",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.AttachmentCollectionExtensions.yml\" sourcestartlinenumber=\"1\">A collection of extension methods for the <xref href=\"System.Net.Mail.AttachmentCollection\" data-throw-if-not-resolved=\"false\"></xref> class.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.AttachmentFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.AttachmentFactory.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.AttachmentFactory",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.AttachmentFactory.yml\" sourcestartlinenumber=\"1\">Provides factory methods for creating <xref href=\"System.Net.Mail.Attachment\" data-throw-if-not-resolved=\"false\"></xref> objects from common sources\nwith automatic content type inference from file extensions.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.EmlParser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.EmlParser.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.EmlParser",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.EmlParser.yml\" sourcestartlinenumber=\"1\">Provides methods to parse EML (RFC 2822 MIME) content into <xref href=\"System.Net.Mail.MailMessage\" data-throw-if-not-resolved=\"false\"></xref> objects.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.InlineHtmlBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.InlineHtmlBuilder.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.InlineHtmlBuilder",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.InlineHtmlBuilder.yml\" sourcestartlinenumber=\"1\">A builder for creating HTML <xref href=\"System.Net.Mail.AlternateView\" data-throw-if-not-resolved=\"false\"></xref> instances with inline embedded images.\nManages <xref href=\"System.Net.Mail.LinkedResource\" data-throw-if-not-resolved=\"false\"></xref> creation and Content-ID wiring automatically.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.MailAddressCollectionExtensions",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.yml\" sourcestartlinenumber=\"1\">A collection of extension methods for the <xref href=\"System.Net.Mail.MailAddressCollection\" data-throw-if-not-resolved=\"false\"></xref> class.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.MailAddressExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.MailAddressExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.MailAddressExtensions",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.MailAddressExtensions.yml\" sourcestartlinenumber=\"1\">Static extension methods for the <xref href=\"System.Net.Mail.MailAddress\" data-throw-if-not-resolved=\"false\"></xref> class, including a\n<code>TryParse</code> backfill for target frameworks that lack <code>MailAddress.TryCreate</code>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.MailMessageBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.MailMessageBuilder.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.MailMessageBuilder",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.MailMessageBuilder.yml\" sourcestartlinenumber=\"1\">A fluent builder for constructing <xref href=\"System.Net.Mail.MailMessage\" data-throw-if-not-resolved=\"false\"></xref> instances.\nSimplifies the verbose ceremony of setting up mail messages.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.MailMessageExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.MailMessageExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.MailMessageExtensions",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.MailMessageExtensions.yml\" sourcestartlinenumber=\"1\">A collection of extension methods for the <xref href=\"System.Net.Mail.MailMessage\" data-throw-if-not-resolved=\"false\"></xref> class.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.Validation.ValidationIssue",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.Validation.ValidationIssue.yml\" sourcestartlinenumber=\"1\">Represents a single validation issue found when validating a <xref href=\"System.Net.Mail.MailMessage\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.Validation.ValidationOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.Validation.ValidationOptions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.Validation.ValidationOptions",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.Validation.ValidationOptions.yml\" sourcestartlinenumber=\"1\">Provides configuration options for <xref href=\"System.Net.Mail.MailMessage\" data-throw-if-not-resolved=\"false\"></xref> validation.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.Validation.ValidationResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.Validation.ValidationResult.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.Validation.ValidationResult",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.Validation.ValidationResult.yml\" sourcestartlinenumber=\"1\">Represents the result of validating a <xref href=\"System.Net.Mail.MailMessage\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.Validation.ValidationSeverity.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.Validation.ValidationSeverity.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.Validation.ValidationSeverity",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.Validation.ValidationSeverity.yml\" sourcestartlinenumber=\"1\">Represents the severity level of a validation issue found in a <xref href=\"System.Net.Mail.MailMessage\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.Validation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.Validation.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.Validation",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail",
+      "Summary": null
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/getting-started.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/getting-started.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/introduction.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/introduction.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "docs/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/toc.html"
+        },
+        ".json": {
+          "relative_path": "docs/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "logo.svg",
+      "output": {
+        "resource": {
+          "relative_path": "logo.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
