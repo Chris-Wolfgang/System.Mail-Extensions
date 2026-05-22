@@ -49,7 +49,7 @@
 [CmdletBinding()]
 param(
     [Parameter()]
-    [string]$Repository = "Chris-Wolfgang/System.Mail-Extensions",
+    [string]$Repository = "{{GITHUB_USERNAME}}/{{REPO_NAME}}",
     
     [Parameter()]
     [switch]$EnablePages,
@@ -211,7 +211,7 @@ try {
 }
 
 # Determine repository
-if ($Repository -eq "Chris-Wolfgang/System.Mail-Extensions" -or -not $Repository) {
+if ($Repository -eq "{{GITHUB_USERNAME}}/{{REPO_NAME}}" -or -not $Repository) {
     # Placeholders not replaced or no repository specified - auto-detect
     Write-Info "Detecting current repository..."
     try {
@@ -219,7 +219,7 @@ if ($Repository -eq "Chris-Wolfgang/System.Mail-Extensions" -or -not $Repository
         $Repository = $repoInfo.nameWithOwner
         Write-Success "Using repository: $Repository"
     } catch {
-        if ($Repository -eq "Chris-Wolfgang/System.Mail-Extensions") {
+        if ($Repository -eq "{{GITHUB_USERNAME}}/{{REPO_NAME}}") {
             Write-Error-Custom "Could not detect repository. Please run the setup script (scripts/setup.ps1 or scripts/setup.sh) first to replace placeholders, or specify -Repository parameter."
         } else {
             Write-Error-Custom "Could not detect repository. Please run from within a git repository or specify -Repository parameter."
@@ -320,13 +320,12 @@ if ($needsDocFxConfig) {
     }
     
     # Create replacements hashtable
-    # Note: PROJECT_NAME and PACKAGE_NAME placeholders both resolve to the same
-    # value in this repo (Wolfgang.Extensions.Mail), so only one entry is needed.
     $replacements = @{
-        'Wolfgang.Extensions.Mail' = $projectName
+        '{{PROJECT_NAME}}' = $projectName
         '{{PROJECT_DESCRIPTION}}' = $projectDescription
-        'https://github.com/Chris-Wolfgang/System.Mail-Extensions' = $githubRepoUrl
-        'https://chris-wolfgang.github.io/System.Mail-Extensions' = $docsUrl
+        '{{PACKAGE_NAME}}' = $packageName
+        '{{GITHUB_REPO_URL}}' = $githubRepoUrl
+        '{{DOCS_URL}}' = $docsUrl
     }
     
     # Files to update
