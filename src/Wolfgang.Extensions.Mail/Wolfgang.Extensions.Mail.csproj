@@ -7,8 +7,8 @@
 		<Title>$(AssemblyName)</Title>
 		<Description>A collection of extension methods for working with email and mail-related functionality.</Description>
 		<PackageProjectUrl>https://github.com/Chris-Wolfgang/System.Mail-Extensions</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Chris-Wolfgang/System.Mail-Extensions.git</RepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<AssemblyVersion>1.0.0</AssemblyVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
