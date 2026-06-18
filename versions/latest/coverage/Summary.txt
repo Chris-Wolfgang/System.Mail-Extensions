@@ -1,0 +1,33 @@
+Summary
+  Generated on: 6/18/2026 - 10:39:56 PM
+  Coverage date: 6/18/2026 - 10:39:53 PM
+  Parser: Cobertura
+  Assemblies: 1
+  Classes: 11
+  Files: 11
+  Line coverage: 96.9%
+  Covered lines: 854
+  Uncovered lines: 27
+  Coverable lines: 881
+  Total lines: 3352
+  Branch coverage: 92.9% (451 of 485)
+  Covered branches: 451
+  Total branches: 485
+  Method coverage: 99.1% (115 of 116)
+  Full method coverage: 86.2% (100 of 116)
+  Covered methods: 115
+  Fully covered methods: 100
+  Total methods: 116
+
+Wolfgang.Extensions.Mail                                     96.9%
+  Wolfgang.Extensions.Mail.AttachmentCollectionExtensions     100%
+  Wolfgang.Extensions.Mail.AttachmentFactory                 97.8%
+  Wolfgang.Extensions.Mail.EmlParser                           93%
+  Wolfgang.Extensions.Mail.InlineHtmlBuilder                  100%
+  Wolfgang.Extensions.Mail.MailAddressCollectionExtensions    100%
+  Wolfgang.Extensions.Mail.MailAddressExtensions              100%
+  Wolfgang.Extensions.Mail.MailMessageBuilder                 100%
+  Wolfgang.Extensions.Mail.MailMessageExtensions             98.8%
+  Wolfgang.Extensions.Mail.Validation.ValidationIssue        94.4%
+  Wolfgang.Extensions.Mail.Validation.ValidationOptions       100%
+  Wolfgang.Extensions.Mail.Validation.ValidationResult       92.3%
