@@ -1,0 +1,19 @@
+{
+  "stryker-config": {
+    "project": "src/Wolfgang.Extensions.Mail/Wolfgang.Extensions.Mail.csproj",
+    "test-projects": [
+      "tests/Wolfgang.Extensions.Mail.Tests.Unit/Wolfgang.Extensions.Mail.Tests.Unit.csproj"
+    ],
+    "target-framework": "net10.0",
+    "reporters": [
+      "html",
+      "json",
+      "progress"
+    ],
+    "thresholds": {
+      "high": 90,
+      "low": 75,
+      "break": 0
+    }
+  }
+}
