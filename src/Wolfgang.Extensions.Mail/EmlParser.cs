@@ -33,6 +33,59 @@ public static class EmlParser
     private const RegexOptions DefaultRegexOptionsNoCase =
         RegexOptions.ExplicitCapture;
 
+    // Patterns are hoisted to static compiled instances: parsing a single
+    // message hits several of these once per header line or MIME part, and
+    // the static Regex.Match/Replace helpers only cache a limited number of
+    // interpreted patterns.
+    private static readonly Regex BoundaryRegex = new Regex
+    (
+        @"boundary=""?(?<boundary>[^"";\s]+)""?",
+        DefaultRegexOptions | RegexOptions.Compiled,
+        RegexTimeout
+    );
+
+    private static readonly Regex FileNameRegex = new Regex
+    (
+        @"filename=""?(?<filename>[^"";\s]+)""?",
+        DefaultRegexOptions | RegexOptions.Compiled,
+        RegexTimeout
+    );
+
+    private static readonly Regex NameRegex = new Regex
+    (
+        @"name=""?(?<name>[^"";\s]+)""?",
+        DefaultRegexOptions | RegexOptions.Compiled,
+        RegexTimeout
+    );
+
+    private static readonly Regex WhitespaceRegex = new Regex
+    (
+        @"\s+",
+        DefaultRegexOptionsNoCase | RegexOptions.Compiled,
+        RegexTimeout
+    );
+
+    private static readonly Regex EncodedWordRegex = new Regex
+    (
+        @"=\?(?<charset>[^?]+)\?(?<encoding>[BbQq])\?(?<text>[^?]+)\?=",
+        DefaultRegexOptionsNoCase | RegexOptions.Compiled,
+        RegexTimeout
+    );
+
+    private static readonly Regex DisplayNameAddressRegex = new Regex
+    (
+        @"^""?(?<name>[^""<]+?)""?\s*<(?<email>[^>]+)>$",
+        DefaultRegexOptionsNoCase | RegexOptions.Compiled,
+        RegexTimeout
+    );
+
+    private static readonly Regex AngleBracketAddressRegex = new Regex
+    (
+        @"^<(?<email>[^>]+)>$",
+        DefaultRegexOptionsNoCase | RegexOptions.Compiled,
+        RegexTimeout
+    );
+
     private static readonly HashSet<string> StandardHeaderNames =
         new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
@@ -348,13 +401,7 @@ public static class EmlParser
         string contentType
     )
     {
-        var match = Regex.Match
-        (
-            contentType,
-            @"boundary=""?(?<boundary>[^"";\s]+)""?",
-            DefaultRegexOptions,
-            RegexTimeout
-        );
+        var match = BoundaryRegex.Match(contentType);
         return match.Success ? match.Groups["boundary"].Value : null;
     }
 
@@ -526,23 +573,11 @@ public static class EmlParser
     {
         if (contentDisposition != null)
         {
-            var match = Regex.Match
-            (
-                contentDisposition,
-                @"filename=""?(?<filename>[^"";\s]+)""?",
-                DefaultRegexOptions,
-                RegexTimeout
-            );
+            var match = FileNameRegex.Match(contentDisposition);
             if (match.Success) return match.Groups["filename"].Value;
         }
 
-        var nameMatch = Regex.Match
-        (
-            contentType,
-            @"name=""?(?<name>[^"";\s]+)""?",
-            DefaultRegexOptions,
-            RegexTimeout
-        );
+        var nameMatch = NameRegex.Match(contentType);
         return nameMatch.Success ? nameMatch.Groups["name"].Value : null;
     }
 
@@ -559,7 +594,7 @@ public static class EmlParser
             case "base64":
                 try
                 {
-                    var cleaned = Regex.Replace(body, @"\s+", "", DefaultRegexOptionsNoCase, RegexTimeout);
+                    var cleaned = WhitespaceRegex.Replace(body, "");
                     var bytes = Convert.FromBase64String(cleaned);
                     return Encoding.UTF8.GetString(bytes);
                 }
@@ -589,7 +624,7 @@ public static class EmlParser
             case "base64":
                 try
                 {
-                    var cleaned = Regex.Replace(body, @"\s+", "", DefaultRegexOptionsNoCase, RegexTimeout);
+                    var cleaned = WhitespaceRegex.Replace(body, "");
                     return Convert.FromBase64String(cleaned);
                 }
                 catch (FormatException)
@@ -612,35 +647,70 @@ public static class EmlParser
         string input
     )
     {
-        // Remove soft line breaks (= at end of line)
-        var cleaned = Regex.Replace(input, @"=\r?\n", "", DefaultRegexOptionsNoCase, RegexTimeout);
-
-        // Collect bytes for proper multi-byte UTF-8 decoding
-        var result = new List<byte>();
+        // Single pass: soft line breaks (=\r\n or =\n) are skipped inline and
+        // =XX escapes are written as raw bytes, so multi-byte UTF-8 sequences
+        // split across escapes still decode correctly. The buffer is sized
+        // for the UTF-8 worst case (3 bytes per UTF-16 code unit) so it never
+        // needs to grow.
+        var buffer = new byte[input.Length * 3];
+        var byteCount = 0;
         var i = 0;
 
-        while (i < cleaned.Length)
+        while (i < input.Length)
         {
-            if (cleaned[i] == '=' && i + 2 < cleaned.Length
-                && IsHexChar(cleaned[i + 1]) && IsHexChar(cleaned[i + 2]))
+            var current = input[i];
+
+            if (current == '=')
             {
-                result.Add(Convert.ToByte(cleaned.Substring(i + 1, 2), 16));
-                i += 3;
+                if (i + 2 < input.Length && IsHexChar(input[i + 1]) && IsHexChar(input[i + 2]))
+                {
+                    buffer[byteCount++] = (byte)((HexValue(input[i + 1]) << 4) | HexValue(input[i + 2]));
+                    i += 3;
+                    continue;
+                }
+
+                if (i + 1 < input.Length && input[i + 1] == '\n')
+                {
+                    i += 2;
+                    continue;
+                }
+
+                if (i + 2 < input.Length && input[i + 1] == '\r' && input[i + 2] == '\n')
+                {
+                    i += 3;
+                    continue;
+                }
+            }
+
+            if (current < 0x80)
+            {
+                buffer[byteCount++] = (byte)current;
+                i++;
             }
             else
             {
-                var ch = cleaned[i];
-                var charBytes = Encoding.UTF8.GetBytes(new[] { ch });
-                foreach (var b in charBytes)
-                {
-                    result.Add(b);
-                }
-
-                i++;
+                var charCount = char.IsHighSurrogate(current) && i + 1 < input.Length ? 2 : 1;
+                byteCount += Encoding.UTF8.GetBytes(input, i, charCount, buffer, byteCount);
+                i += charCount;
             }
         }
 
-        return Encoding.UTF8.GetString(result.ToArray());
+        return Encoding.UTF8.GetString(buffer, 0, byteCount);
+    }
+
+
+
+    private static int HexValue
+    (
+        char c
+    )
+    {
+        if (c <= '9')
+        {
+            return c - '0';
+        }
+
+        return (c <= 'F' ? c - 'A' : c - 'a') + 10;
     }
 
 
@@ -661,14 +731,7 @@ public static class EmlParser
     )
     {
         // RFC 2047: =?charset?encoding?encoded-text?=
-        return Regex.Replace
-        (
-            input,
-            @"=\?(?<charset>[^?]+)\?(?<encoding>[BbQq])\?(?<text>[^?]+)\?=",
-            DecodeEncodedWordMatch,
-            DefaultRegexOptionsNoCase,
-            RegexTimeout
-        );
+        return EncodedWordRegex.Replace(input, DecodeEncodedWordMatch);
     }
 
 
@@ -744,26 +807,14 @@ public static class EmlParser
         var trimmed = addressString.Trim();
 
         // Handle "Display Name" <email@example.com> format
-        var match = Regex.Match
-        (
-            trimmed,
-            @"^""?(?<name>[^""<]+?)""?\s*<(?<email>[^>]+)>$",
-            DefaultRegexOptionsNoCase,
-            RegexTimeout
-        );
+        var match = DisplayNameAddressRegex.Match(trimmed);
         if (match.Success)
         {
             return new MailAddress(match.Groups["email"].Value.Trim(), match.Groups["name"].Value.Trim());
         }
 
         // Handle bare <email@example.com>
-        var angleBracket = Regex.Match
-        (
-            trimmed,
-            @"^<(?<email>[^>]+)>$",
-            DefaultRegexOptionsNoCase,
-            RegexTimeout
-        );
+        var angleBracket = AngleBracketAddressRegex.Match(trimmed);
         if (angleBracket.Success)
         {
             return new MailAddress(angleBracket.Groups["email"].Value.Trim());

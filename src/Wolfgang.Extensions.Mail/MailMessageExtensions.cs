@@ -179,8 +179,17 @@ public static class MailMessageExtensions
         }
 
         using var stream = new MemoryStream();
-        SerializeToMimeStream(source, stream);
-        return Encoding.UTF8.GetString(stream.ToArray());
+
+        // MailWriter closes the stream it writes to. The wrapper absorbs that
+        // close so the MemoryStream stays readable, letting GetBuffer avoid
+        // the full extra copy ToArray would make. The buffer never escapes
+        // this method.
+        using (var wrapper = new NonClosingStreamWrapper(stream))
+        {
+            SerializeToMimeStream(source, wrapper);
+        }
+
+        return Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
     }
 
 
@@ -419,7 +428,7 @@ public static class MailMessageExtensions
     private static void SerializeToMimeStream
     (
         MailMessage source,
-        MemoryStream stream
+        Stream stream
     )
     {
         var mailWriterType = typeof(SmtpClient).Assembly.GetType("System.Net.Mail.MailWriter");
@@ -571,7 +580,7 @@ public static class MailMessageExtensions
     {
         var clonedStream = CloneStream(source.ContentStream);
 
-        var clone = new Attachment(clonedStream, new ContentType(source.ContentType.ToString()))
+        var clone = new Attachment(clonedStream, CloneContentType(source.ContentType))
         {
             Name = source.Name,
             TransferEncoding = source.TransferEncoding
@@ -605,7 +614,7 @@ public static class MailMessageExtensions
     {
         var clonedStream = CloneStream(source.ContentStream);
 
-        var clone = new AlternateView(clonedStream, new ContentType(source.ContentType.ToString()))
+        var clone = new AlternateView(clonedStream, CloneContentType(source.ContentType))
         {
             TransferEncoding = source.TransferEncoding,
             BaseUri = source.BaseUri
@@ -633,7 +642,7 @@ public static class MailMessageExtensions
     {
         var clonedStream = CloneStream(source.ContentStream);
 
-        var clone = new LinkedResource(clonedStream, new ContentType(source.ContentType.ToString()))
+        var clone = new LinkedResource(clonedStream, CloneContentType(source.ContentType))
         {
             TransferEncoding = source.TransferEncoding,
             ContentLink = source.ContentLink
@@ -642,6 +651,29 @@ public static class MailMessageExtensions
         if (!string.IsNullOrEmpty(source.ContentId))
         {
             clone.ContentId = source.ContentId;
+        }
+
+        return clone;
+    }
+
+
+
+    private static ContentType CloneContentType
+    (
+        ContentType source
+    )
+    {
+        // Copy properties directly instead of round-tripping through
+        // ToString() + header re-parsing. Parameters carries charset, name,
+        // and boundary alongside any custom parameters.
+        var clone = new ContentType(source.MediaType);
+
+        foreach (string? key in source.Parameters.Keys)
+        {
+            if (key != null)
+            {
+                clone.Parameters[key] = source.Parameters[key];
+            }
         }
 
         return clone;
@@ -720,4 +752,92 @@ public static class MailMessageExtensions
         );
     }
 #pragma warning restore S3011
+
+
+
+#pragma warning disable RS0030 // BannedSymbols: sync Stream members are banned for async-first,
+                               // but this wrapper forwards to an in-memory stream used by the
+                               // synchronous MailWriter serialization path.
+    /// <summary>
+    /// Forwards to an inner <see cref="Stream"/> but absorbs Close/Dispose,
+    /// so the framework's MailWriter (which closes the stream it writes to)
+    /// leaves the backing <see cref="MemoryStream"/> readable.
+    /// </summary>
+    private sealed class NonClosingStreamWrapper : Stream
+    {
+        private readonly Stream _inner;
+
+
+
+        internal NonClosingStreamWrapper(Stream inner)
+        {
+            _inner = inner;
+        }
+
+
+
+        public override bool CanRead => _inner.CanRead;
+
+        public override bool CanSeek => _inner.CanSeek;
+
+        public override bool CanWrite => _inner.CanWrite;
+
+        public override long Length => _inner.Length;
+
+        public override long Position
+        {
+            get => _inner.Position;
+            set => _inner.Position = value;
+        }
+
+
+
+        public override void Flush()
+        {
+            _inner.Flush();
+        }
+
+
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            return _inner.Read(buffer, offset, count);
+        }
+
+
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            return _inner.Seek(offset, origin);
+        }
+
+
+
+        public override void SetLength(long value)
+        {
+            _inner.SetLength(value);
+        }
+
+
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            _inner.Write(buffer, offset, count);
+        }
+
+
+
+        protected override void Dispose(bool disposing)
+        {
+            // Deliberately does not dispose _inner — that is the point of
+            // this wrapper. Flush so nothing buffered is lost.
+            if (disposing)
+            {
+                _inner.Flush();
+            }
+
+            base.Dispose(disposing);
+        }
+    }
+#pragma warning restore RS0030
 }
