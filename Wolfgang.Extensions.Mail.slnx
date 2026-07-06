@@ -24,7 +24,9 @@
     <File Path=".github/workflows/pr.yaml" />
     <File Path=".github/workflows/release.yaml" />
   </Folder>
-  <Folder Name="/benchmarks/" />
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/Wolfgang.Extensions.Mail.Benchmarks/Wolfgang.Extensions.Mail.Benchmarks.csproj" />
+  </Folder>
   <Folder Name="/examples/">
     <Project Path="Wolfgang.Extensions.IAsyncEnumerable.Example/Wolfgang.Extensions.IAsyncEnumerable.Example.csproj" Id="cad5a7dc-0754-45b7-8cb1-28c1b6b90adc" />
   </Folder>
