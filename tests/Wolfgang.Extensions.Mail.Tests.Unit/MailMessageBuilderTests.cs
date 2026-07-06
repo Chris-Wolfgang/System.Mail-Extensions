@@ -585,10 +585,7 @@ public class MailMessageBuilderTests
         }
         finally
         {
-            if (System.IO.File.Exists(filePath))
-            {
-                System.IO.File.Delete(filePath);
-            }
+            TestFileHelpers.BestEffortDelete(filePath);
         }
     }
 }

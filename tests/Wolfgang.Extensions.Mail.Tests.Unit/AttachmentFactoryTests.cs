@@ -242,9 +242,11 @@ public class AttachmentFactoryTests
     [Fact]
     public void RegisterContentType_when_registered_InferContentType_returns_it()
     {
-        AttachmentFactory.RegisterContentType(".test1", "application/x-test1");
+        var ext = UniqueExtension();
 
-        Assert.Equal("application/x-test1", AttachmentFactory.InferContentType("file.test1"));
+        AttachmentFactory.RegisterContentType(ext, "application/x-test1");
+
+        Assert.Equal("application/x-test1", AttachmentFactory.InferContentType($"file{ext}"));
     }
 
 
@@ -252,10 +254,12 @@ public class AttachmentFactoryTests
     [Fact]
     public void RegisterContentType_when_extension_already_exists_overrides_it()
     {
-        AttachmentFactory.RegisterContentType(".test2", "application/x-test2-original");
-        AttachmentFactory.RegisterContentType(".test2", "application/x-test2-override");
+        var ext = UniqueExtension();
 
-        Assert.Equal("application/x-test2-override", AttachmentFactory.InferContentType("file.test2"));
+        AttachmentFactory.RegisterContentType(ext, "application/x-test2-original");
+        AttachmentFactory.RegisterContentType(ext, "application/x-test2-override");
+
+        Assert.Equal("application/x-test2-override", AttachmentFactory.InferContentType($"file{ext}"));
     }
 
 
@@ -263,9 +267,15 @@ public class AttachmentFactoryTests
     [Fact]
     public void RegisterContentType_extension_matching_is_case_insensitive()
     {
-        AttachmentFactory.RegisterContentType(".test3", "application/x-test3");
+        var ext = UniqueExtension();
 
-        Assert.Equal("application/x-test3", AttachmentFactory.InferContentType("file.TEST3"));
+        AttachmentFactory.RegisterContentType(ext, "application/x-test3");
+
+        Assert.Equal
+        (
+            "application/x-test3",
+            AttachmentFactory.InferContentType($"file{ext.ToUpperInvariant()}")
+        );
     }
 
 
@@ -286,9 +296,11 @@ public class AttachmentFactoryTests
     [Fact]
     public void TryGetRegisteredContentType_when_registered_returns_true()
     {
-        AttachmentFactory.RegisterContentType(".test4", "application/x-test4");
+        var ext = UniqueExtension();
 
-        var success = AttachmentFactory.TryGetRegisteredContentType(".test4", out var contentType);
+        AttachmentFactory.RegisterContentType(ext, "application/x-test4");
+
+        var success = AttachmentFactory.TryGetRegisteredContentType(ext, out var contentType);
 
         Assert.True(success);
         Assert.Equal("application/x-test4", contentType);
@@ -303,5 +315,15 @@ public class AttachmentFactoryTests
 
         Assert.False(success);
         Assert.Null(contentType);
+    }
+
+
+    /// <summary>
+    /// A per-call unique extension so registrations in the process-wide
+    /// AttachmentFactory registry can never collide between tests.
+    /// </summary>
+    private static string UniqueExtension()
+    {
+        return $".x{Guid.NewGuid():N}";
     }
 }

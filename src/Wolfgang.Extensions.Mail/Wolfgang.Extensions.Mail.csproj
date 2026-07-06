@@ -13,6 +13,8 @@
 		<FileVersion>$([System.Text.RegularExpressions.Regex]::Replace("$(Version)", "[-+].*$", "")).0</FileVersion>
 		<Title>$(AssemblyName)</Title>
 		<Description>A collection of extension methods for working with email and mail-related functionality.</Description>
+		<PackageTags>dotnet;extensions;mail;email;mailmessage;mailaddress;smtp;eml;mime;parser;attachment;builder;validation</PackageTags>
+		<PackageIcon>icon.png</PackageIcon>
 		<PackageProjectUrl>https://github.com/Chris-Wolfgang/System.Mail-Extensions</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Chris-Wolfgang/System.Mail-Extensions.git</RepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -33,6 +35,7 @@
 
 	<ItemGroup>
 		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\assets\icon.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 	<!-- Analyzer PackageReferences are centralized in Directory.Build.props -->
