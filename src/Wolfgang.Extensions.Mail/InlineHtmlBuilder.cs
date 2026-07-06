@@ -13,6 +13,8 @@ namespace Wolfgang.Extensions.Mail;
 /// </summary>
 /// <example>
 /// <code>
+/// using var message = new MailMessage("from@example.com", "to@example.com");
+///
 /// var builder = new InlineHtmlBuilder()
 ///     .Html("&lt;h1&gt;Report&lt;/h1&gt;&lt;img src='cid:{0}' /&gt;")
 ///     .EmbedImage("chart.png");

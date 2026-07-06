@@ -61,6 +61,12 @@ public static class AttachmentFactory
     /// Registers or overrides a custom content type mapping for a file extension.
     /// Extension matching is case-insensitive. Registrations persist for the lifetime of the process.
     /// </summary>
+    /// <remarks>
+    /// The registry is a process-wide static map shared by every caller in
+    /// the process. Registration is thread-safe, and concurrent
+    /// registrations of the same extension resolve to last-write-wins —
+    /// there is no notification when a mapping is overwritten.
+    /// </remarks>
     /// <param name="extension">The file extension (with leading dot, e.g. <c>".heic"</c>).</param>
     /// <param name="contentType">The MIME content type to associate with the extension.</param>
     /// <exception cref="ArgumentNullException"><paramref name="extension"/> is null.</exception>
@@ -146,7 +152,7 @@ public static class AttachmentFactory
     /// <exception cref="ArgumentNullException"><paramref name="fileName"/> is null.</exception>
     /// <example>
     /// <code>
-    /// byte[] pdfBytes = File.ReadAllBytes("report.pdf");
+    /// byte[] pdfBytes = await File.ReadAllBytesAsync("report.pdf");
     /// var attachment = AttachmentFactory.FromBytes(pdfBytes, "report.pdf");
     /// </code>
     /// </example>
