@@ -365,7 +365,7 @@ public class EmlParserTests
         }
         finally
         {
-            if (File.Exists(filePath)) File.Delete(filePath);
+            TestFileHelpers.BestEffortDelete(filePath);
         }
     }
 
@@ -399,7 +399,7 @@ public class EmlParserTests
         }
         finally
         {
-            if (File.Exists(filePath)) File.Delete(filePath);
+            TestFileHelpers.BestEffortDelete(filePath);
         }
     }
 

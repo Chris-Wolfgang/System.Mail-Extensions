@@ -109,8 +109,7 @@ public class AttachmentCollectionExtensionsTests
         }
         finally
         {
-            File.Delete(f1);
-            File.Delete(f2);
+            TestFileHelpers.BestEffortDelete(f1, f2);
         }
     }
 
@@ -228,8 +227,7 @@ public class AttachmentCollectionExtensionsTests
         }
         finally
         {
-            File.Delete(f1);
-            File.Delete(f2);
+            TestFileHelpers.BestEffortDelete(f1, f2);
         }
     }
 
