@@ -57,7 +57,7 @@ public class RoundTripTests
 
 
     [Fact]
-    public void ToMimeString_when_message_has_html_alternate_view_parsed_back_preserves_html()
+    public async Task ToMimeString_when_message_has_html_alternate_view_parsed_back_preserves_html()
     {
         const string html = "<html><body><p>alternate view content</p></body></html>";
 
@@ -73,7 +73,12 @@ public class RoundTripTests
 
         using var parsed = EmlParser.Parse(original.ToMimeString());
 
-        Assert.Single(parsed.AlternateViews);
+        var view = Assert.Single(parsed.AlternateViews);
+        Assert.Equal("text/html", view.ContentType.MediaType);
+
+        using var reader = new StreamReader(view.ContentStream);
+        var roundTrippedHtml = await reader.ReadToEndAsync();
+        Assert.Contains("alternate view content", roundTrippedHtml, StringComparison.Ordinal);
     }
 
 
