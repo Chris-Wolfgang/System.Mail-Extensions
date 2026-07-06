@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <Version>0.1.0</Version>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <Copyright>Copyright 2026 Chris Wolfgang</Copyright>
+  </PropertyGroup>
+
+
+
+  <!-- Integration tests target net8.0+ only: coverlet emits no coverage data
+       on net6.0/net7.0, and the end-to-end scenarios here (file I/O round
+       trips, wire-format fidelity) don't vary by legacy TFM — the unit suite
+       already covers the full TFM matrix. -->
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="10.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.assert" Version="2.9.3" />
+    <PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="[2.8.2,3.0.0)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Wolfgang.Extensions.Mail\Wolfgang.Extensions.Mail.csproj" />
+  </ItemGroup>
+
+
+
+  <!-- Analyzer PackageReferences are centralized in Directory.Build.props -->
+
+</Project>
