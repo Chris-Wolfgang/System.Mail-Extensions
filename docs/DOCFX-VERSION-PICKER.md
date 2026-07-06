@@ -6,8 +6,9 @@ versions. The picker is a self-contained JavaScript snippet — DocFX's
 `default`/`modern`/`modern-dark` templates don't ship one natively, so
 this repo implements its own.
 
-The same picker is in `repo-template` and fans out unchanged to every
-downstream `.NET` repo in the fleet.
+The canonical copy of this picker lives in
+[repo-template](https://github.com/Chris-Wolfgang/repo-template); this
+repo consumes it unchanged, so improvements belong upstream.
 
 ---
 
