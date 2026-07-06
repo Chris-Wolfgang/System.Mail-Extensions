@@ -15,11 +15,21 @@ internal static class TestFileHelpers
     /// </summary>
     internal static void BestEffortDelete
     (
-        params string[] paths
+        params string[]? paths
     )
     {
+        if (paths == null)
+        {
+            return;
+        }
+
         foreach (var path in paths)
         {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                continue;
+            }
+
             try
             {
                 File.Delete(path);

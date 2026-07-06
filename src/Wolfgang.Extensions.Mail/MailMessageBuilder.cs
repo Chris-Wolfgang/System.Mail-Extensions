@@ -507,6 +507,10 @@ public sealed class MailMessageBuilder
             );
         }
 
+        // _from is re-checked alongside errors.Count so the compiler's
+        // nullable flow analysis can prove _from non-null for the object
+        // initializer below; throwing on errors.Count alone would leave a
+        // CS8601 on the From assignment.
         if (_from == null || errors.Count > 0)
         {
             throw new InvalidOperationException(string.Join(" ", errors));
