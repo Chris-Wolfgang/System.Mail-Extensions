@@ -41,6 +41,22 @@ public class MailMessageBuilderTests
 
 
     [Fact]
+    public void Build_when_From_and_recipients_both_missing_exception_reports_both()
+    {
+        var builder = new MailMessageBuilder();
+
+        var ex = Assert.Throws<InvalidOperationException>
+        (
+            () => builder.Build()
+        );
+
+        Assert.Contains("From address is required", ex.Message, StringComparison.Ordinal);
+        Assert.Contains("At least one recipient", ex.Message, StringComparison.Ordinal);
+    }
+
+
+
+    [Fact]
     public void Build_when_only_Cc_recipient_is_set_succeeds()
     {
         using var msg = new MailMessageBuilder()
