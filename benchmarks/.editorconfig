@@ -1,0 +1,31 @@
+# Analyzer rules relaxed for benchmark projects
+#
+# BenchmarkDotNet code deliberately trips several analyzers: measured methods
+# are intentionally naive, are invoked by reflection, and memory diagnostics
+# read GC counters directly. This file silences only those genuinely
+# benchmark-inappropriate rules so the project can be held to
+# TreatWarningsAsErrors in Release alongside src/ and tests/.
+# Canonical parallel to tests/.editorconfig.
+
+[*.cs]
+
+# AsyncFixer01: Remove async/await — benchmark methods follow BenchmarkDotNet conventions
+dotnet_diagnostic.AsyncFixer01.severity = none
+
+# MA0004: Use ConfigureAwait(false) — not needed in a benchmark harness
+dotnet_diagnostic.MA0004.severity = none
+
+# CA2007: Consider calling ConfigureAwait — same rationale as MA0004
+dotnet_diagnostic.CA2007.severity = none
+
+# S1215: Remove use of GC.GetTotalMemory / GC.Collect — required for memory benchmarks
+dotnet_diagnostic.S1215.severity = none
+
+# CA1822: Mark members as static — [Benchmark] methods must be instance methods
+dotnet_diagnostic.CA1822.severity = none
+
+# CA1024: Use properties where appropriate — benchmark setup methods are intentionally methods
+dotnet_diagnostic.CA1024.severity = none
+
+# VSTHRD200: Use Async suffix — benchmark methods follow BenchmarkDotNet naming conventions
+dotnet_diagnostic.VSTHRD200.severity = none
