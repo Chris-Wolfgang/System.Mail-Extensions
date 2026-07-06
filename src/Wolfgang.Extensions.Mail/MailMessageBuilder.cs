@@ -481,25 +481,35 @@ public sealed class MailMessageBuilder
     /// Builds a new <see cref="MailMessage"/> from the configured values.
     /// </summary>
     /// <returns>A fully constructed <see cref="MailMessage"/>.</returns>
-    /// <exception cref="InvalidOperationException">From address has not been set.</exception>
+    /// <exception cref="InvalidOperationException">
+    /// The From address has not been set, or no recipient (To, Cc, or Bcc)
+    /// has been added. The exception message reports every missing part.
+    /// </exception>
     // ReSharper disable once UnusedMember.Global
     public MailMessage Build()
     {
+        // Collect every composition error before throwing so the caller can
+        // fix the message in one pass instead of discovering problems one
+        // rebuild at a time.
+        var errors = new List<string>();
+
         if (_from == null)
         {
-            throw new InvalidOperationException
-            (
-                "From address is required. Call From() before Build()."
-            );
+            errors.Add("From address is required. Call From() before Build().");
         }
 
         if (_to.Count == 0 && _cc.Count == 0 && _bcc.Count == 0)
         {
-            throw new InvalidOperationException
+            errors.Add
             (
                 "At least one recipient (To, Cc, or Bcc) is required. " +
                 "Call To(), Cc(), or Bcc() before Build()."
             );
+        }
+
+        if (_from == null || errors.Count > 0)
+        {
+            throw new InvalidOperationException(string.Join(" ", errors));
         }
 
         var message = new MailMessage

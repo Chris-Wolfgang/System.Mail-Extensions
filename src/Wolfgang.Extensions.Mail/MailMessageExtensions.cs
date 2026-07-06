@@ -81,9 +81,10 @@ public static class MailMessageExtensions
         ValidateSubject(source, options, issues);
         ValidateBody(source, options, issues);
 
-        if (options?.MaxAttachmentSizeBytes != null || options?.MaxTotalAttachmentSizeBytes != null)
+        if (options != null
+            && (options.MaxAttachmentSizeBytes != null || options.MaxTotalAttachmentSizeBytes != null))
         {
-            ValidateAttachmentSizes(source, options!, issues);
+            ValidateAttachmentSizes(source, options, issues);
         }
 
         return new ValidationResult(issues);
@@ -354,12 +355,12 @@ public static class MailMessageExtensions
     {
         if (source.From != null)
         {
-            clone.From = CloneMailAddress(source.From)!;
+            clone.From = CloneMailAddress(source.From);
         }
 
         if (source.Sender != null)
         {
-            clone.Sender = CloneMailAddress(source.Sender)!;
+            clone.Sender = CloneMailAddress(source.Sender);
         }
 
         CopyAddressCollection(source.To, clone.To);
@@ -537,16 +538,11 @@ public static class MailMessageExtensions
     // Shared helpers
     // ==========================================================================
 
-    private static MailAddress? CloneMailAddress
+    private static MailAddress CloneMailAddress
     (
-        MailAddress? address
+        MailAddress address
     )
     {
-        if (address == null)
-        {
-            return null;
-        }
-
         return string.IsNullOrEmpty(address.DisplayName)
             ? new MailAddress(address.Address)
             : new MailAddress(address.Address, address.DisplayName);

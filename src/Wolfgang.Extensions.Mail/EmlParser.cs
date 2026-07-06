@@ -27,7 +27,7 @@ namespace Wolfgang.Extensions.Mail;
 /// </remarks>
 /// <example>
 /// <code>
-/// using var message = EmlParser.Parse(File.ReadAllText("message.eml"));
+/// using var message = await EmlParser.ParseFileAsync("message.eml");
 /// Console.WriteLine(message.Subject);
 /// </code>
 /// </example>
@@ -794,7 +794,11 @@ public static class EmlParser
 
             return DecodeQEncoding(encodedText, enc);
         }
-        catch (Exception ex) when (ex is FormatException || ex is ArgumentException)
+        catch (FormatException)
+        {
+            return m.Value;
+        }
+        catch (ArgumentException)
         {
             return m.Value;
         }
