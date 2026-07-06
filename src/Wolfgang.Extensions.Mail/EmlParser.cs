@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
@@ -15,6 +16,15 @@ namespace Wolfgang.Extensions.Mail;
 /// <summary>
 /// Provides methods to parse EML (RFC 2822 MIME) content into <see cref="MailMessage"/> objects.
 /// </summary>
+/// <remarks>
+/// Parsing is deliberately lenient, because real-world EML files routinely
+/// contain malformed headers: an address that cannot be parsed is skipped
+/// rather than throwing, and a malformed <c>From</c> header leaves
+/// <see cref="MailMessage.From"/> <c>null</c>. To detect what a lenient
+/// parse dropped, pair with
+/// <see cref="MailMessageExtensions.Validate(MailMessage)"/>, which reports
+/// a missing sender or recipients as structured issues.
+/// </remarks>
 /// <example>
 /// <code>
 /// using var message = EmlParser.Parse(File.ReadAllText("message.eml"));
@@ -206,10 +216,11 @@ public static class EmlParser
         Dictionary<string, string> headers
     )
     {
-        if (headers.TryGetValue("from", out var from) && !string.IsNullOrWhiteSpace(from))
+        if (headers.TryGetValue("from", out var from)
+            && !string.IsNullOrWhiteSpace(from)
+            && TryParseMailAddress(from, out var fromAddress))
         {
-            try { message.From = ParseMailAddressSafe(from); }
-            catch (FormatException) { /* Skip malformed From */ }
+            message.From = fromAddress;
         }
 
         if (headers.TryGetValue("to", out var to))
@@ -274,8 +285,34 @@ public static class EmlParser
         {
             var isHtml = contentType.IndexOf("text/html", StringComparison.OrdinalIgnoreCase) >= 0;
             message.IsBodyHtml = isHtml;
-            message.Body = DecodeBody(bodySection, transferEncoding);
+            message.Body = TrimFinalLineBreak(DecodeBody(bodySection, transferEncoding));
         }
+    }
+
+
+
+    /// <summary>
+    /// Removes exactly one trailing CRLF (or bare LF) from a decoded body.
+    /// MIME writers terminate the final body line with a line break that is
+    /// part of the wire format, not the content; keeping it made every
+    /// serialize→parse round trip grow the body by one blank line.
+    /// </summary>
+    private static string TrimFinalLineBreak
+    (
+        string body
+    )
+    {
+        if (body.Length >= 2 && body[body.Length - 2] == '\r' && body[body.Length - 1] == '\n')
+        {
+            return body.Substring(0, body.Length - 2);
+        }
+
+        if (body.Length >= 1 && body[body.Length - 1] == '\n')
+        {
+            return body.Substring(0, body.Length - 1);
+        }
+
+        return body;
     }
 
 
@@ -804,7 +841,36 @@ public static class EmlParser
 
 
 
-    private static MailAddress ParseMailAddressSafe
+    /// <summary>
+    /// Attempts to parse a header address token in any of the common forms
+    /// ("Display Name" &lt;email&gt;, bare &lt;email&gt;, or a plain address).
+    /// Returns <c>false</c> for malformed input instead of throwing — the
+    /// parser is deliberately lenient and skips addresses it cannot read.
+    /// </summary>
+    private static bool TryParseMailAddress
+    (
+        string addressString,
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+        [NotNullWhen(true)]
+#endif
+        out MailAddress? result
+    )
+    {
+        try
+        {
+            result = ParseMailAddress(addressString);
+            return true;
+        }
+        catch (FormatException)
+        {
+            result = null;
+            return false;
+        }
+    }
+
+
+
+    private static MailAddress ParseMailAddress
     (
         string addressString
     )
@@ -844,13 +910,9 @@ public static class EmlParser
             var trimmed = addr.Trim();
             if (string.IsNullOrWhiteSpace(trimmed)) continue;
 
-            try
+            if (TryParseMailAddress(trimmed, out var parsed))
             {
-                collection.Add(ParseMailAddressSafe(trimmed));
-            }
-            catch (FormatException)
-            {
-                // Skip malformed addresses
+                collection.Add(parsed!);
             }
         }
     }
