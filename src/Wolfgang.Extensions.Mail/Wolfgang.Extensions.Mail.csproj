@@ -25,13 +25,12 @@
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.1' OR
-							  '$(TargetFramework)' == 'net8.0' OR
-							  '$(TargetFramework)' == 'net9.0' OR
-							  '$(TargetFramework)' == 'net10.0'
-							  ">
-		<ImplicitUsings>enable</ImplicitUsings>
-	</PropertyGroup>
+	<!-- ImplicitUsings intentionally left disabled (SDK default) for ALL target
+	     frameworks. It cannot be enabled on net462 / netstandard2.0, so enabling
+	     it only on the modern TFMs made the same explicit using "redundant" on
+	     net10 but required on net462 — a cross-TFM inconsistency that trips
+	     static analysis (ReSharper / IDE0005). Uniform explicit usings compile
+	     identically on every TFM and keep the analyzers quiet. -->
 
 	<ItemGroup>
 		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
