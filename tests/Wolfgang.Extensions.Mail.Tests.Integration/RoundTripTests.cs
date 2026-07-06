@@ -89,16 +89,8 @@ public class RoundTripTests
         using var firstPass = EmlParser.Parse(original.ToMimeString());
         using var secondPass = EmlParser.Parse(firstPass.ToMimeString());
 
-        // Known defect: each serialize→parse cycle appends one trailing CRLF
-        // to the body (MailWriter terminates the final part with CRLF and
-        // DecodeBody preserves it), so round trips are not idempotent.
-        // Trailing line breaks are normalized here; tighten to exact equality
-        // once the parser trims the final part's terminating CRLF.
-        Assert.Equal
-        (
-            firstPass.Body.TrimEnd('\r', '\n'),
-            secondPass.Body.TrimEnd('\r', '\n')
-        );
+        Assert.Equal(original.Body, firstPass.Body);
+        Assert.Equal(firstPass.Body, secondPass.Body);
         Assert.Equal(firstPass.Subject, secondPass.Subject);
     }
 
