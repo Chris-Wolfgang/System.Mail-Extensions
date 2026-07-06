@@ -1,8 +1,8 @@
 name: Benchmarks
 
-# Runs BenchmarkDotNet after a merge to main, then publishes the results to
-# the gh-pages branch under /dev/bench/ where benchmark-action/github-action-benchmark
-# renders an interactive line chart.
+# Runs BenchmarkDotNet on every push to main (typically a PR merge), then
+# publishes the results to the gh-pages branch under /dev/bench/ where
+# benchmark-action/github-action-benchmark renders an interactive line chart.
 #
 # This workflow is decoupled from PR validation and release: it does NOT gate
 # merging or publishing — it just adds one data point per qualifying push.
@@ -63,6 +63,9 @@ jobs:
       - name: Merge per-class BDN reports
         id: locate
         working-directory: benchmarks/Wolfgang.Extensions.Mail.Benchmarks
+        # Explicit bash: the script uses shopt and arrays, so it must not be
+        # affected by a future defaults.run.shell change.
+        shell: bash
         run: |
           # BDN's --exporters json writes one *-report-full-compressed.json per
           # benchmark class. github-action-benchmark consumes a single file, so
