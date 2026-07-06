@@ -43,7 +43,32 @@ using var fromFile   = EmlParser.ParseFile("message.eml");
 using var fromFileAsync = await EmlParser.ParseFileAsync("message.eml", cancellationToken);
 ```
 
-Parsing is deliberately **lenient**, because real-world EML files routinely contain malformed headers: an address that cannot be parsed is skipped, and a malformed `From` header leaves `message.From` null. Pair with `Validate()` to detect what a lenient parse dropped.
+Parsing is deliberately **lenient**, because real-world EML files routinely contain malformed headers: an address that cannot be parsed is skipped, and a malformed `From` header leaves `message.From` null.
+
+#### Strict mode and diagnostics — `EmlParserOptions`
+
+To reject malformed input instead of skipping it, parse in **strict** mode — the parser throws an `EmlParseException` (a `FormatException`) on the first malformed construct:
+
+```csharp
+using var message = EmlParser.Parse(emlContent, new EmlParserOptions { Strict = true });
+// throws EmlParseException on a malformed address, undecodable body part, or malformed encoded word
+```
+
+To see what a lenient parse dropped without throwing, use `ParseWithDiagnostics`, which returns the message alongside a list of skipped constructs:
+
+```csharp
+ParseResult result = EmlParser.ParseWithDiagnostics(emlContent);
+if (result.HasIssues)
+{
+    foreach (ValidationIssue issue in result.Issues)
+    {
+        Console.WriteLine($"{issue.PropertyName}: {issue.Message}");
+    }
+}
+// result.Message is still populated best-effort (well-formed parts are kept)
+```
+
+Both `ParseFile` and `ParseFileAsync` have matching `EmlParserOptions` overloads.
 
 ### Serialize to EML — `ToMimeString()`
 

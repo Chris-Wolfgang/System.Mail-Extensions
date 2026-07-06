@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Wolfgang.Extensions.Mail.Validation;
 
 namespace Wolfgang.Extensions.Mail;
 
@@ -107,7 +108,8 @@ public static class EmlParser
 
 
     /// <summary>
-    /// Parses a raw EML/MIME string into a <see cref="MailMessage"/>.
+    /// Parses a raw EML/MIME string into a <see cref="MailMessage"/> using the
+    /// default lenient behavior (malformed constructs are skipped).
     /// </summary>
     /// <param name="emlContent">The EML content string.</param>
     /// <returns>A new <see cref="MailMessage"/> populated from the EML content.</returns>
@@ -123,6 +125,76 @@ public static class EmlParser
             throw new ArgumentNullException(nameof(emlContent));
         }
 
+        return ParseCore(emlContent, new ParseContext(new EmlParserOptions()));
+    }
+
+
+
+    /// <summary>
+    /// Parses a raw EML/MIME string into a <see cref="MailMessage"/> using the
+    /// supplied <paramref name="options"/>.
+    /// </summary>
+    /// <param name="emlContent">The EML content string.</param>
+    /// <param name="options">Parsing options. Set <see cref="EmlParserOptions.Strict"/> to reject malformed input.</param>
+    /// <returns>A new <see cref="MailMessage"/> populated from the EML content.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="emlContent"/> or <paramref name="options"/> is null.</exception>
+    /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
+    // ReSharper disable once UnusedMember.Global
+    public static MailMessage Parse
+    (
+        string emlContent,
+        EmlParserOptions options
+    )
+    {
+        if (emlContent == null)
+        {
+            throw new ArgumentNullException(nameof(emlContent));
+        }
+
+        if (options == null)
+        {
+            throw new ArgumentNullException(nameof(options));
+        }
+
+        return ParseCore(emlContent, new ParseContext(options));
+    }
+
+
+
+    /// <summary>
+    /// Parses a raw EML/MIME string and returns both the message and the list of
+    /// malformed constructs the lenient parser skipped.
+    /// </summary>
+    /// <param name="emlContent">The EML content string.</param>
+    /// <param name="options">Optional parsing options. When <see cref="EmlParserOptions.Strict"/> is set, a malformed construct throws instead of being reported.</param>
+    /// <returns>A <see cref="ParseResult"/> containing the message and any diagnostics.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="emlContent"/> is null.</exception>
+    /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
+    // ReSharper disable once UnusedMember.Global
+    public static ParseResult ParseWithDiagnostics
+    (
+        string emlContent,
+        EmlParserOptions? options = null
+    )
+    {
+        if (emlContent == null)
+        {
+            throw new ArgumentNullException(nameof(emlContent));
+        }
+
+        var context = new ParseContext(options ?? new EmlParserOptions());
+        var message = ParseCore(emlContent, context);
+        return new ParseResult(message, context.Issues);
+    }
+
+
+
+    private static MailMessage ParseCore
+    (
+        string emlContent,
+        ParseContext context
+    )
+    {
         var headerEndIndex = FindHeaderBodySeparator(emlContent);
         var headerSection = headerEndIndex >= 0
             ? emlContent.Substring(0, headerEndIndex)
@@ -134,9 +206,9 @@ public static class EmlParser
         var headers = ParseHeaders(headerSection);
         var message = new MailMessage();
 
-        ApplyAddressHeaders(message, headers);
-        ApplySubject(message, headers);
-        ApplyBodyOrMultipart(message, headers, bodySection);
+        ApplyAddressHeaders(message, headers, context);
+        ApplySubject(message, headers, context);
+        ApplyBodyOrMultipart(message, headers, bodySection, context);
         ApplyCustomHeaders(message, headers);
         ApplyPriority(message, headers);
 
@@ -167,6 +239,41 @@ public static class EmlParser
 #pragma warning restore RS0030
 
         return Parse(content);
+    }
+
+
+
+    /// <summary>
+    /// Parses an EML file into a <see cref="MailMessage"/> using the supplied
+    /// <paramref name="options"/>.
+    /// </summary>
+    /// <param name="filePath">The path to the EML file.</param>
+    /// <param name="options">Parsing options. Set <see cref="EmlParserOptions.Strict"/> to reject malformed input.</param>
+    /// <returns>A new <see cref="MailMessage"/> populated from the file.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="filePath"/> or <paramref name="options"/> is null.</exception>
+    /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
+    // ReSharper disable once UnusedMember.Global
+    public static MailMessage ParseFile
+    (
+        string filePath,
+        EmlParserOptions options
+    )
+    {
+        if (filePath == null)
+        {
+            throw new ArgumentNullException(nameof(filePath));
+        }
+
+        if (options == null)
+        {
+            throw new ArgumentNullException(nameof(options));
+        }
+
+#pragma warning disable RS0030 // File I/O - reading EML file
+        var content = File.ReadAllText(filePath, Encoding.UTF8);
+#pragma warning restore RS0030
+
+        return Parse(content, options);
     }
 
 
@@ -206,6 +313,50 @@ public static class EmlParser
 
 
 
+    /// <summary>
+    /// Asynchronously parses an EML file into a <see cref="MailMessage"/> using
+    /// the supplied <paramref name="options"/>.
+    /// </summary>
+    /// <param name="filePath">The path to the EML file.</param>
+    /// <param name="options">Parsing options. Set <see cref="EmlParserOptions.Strict"/> to reject malformed input.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the parsed <see cref="MailMessage"/>.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="filePath"/> or <paramref name="options"/> is null.</exception>
+    /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
+    // ReSharper disable once UnusedMember.Global
+    public static async Task<MailMessage> ParseFileAsync
+    (
+        string filePath,
+        EmlParserOptions options,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (filePath == null)
+        {
+            throw new ArgumentNullException(nameof(filePath));
+        }
+
+        if (options == null)
+        {
+            throw new ArgumentNullException(nameof(options));
+        }
+
+#if NETSTANDARD2_0 || NET462
+        cancellationToken.ThrowIfCancellationRequested();
+#pragma warning disable RS0030
+        var content = File.ReadAllText(filePath, Encoding.UTF8);
+#pragma warning restore RS0030
+        await Task.CompletedTask.ConfigureAwait(false);
+#else
+        var content = await File.ReadAllTextAsync(filePath, Encoding.UTF8, cancellationToken)
+            .ConfigureAwait(false);
+#endif
+
+        return Parse(content, options);
+    }
+
+
+
     // ==========================================================================
     // Parse helpers
     // ==========================================================================
@@ -213,34 +364,40 @@ public static class EmlParser
     private static void ApplyAddressHeaders
     (
         MailMessage message,
-        Dictionary<string, string> headers
+        Dictionary<string, string> headers,
+        ParseContext context
     )
     {
-        if (headers.TryGetValue("from", out var from)
-            && !string.IsNullOrWhiteSpace(from)
-            && TryParseMailAddress(from, out var fromAddress))
+        if (headers.TryGetValue("from", out var from) && !string.IsNullOrWhiteSpace(from))
         {
-            message.From = fromAddress;
+            if (TryParseMailAddress(from, out var fromAddress))
+            {
+                message.From = fromAddress;
+            }
+            else
+            {
+                context.Report($"Malformed From address: '{from.Trim()}'.", "From");
+            }
         }
 
         if (headers.TryGetValue("to", out var to))
         {
-            AddAddresses(message.To, to);
+            AddAddresses(message.To, to, context, "To");
         }
 
         if (headers.TryGetValue("cc", out var cc))
         {
-            AddAddresses(message.CC, cc);
+            AddAddresses(message.CC, cc, context, "CC");
         }
 
         if (headers.TryGetValue("bcc", out var bcc))
         {
-            AddAddresses(message.Bcc, bcc);
+            AddAddresses(message.Bcc, bcc, context, "Bcc");
         }
 
         if (headers.TryGetValue("reply-to", out var replyTo))
         {
-            AddAddresses(message.ReplyToList, replyTo);
+            AddAddresses(message.ReplyToList, replyTo, context, "ReplyTo");
         }
     }
 
@@ -249,12 +406,13 @@ public static class EmlParser
     private static void ApplySubject
     (
         MailMessage message,
-        Dictionary<string, string> headers
+        Dictionary<string, string> headers,
+        ParseContext context
     )
     {
         if (headers.TryGetValue("subject", out var subject))
         {
-            message.Subject = DecodeEncodedWords(subject);
+            message.Subject = DecodeEncodedWords(subject, context);
         }
     }
 
@@ -264,7 +422,8 @@ public static class EmlParser
     (
         MailMessage message,
         Dictionary<string, string> headers,
-        string bodySection
+        string bodySection,
+        ParseContext context
     )
     {
         var contentType = headers.TryGetValue("content-type", out var ct) ? ct : "text/plain";
@@ -278,14 +437,14 @@ public static class EmlParser
             var boundary = ExtractBoundary(contentType);
             if (boundary != null)
             {
-                ParseMultipart(message, bodySection, boundary);
+                ParseMultipart(message, bodySection, boundary, context);
             }
         }
         else
         {
             var isHtml = contentType.IndexOf("text/html", StringComparison.OrdinalIgnoreCase) >= 0;
             message.IsBodyHtml = isHtml;
-            message.Body = TrimFinalLineBreak(DecodeBody(bodySection, transferEncoding));
+            message.Body = TrimFinalLineBreak(DecodeBody(bodySection, transferEncoding, context));
         }
     }
 
@@ -448,7 +607,8 @@ public static class EmlParser
     (
         MailMessage message,
         string body,
-        string boundary
+        string boundary,
+        ParseContext context
     )
     {
         var delimiter = "--" + boundary;
@@ -474,7 +634,7 @@ public static class EmlParser
             var partTransferEncoding = partHeaders.TryGetValue("content-transfer-encoding", out var pcte)
                 ? pcte.Trim().ToLowerInvariant() : "7bit";
 
-            if (TryHandleNestedMultipart(message, partContentType, partBody))
+            if (TryHandleNestedMultipart(message, partContentType, partBody, context))
             {
                 continue;
             }
@@ -485,7 +645,8 @@ public static class EmlParser
                 partHeaders,
                 partContentType,
                 partTransferEncoding,
-                partBody
+                partBody,
+                context
             );
         }
     }
@@ -496,7 +657,8 @@ public static class EmlParser
     (
         MailMessage message,
         string partContentType,
-        string partBody
+        string partBody,
+        ParseContext context
     )
     {
         if (partContentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) < 0)
@@ -507,7 +669,7 @@ public static class EmlParser
         var nestedBoundary = ExtractBoundary(partContentType);
         if (nestedBoundary != null)
         {
-            ParseMultipart(message, partBody, nestedBoundary);
+            ParseMultipart(message, partBody, nestedBoundary, context);
         }
 
         return true;
@@ -521,7 +683,8 @@ public static class EmlParser
         Dictionary<string, string> partHeaders,
         string partContentType,
         string partTransferEncoding,
-        string partBody
+        string partBody,
+        ParseContext context
     )
     {
         var isTextPlain = partContentType.IndexOf("text/plain", StringComparison.OrdinalIgnoreCase) >= 0;
@@ -534,15 +697,15 @@ public static class EmlParser
 
         if (isAttachment || (!isTextPlain && !isTextHtml))
         {
-            AddAttachmentPart(message, partHeaders, partContentType, partTransferEncoding, partBody, contentDisposition);
+            AddAttachmentPart(message, partHeaders, partContentType, partTransferEncoding, partBody, contentDisposition, context);
         }
         else if (isTextHtml)
         {
-            AddHtmlPart(message, partBody, partTransferEncoding);
+            AddHtmlPart(message, partBody, partTransferEncoding, context);
         }
         else if (isTextPlain && string.IsNullOrEmpty(message.Body))
         {
-            message.Body = DecodeBody(partBody, partTransferEncoding);
+            message.Body = DecodeBody(partBody, partTransferEncoding, context);
             message.IsBodyHtml = false;
         }
     }
@@ -556,11 +719,12 @@ public static class EmlParser
         string partContentType,
         string partTransferEncoding,
         string partBody,
-        string? contentDisposition
+        string? contentDisposition,
+        ParseContext context
     )
     {
         var fileName = ExtractFileName(contentDisposition, partContentType) ?? "attachment.bin";
-        var attachmentBytes = DecodeBodyBytes(partBody, partTransferEncoding);
+        var attachmentBytes = DecodeBodyBytes(partBody, partTransferEncoding, context);
         var stream = new MemoryStream(attachmentBytes, writable: false);
         var mimeType = partContentType.Split(';')[0].Trim();
         var attachment = new Attachment(stream, fileName, mimeType);
@@ -579,17 +743,18 @@ public static class EmlParser
     (
         MailMessage message,
         string partBody,
-        string partTransferEncoding
+        string partTransferEncoding,
+        ParseContext context
     )
     {
         if (string.IsNullOrEmpty(message.Body))
         {
-            message.Body = DecodeBody(partBody, partTransferEncoding);
+            message.Body = DecodeBody(partBody, partTransferEncoding, context);
             message.IsBodyHtml = true;
         }
         else
         {
-            var decodedHtml = DecodeBody(partBody, partTransferEncoding);
+            var decodedHtml = DecodeBody(partBody, partTransferEncoding, context);
             var view = AlternateView.CreateAlternateViewFromString
             (
                 decodedHtml,
@@ -623,7 +788,8 @@ public static class EmlParser
     private static string DecodeBody
     (
         string body,
-        string transferEncoding
+        string transferEncoding,
+        ParseContext context
     )
     {
         switch (transferEncoding)
@@ -637,6 +803,7 @@ public static class EmlParser
                 }
                 catch (FormatException)
                 {
+                    context.Report("Undecodable base64 body part; kept as raw text.", "Body");
                     return body;
                 }
 
@@ -653,7 +820,8 @@ public static class EmlParser
     private static byte[] DecodeBodyBytes
     (
         string body,
-        string transferEncoding
+        string transferEncoding,
+        ParseContext context
     )
     {
         switch (transferEncoding)
@@ -666,6 +834,7 @@ public static class EmlParser
                 }
                 catch (FormatException)
                 {
+                    context.Report("Undecodable base64 attachment part; kept as raw bytes.", "Attachments");
                     return Encoding.UTF8.GetBytes(body);
                 }
 
@@ -769,18 +938,20 @@ public static class EmlParser
 
     private static string DecodeEncodedWords
     (
-        string input
+        string input,
+        ParseContext context
     )
     {
         // RFC 2047: =?charset?encoding?encoded-text?=
-        return EncodedWordRegex.Replace(input, DecodeEncodedWordMatch);
+        return EncodedWordRegex.Replace(input, m => DecodeEncodedWordMatch(m, context));
     }
 
 
 
     private static string DecodeEncodedWordMatch
     (
-        Match m
+        Match m,
+        ParseContext context
     )
     {
         var charset = m.Groups["charset"].Value;
@@ -801,10 +972,12 @@ public static class EmlParser
         }
         catch (FormatException)
         {
+            context.Report($"Malformed RFC 2047 encoded word: '{m.Value}'; kept verbatim.", propertyName: null);
             return m.Value;
         }
         catch (ArgumentException)
         {
+            context.Report($"Malformed RFC 2047 encoded word: '{m.Value}'; kept verbatim.", propertyName: null);
             return m.Value;
         }
     }
@@ -903,7 +1076,9 @@ public static class EmlParser
     private static void AddAddresses
     (
         MailAddressCollection collection,
-        string addressList
+        string addressList,
+        ParseContext context,
+        string propertyName
     )
     {
         // Split on comma, handling quoted display names
@@ -917,6 +1092,10 @@ public static class EmlParser
             if (TryParseMailAddress(trimmed, out var parsed))
             {
                 collection.Add(parsed!);
+            }
+            else
+            {
+                context.Report($"Malformed {propertyName} address: '{trimmed}'.", propertyName);
             }
         }
     }
@@ -967,5 +1146,49 @@ public static class EmlParser
         }
 
         return result;
+    }
+
+
+
+    /// <summary>
+    /// Carries the parse options and accumulates diagnostics as the parser
+    /// walks the message. A malformed construct is recorded as a
+    /// <see cref="ValidationIssue"/>; when <see cref="EmlParserOptions.Strict"/>
+    /// is set the same construct throws an <see cref="EmlParseException"/>.
+    /// </summary>
+    private sealed class ParseContext
+    {
+
+        internal ParseContext
+        (
+            EmlParserOptions options
+        )
+        {
+            Options = options;
+        }
+
+
+
+        internal EmlParserOptions Options { get; }
+
+
+
+        internal List<ValidationIssue> Issues { get; } = new List<ValidationIssue>();
+
+
+
+        internal void Report
+        (
+            string message,
+            string? propertyName
+        )
+        {
+            Issues.Add(new ValidationIssue(ValidationSeverity.Warning, message, propertyName));
+
+            if (Options.Strict)
+            {
+                throw new EmlParseException(message);
+            }
+        }
     }
 }
