@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Net.Mail;
 using Xunit;
 using Assert = Xunit.Assert;
 #pragma warning disable CA1707
@@ -209,10 +205,7 @@ public class InlineHtmlBuilderTests
         }
         finally
         {
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
+            TestFileHelpers.BestEffortDelete(filePath);
         }
     }
 

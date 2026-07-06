@@ -1,50 +1,42 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net462;net47;net471;net472;net48;net481;net5.0;net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <Version>0.1.0</Version>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <Copyright>Copyright 2026 Chris Wolfgang</Copyright>
-    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
-    <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
 
 
 
-  <!-- All TFMs: xunit v2 + coverlet -->
+  <!-- Integration tests target net8.0+ only: coverlet emits no coverage data
+       on net6.0/net7.0, and the end-to-end scenarios here (file I/O round
+       trips, wire-format fidelity) don't vary by legacy TFM — the unit suite
+       already covers the full TFM matrix.
+
+       Known, accepted gap: no test run ever loads the netstandard2.0 build
+       (net4x test TFMs resolve to the net462 asset; net5.0-7.0 resolve to
+       netstandard2.1). Its #if NETSTANDARD2_0||NET462 source branches are
+       exercised via net462, and compilation proves API availability; forcing
+       a netstandard2.0 reference (via the SetTargetFramework metadata on a
+       ProjectReference, which pins the build graph but not NuGet restore)
+       risks NU1107 restore conflicts, so the gap is documented instead. -->
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="10.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.assert" Version="2.9.3" />
     <PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.console" Version="2.9.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="xunit.runner.visualstudio" Version="[2.8.2,3.0.0)">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-
-
-  <!-- .NET Framework 4.x and .NET 5.0-7.0: pinned older Test.Sdk -->
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) OR '$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net7.0'">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.13.0]" />
-  </ItemGroup>
-
-
-
-  <!-- .NET 8.0+: latest Test.Sdk -->
-  <ItemGroup Condition="!$(TargetFramework.StartsWith('net4')) AND '$(TargetFramework)' != 'net5.0' AND '$(TargetFramework)' != 'net6.0' AND '$(TargetFramework)' != 'net7.0'">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
   </ItemGroup>
 
 

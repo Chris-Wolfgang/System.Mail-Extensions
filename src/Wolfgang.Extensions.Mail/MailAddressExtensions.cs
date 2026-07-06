@@ -61,7 +61,12 @@ public static class MailAddressExtensions
                 result = new MailAddress(address);
                 return true;
             }
-            catch (Exception ex) when (ex is FormatException || ex is ArgumentException)
+            catch (FormatException)
+            {
+                result = null;
+                return false;
+            }
+            catch (ArgumentException)
             {
                 result = null;
                 return false;
@@ -106,7 +111,12 @@ public static class MailAddressExtensions
                 result = new MailAddress(address, displayName);
                 return true;
             }
-            catch (Exception ex) when (ex is FormatException || ex is ArgumentException)
+            catch (FormatException)
+            {
+                result = null;
+                return false;
+            }
+            catch (ArgumentException)
             {
                 result = null;
                 return false;

@@ -32,12 +32,12 @@ You can contribute in several ways:
    ```
 5. **Open a pull request** describing your changes.
 
-6. **PR Checks:**
+6. **PR Checks:**  
    Once you create a pull request (PR), several Continuous Integration (CI) steps will run automatically. These may include:
    - Building the project
    - Running automated tests
    - Checking code style and linting
-   - Running static analysis
+   - Running static analysis with multiple static analyzers (see list below)
 
    **It is important to make sure that all CI steps pass before your PR can be merged.**
    - If any CI step fails, please review the error messages and update your PR as needed.
@@ -47,39 +47,117 @@ You can contribute in several ways:
 
 ## Code Quality Standards
 
-This project aims to maintain **high code quality standards** through automated checks in the build and CI pipeline.
+This project maintains **extremely high code quality standards** through multiple layers of static analysis and automated enforcement.
 
-### Static Analysis and CI Enforcement
+### The 8 Analyzers
 
-Code quality enforcement in this repository is based on the tools and checks that are actually configured in the project and workflow files.
+All code is analyzed by these tools during build:
 
-Depending on the current repository configuration, pull requests may be validated with checks such as:
+1. **Microsoft.CodeAnalysis.NetAnalyzers** (Built-in .NET SDK)
+   - Correctness, performance, and security rules
+   - Latest analysis level enabled
 
-1. **.NET SDK analyzers and compiler warnings**
-   - Correctness, reliability, and maintainability checks provided by the SDK
-   - Warnings surfaced during restore/build
+2. **Roslynator.Analyzers**
+   - 500+ refactoring and code quality rules
+   - Advanced C# pattern detection
 
-2. **Automated tests**
-   - Validation that changes do not break expected behavior
-   - Coverage and test execution requirements when configured
+3. **AsyncFixer**
+   - Detects common async/await anti-patterns (AsyncFixer01–05)
+   - Flags missing or incorrect cancellation-token propagation
+   - Prevents fire-and-forget async calls (`async void` outside event handlers)
+   - NOTE: `ConfigureAwait()` enforcement is handled by Meziantou's
+     MA0004 / SonarAnalyzer S3216 / CA2007, not by AsyncFixer.
 
-3. **Formatting, style, and linting rules**
-   - Enforcement driven by repository configuration such as `.editorconfig`
-   - Helps keep code consistent and reviewable
+4. **Microsoft.VisualStudio.Threading.Analyzers**
+   - Thread safety enforcement
+   - Async method naming conventions
+   - Deadlock prevention
 
-4. **CI and security scanning**
-   - Additional checks may run through the configured GitHub Actions workflows
-   - Contributors should treat the repository configuration and CI results as the source of truth for what is enforced
+5. **Microsoft.CodeAnalysis.BannedApiAnalyzers**
+   - Blocks usage of APIs listed in `BannedSymbols.txt`
+   - Enforces async-first patterns (see below)
 
-If a tool, analyzer, or banned API list is not configured in the repository, contributors should not assume it is enforced automatically.
-Always check the current project files and workflow definitions when in doubt.
+6. **Meziantou.Analyzer**
+   - Comprehensive code quality checks
+   - Performance optimizations
+   - Best practice enforcement
+
+7. **SonarAnalyzer.CSharp**
+   - Industry-standard code analysis
+   - Security vulnerability detection
+   - Code smell identification
+
+8. **Microsoft.CodeAnalysis.PublicApiAnalyzers**
+   - Tracks the project's public API surface against
+     `PublicAPI.Shipped.txt` / `PublicAPI.Unshipped.txt` baseline files
+   - Catches inadvertent breaking changes before they ship
+   - **Opt-in per project**: the package is referenced from
+     `Directory.Build.props` but the analyzer only emits diagnostics
+     when the baseline files exist in a project directory (gated via
+     `<AdditionalFiles Condition="Exists(...)" />`). Library projects
+     under `src/` opt in; test / example / benchmark projects do not.
+
+### Async-First Enforcement
+
+This library **prohibits synchronous blocking calls** via `BannedSymbols.txt`. The following APIs are **banned**:
+
+#### ❌ Blocking Async Operations
+```csharp
+// Banned - blocks threads
+task.Wait();
+task.Result;
+Task.WaitAll(tasks);
+
+// Required - truly async
+await task;
+await Task.WhenAll(tasks);
+```
+
+#### ❌ Synchronous I/O
+```csharp
+// Banned
+File.ReadAllText(path);
+stream.Read(buffer, 0, count);
+streamReader.ReadLine();
+
+// Required
+await File.ReadAllTextAsync(path);
+await stream.ReadAsync(buffer, 0, count);
+await streamReader.ReadLineAsync();
+```
+
+#### ❌ Thread Blocking
+```csharp
+// Banned
+Thread.Sleep(1000);
+Console.ReadLine();
+
+// Required
+await Task.Delay(1000);
+// Avoid blocking console reads in async code
+```
+
+#### ❌ Obsolete/Insecure APIs
+```csharp
+// Banned
+var client = new WebClient();
+var formatter = new BinaryFormatter();
+var now = DateTime.Now; // Use DateTimeOffset
+
+// Required
+var client = new HttpClient();
+// Use System.Text.Json.JsonSerializer
+var now = DateTimeOffset.UtcNow;
+```
+
+**Why?** This ensures all code is **truly asynchronous** and **non-blocking**, providing optimal performance in async contexts.
 
 ---
 
 ## Build and Test Instructions
 
 ### Prerequisites
-- .NET 8.0 SDK or later
+- .NET 10.0 SDK or later (required for the repo's net10.0 target; older SDKs cannot load the csproj)
 - PowerShell Core (optional, for formatting scripts)
 
 ### Build the Project
@@ -88,9 +166,11 @@ Always check the current project files and workflow definitions when in doubt.
 # Restore NuGet packages
 dotnet restore
 
-# Build in Release configuration
+# Build in Release configuration (enforces all analyzers)
 dotnet build --configuration Release
 ```
+
+**Note:** Release builds treat all analyzer warnings as errors (`<TreatWarningsAsErrors>true</TreatWarningsAsErrors>`). Debug builds allow warnings to facilitate development.
 
 ### Run Tests
 
@@ -116,6 +196,8 @@ dotnet format --verify-no-changes
 # PowerShell formatting script
 pwsh ./scripts/format.ps1
 ```
+
+See [docs/README-FORMATTING.md](docs/README-FORMATTING.md) for detailed formatting rules.
 
 ---
 
@@ -144,7 +226,7 @@ View the complete configuration in [.editorconfig](.editorconfig).
 - Write clear, concise commit messages.
 - Add relevant tests for new features or bug fixes.
 - Document any public APIs with XML documentation comments.
-- Ensure all analyzer warnings are addressed.
+- Ensure all analyzer warnings are addressed (they're treated as errors in Release builds).
 - Use async/await patterns - no blocking calls allowed.
 - Include `CancellationToken` parameters in async methods where appropriate.
 
@@ -166,4 +248,4 @@ Please be respectful and considerate in all interactions. See [CODE_OF_CONDUCT.m
 
 ---
 
-Thank you for contributing!
+Thank you for contributing! 🎉

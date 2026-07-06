@@ -1,8 +1,5 @@
-using System;
-using System.IO;
 using System.Net.Mail;
 using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using Assert = Xunit.Assert;
 #pragma warning disable CA1707
@@ -368,7 +365,7 @@ public class EmlParserTests
         }
         finally
         {
-            if (File.Exists(filePath)) File.Delete(filePath);
+            TestFileHelpers.BestEffortDelete(filePath);
         }
     }
 
@@ -402,7 +399,7 @@ public class EmlParserTests
         }
         finally
         {
-            if (File.Exists(filePath)) File.Delete(filePath);
+            TestFileHelpers.BestEffortDelete(filePath);
         }
     }
 

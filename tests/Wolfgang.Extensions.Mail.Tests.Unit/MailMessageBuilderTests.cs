@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using System.Net.Mail;
 using System.Text;
 using Xunit;
@@ -38,6 +36,22 @@ public class MailMessageBuilderTests
             () => builder.Build()
         );
         Assert.Contains("recipient", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+
+
+    [Fact]
+    public void Build_when_From_and_recipients_both_missing_exception_reports_both()
+    {
+        var builder = new MailMessageBuilder();
+
+        var ex = Assert.Throws<InvalidOperationException>
+        (
+            () => builder.Build()
+        );
+
+        Assert.Contains("From address is required", ex.Message, StringComparison.Ordinal);
+        Assert.Contains("At least one recipient", ex.Message, StringComparison.Ordinal);
     }
 
 
@@ -571,10 +585,7 @@ public class MailMessageBuilderTests
         }
         finally
         {
-            if (System.IO.File.Exists(filePath))
-            {
-                System.IO.File.Delete(filePath);
-            }
+            TestFileHelpers.BestEffortDelete(filePath);
         }
     }
 }

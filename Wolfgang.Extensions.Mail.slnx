@@ -2,11 +2,12 @@
   <Folder Name="/.root/">
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
+    <File Path="CHANGELOG.md" />
     <File Path="CODE_OF_CONDUCT.md" />
     <File Path="CONTRIBUTING.md" />
     <File Path="LICENSE" />
     <File Path="README.md" />
-    <File Path="SETUP.md" />
+    <File Path="SECURITY.md" />
   </Folder>
   <Folder Name="/.root/.github/">
     <File Path=".github/CODEOWNERS" />
@@ -16,22 +17,26 @@
   </Folder>
   <Folder Name="/.root/.github/ISSUE_TEMPLATE/">
     <File Path=".github/ISSUE_TEMPLATE/BUG_REPORT.yaml" />
-    <File Path=".github/ISSUE_TEMPLATE/feature_request.md" />
+    <File Path=".github/ISSUE_TEMPLATE/feature_request.yaml" />
   </Folder>
   <Folder Name="/.root/.github/workflows/">
-    <File Path=".github/workflows/create-labels.yaml" />
+    <File Path=".github/workflows/benchmarks.yaml" />
+    <File Path=".github/workflows/build-all-versions.yaml" />
+    <File Path=".github/workflows/codeql.yaml" />
     <File Path=".github/workflows/docfx.yaml" />
     <File Path=".github/workflows/pr.yaml" />
     <File Path=".github/workflows/release.yaml" />
+    <File Path=".github/workflows/stryker.yaml" />
   </Folder>
-  <Folder Name="/benchmarks/" />
-  <Folder Name="/examples/">
-    <Project Path="Wolfgang.Extensions.IAsyncEnumerable.Example/Wolfgang.Extensions.IAsyncEnumerable.Example.csproj" Id="cad5a7dc-0754-45b7-8cb1-28c1b6b90adc" />
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/Wolfgang.Extensions.Mail.Benchmarks/Wolfgang.Extensions.Mail.Benchmarks.csproj" />
   </Folder>
+  <Folder Name="/examples/" />
   <Folder Name="/src/">
     <Project Path="src/Wolfgang.Extensions.Mail/Wolfgang.Extensions.Mail.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Wolfgang.Extensions.Mail.Tests.Integration/Wolfgang.Extensions.Mail.Tests.Integration.csproj" />
     <Project Path="tests/Wolfgang.Extensions.Mail.Tests.Unit/Wolfgang.Extensions.Mail.Tests.Unit.csproj" Id="f132f60b-87f5-4e4a-a13a-c49311d2586d" />
   </Folder>
 </Solution>
