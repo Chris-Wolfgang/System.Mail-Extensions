@@ -689,7 +689,9 @@ public static class EmlParser
         // split across escapes still decode correctly. The buffer is sized
         // for the UTF-8 worst case (3 bytes per UTF-16 code unit) so it never
         // needs to grow.
-        var buffer = new byte[input.Length * 3];
+        // checked: a >715 MB input would overflow int sizing; fail explicitly
+        // rather than allocate a wrong-sized buffer.
+        var buffer = new byte[checked(input.Length * 3)];
         var byteCount = 0;
         var i = 0;
 
@@ -726,7 +728,10 @@ public static class EmlParser
             }
             else
             {
-                var charCount = char.IsHighSurrogate(current) && i + 1 < input.Length ? 2 : 1;
+                // Only a valid surrogate pair consumes two chars; a lone high
+                // surrogate must not swallow the next character (it could be
+                // an '=' starting an escape or soft break).
+                var charCount = i + 1 < input.Length && char.IsSurrogatePair(input, i) ? 2 : 1;
                 byteCount += Encoding.UTF8.GetBytes(input, i, charCount, buffer, byteCount);
                 i += charCount;
             }

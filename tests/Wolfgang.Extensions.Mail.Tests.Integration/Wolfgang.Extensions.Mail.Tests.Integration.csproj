@@ -21,8 +21,9 @@
        (net4x test TFMs resolve to the net462 asset; net5.0-7.0 resolve to
        netstandard2.1). Its #if NETSTANDARD2_0||NET462 source branches are
        exercised via net462, and compilation proves API availability; forcing
-       a netstandard2.0 reference via SetTargetFramework risks NU1107 restore
-       conflicts, so the gap is documented instead. -->
+       a netstandard2.0 reference (via the SetTargetFramework metadata on a
+       ProjectReference, which pins the build graph but not NuGet restore)
+       risks NU1107 restore conflicts, so the gap is documented instead. -->
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="10.0.1">
       <PrivateAssets>all</PrivateAssets>
