@@ -301,4 +301,31 @@ public class MailMessageExtensions_Validate_Tests
 
         Assert.Equal("Warning: General warning", issue.ToString());
     }
+
+
+
+    [Fact]
+    public void ValidationIssue_when_message_is_null_throws_ArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>
+        (
+            () => new ValidationIssue(ValidationSeverity.Error, null!)
+        );
+    }
+
+
+
+    // ---------- ValidationResult.AllIssues ----------
+
+    [Fact]
+    public void AllIssues_contains_both_errors_and_warnings()
+    {
+        using var message = new MailMessage();   // no From, no recipients -> errors; empty subject/body -> warnings
+
+        var result = message.Validate();
+
+        Assert.NotEmpty(result.Errors);
+        Assert.NotEmpty(result.Warnings);
+        Assert.Equal(result.Errors.Count + result.Warnings.Count, result.AllIssues.Count);
+    }
 }

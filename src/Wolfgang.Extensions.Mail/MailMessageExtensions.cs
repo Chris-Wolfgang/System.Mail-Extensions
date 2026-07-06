@@ -759,6 +759,10 @@ public static class MailMessageExtensions
     /// so the framework's MailWriter (which closes the stream it writes to)
     /// leaves the backing <see cref="MemoryStream"/> readable.
     /// </summary>
+    // The read/seek/length members are Stream-contract plumbing the MailWriter
+    // serialization path never calls (it only writes, flushes, and closes), so
+    // they are excluded from coverage rather than exercised by an artificial test.
+    [ExcludeFromCodeCoverage]
     private sealed class NonClosingStreamWrapper : Stream
     {
         private readonly Stream _inner;
