@@ -74,7 +74,7 @@ if (!result.IsValid)
 }
 ```
 
-`ValidationResult` exposes `IsValid`, `Errors`, `Warnings`, and `AllIssues`. Calling `Validate()` without options checks the essentials (From address, at least one recipient).
+`ValidationResult` exposes `IsValid`, `Errors`, `Warnings`, and `AllIssues`. Calling `Validate()` without options reports a missing From address or missing recipients as errors, and an empty subject or body as warnings (options promote those to errors via `RequireSubject`/`RequireBody`).
 
 ### Deep-copy messages — `Clone()`
 

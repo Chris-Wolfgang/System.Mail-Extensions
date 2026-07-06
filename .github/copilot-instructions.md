@@ -33,7 +33,7 @@ dotnet test --no-build --configuration Release      # or -f net10.0 for a quick 
 - **Release builds treat warnings as errors** (set in `Directory.Build.props`).
 - **Sync I/O and blocking APIs are banned** (`BannedSymbols.txt` / RS0030): no `File.ReadAllText`, `Stream.Read/Write/CopyTo/Flush`, `Task.Wait`, `.Result`. Use async equivalents. Tests and benchmarks are exempt via `.editorconfig` scopes.
 - **`PublicAPI.Shipped.txt` must match the public surface.** RS0017 (entry not found) breaks Release builds. The entries use the analyzer's dialect: `!` on non-null reference types, enum members as `Name = value -> Type`, `default(System.Threading.CancellationToken)` spelled out, and C# 14 extension members as `Type.extension(Receiver!).Member(...)`. To regenerate: `dotnet format analyzers src/Wolfgang.Extensions.Mail/Wolfgang.Extensions.Mail.csproj --diagnostics RS0016 --severity info` (severity `info` is required — a global `.editorconfig` rule downgrades analyzer diagnostics at `.cs` locations to suggestion).
-- **`TargetFrameworks` stays on a single line** in every csproj (CI parses it).
+- **`TargetFrameworks` stays on a single line** in every csproj — fleet-wide convention. This repo's `pr.yaml` tolerates multi-line values (it evaluates the property via `dotnet msbuild -getProperty`), but other fleet tooling greps for the single-line form, so keep it.
 - **No absolute paths** in project files.
 - Code style: Allman braces, file-scoped namespaces, 4-space indent, three blank lines between members, multi-line argument lists with the closing paren on its own line.
 - Test naming: `MethodUnderTest_when_condition_expected_result`.
