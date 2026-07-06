@@ -290,17 +290,17 @@ var assemblies = [
   {
     "name": "Wolfgang.Extensions.Mail",
     "classes": [
-      { "name": "Wolfgang.Extensions.Mail.AttachmentCollectionExtensions", "rp": "Wolfgang.Extensions.Mail_AttachmentCollectionExtensions.html", "cl": 22, "ucl": 0, "cal": 22, "tl": 167, "cb": 14, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Wolfgang.Extensions.Mail.AttachmentFactory", "rp": "Wolfgang.Extensions.Mail_AttachmentFactory.html", "cl": 89, "ucl": 2, "cal": 91, "tl": 303, "cb": 32, "tb": 34, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Wolfgang.Extensions.Mail.EmlParser", "rp": "Wolfgang.Extensions.Mail_EmlParser.html", "cl": 280, "ucl": 21, "cal": 301, "tl": 849, "cb": 162, "tb": 186, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Wolfgang.Extensions.Mail.InlineHtmlBuilder", "rp": "Wolfgang.Extensions.Mail_InlineHtmlBuilder.html", "cl": 79, "ucl": 0, "cal": 79, "tl": 261, "cb": 60, "tb": 61, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Wolfgang.Extensions.Mail.MailAddressCollectionExtensions", "rp": "Wolfgang.Extensions.Mail_MailAddressCollectionExtensions.html", "cl": 31, "ucl": 0, "cal": 31, "tl": 186, "cb": 18, "tb": 18, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Wolfgang.Extensions.Mail.MailAddressExtensions", "rp": "Wolfgang.Extensions.Mail_MailAddressExtensions.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 117, "cb": 4, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Wolfgang.Extensions.Mail.MailMessageBuilder", "rp": "Wolfgang.Extensions.Mail_MailMessageBuilder.html", "cl": 138, "ucl": 0, "cal": 138, "tl": 576, "cb": 74, "tb": 76, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Wolfgang.Extensions.Mail.MailMessageExtensions", "rp": "Wolfgang.Extensions.Mail_MailMessageExtensions.html", "cl": 174, "ucl": 2, "cal": 176, "tl": 723, "cb": 83, "tb": 86, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Wolfgang.Extensions.Mail.Validation.ValidationIssue", "rp": "Wolfgang.Extensions.Mail_ValidationIssue.html", "cl": 17, "ucl": 1, "cal": 18, "tl": 69, "cb": 3, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Wolfgang.Extensions.Mail.Validation.ValidationOptions", "rp": "Wolfgang.Extensions.Mail_ValidationOptions.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 39, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Wolfgang.Extensions.Mail.Validation.ValidationResult", "rp": "Wolfgang.Extensions.Mail_ValidationResult.html", "cl": 12, "ucl": 1, "cal": 13, "tl": 62, "cb": 1, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Wolfgang.Extensions.Mail.AttachmentCollectionExtensions", "rp": "Wolfgang.Extensions.Mail_AttachmentCollectionExtensions.html", "cl": 22, "ucl": 0, "cal": 22, "tl": 167, "cb": 14, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [100], "bch": [100], "mch": [], "mfch": [], "hc": [{ "et": "7/6/2026 - 9:46:29 PM", "cl": 22, "ucl": 0, "cal": 22, "tl": 167, "lcq": 100, "cb": 14, "tb": 14, "bcq": 100, "cm": 0, "fcm": 0, "tm": 0, "mcq": 0, "mfcq": 0 }], "metrics": { } },
+      { "name": "Wolfgang.Extensions.Mail.AttachmentFactory", "rp": "Wolfgang.Extensions.Mail_AttachmentFactory.html", "cl": 89, "ucl": 2, "cal": 91, "tl": 309, "cb": 32, "tb": 34, "cm": 0, "fcm": 0, "tm": 0, "lch": [97.8], "bch": [94.1], "mch": [], "mfch": [], "hc": [{ "et": "7/6/2026 - 9:46:29 PM", "cl": 89, "ucl": 2, "cal": 91, "tl": 309, "lcq": 97.8, "cb": 32, "tb": 34, "bcq": 94.1, "cm": 0, "fcm": 0, "tm": 0, "mcq": 0, "mfcq": 0 }], "metrics": { } },
+      { "name": "Wolfgang.Extensions.Mail.EmlParser", "rp": "Wolfgang.Extensions.Mail_EmlParser.html", "cl": 319, "ucl": 11, "cal": 330, "tl": 971, "cb": 191, "tb": 218, "cm": 0, "fcm": 0, "tm": 0, "lch": [96.6], "bch": [87.6], "mch": [], "mfch": [], "hc": [{ "et": "7/6/2026 - 9:46:29 PM", "cl": 319, "ucl": 11, "cal": 330, "tl": 971, "lcq": 96.6, "cb": 191, "tb": 218, "bcq": 87.6, "cm": 0, "fcm": 0, "tm": 0, "mcq": 0, "mfcq": 0 }], "metrics": { } },
+      { "name": "Wolfgang.Extensions.Mail.InlineHtmlBuilder", "rp": "Wolfgang.Extensions.Mail_InlineHtmlBuilder.html", "cl": 79, "ucl": 0, "cal": 79, "tl": 263, "cb": 59, "tb": 61, "cm": 0, "fcm": 0, "tm": 0, "lch": [100], "bch": [96.7], "mch": [], "mfch": [], "hc": [{ "et": "7/6/2026 - 9:46:29 PM", "cl": 79, "ucl": 0, "cal": 79, "tl": 263, "lcq": 100, "cb": 59, "tb": 61, "bcq": 96.7, "cm": 0, "fcm": 0, "tm": 0, "mcq": 0, "mfcq": 0 }], "metrics": { } },
+      { "name": "Wolfgang.Extensions.Mail.MailAddressCollectionExtensions", "rp": "Wolfgang.Extensions.Mail_MailAddressCollectionExtensions.html", "cl": 31, "ucl": 0, "cal": 31, "tl": 186, "cb": 18, "tb": 18, "cm": 0, "fcm": 0, "tm": 0, "lch": [100], "bch": [100], "mch": [], "mfch": [], "hc": [{ "et": "7/6/2026 - 9:46:29 PM", "cl": 31, "ucl": 0, "cal": 31, "tl": 186, "lcq": 100, "cb": 18, "tb": 18, "bcq": 100, "cm": 0, "fcm": 0, "tm": 0, "mcq": 0, "mfcq": 0 }], "metrics": { } },
+      { "name": "Wolfgang.Extensions.Mail.MailAddressExtensions", "rp": "Wolfgang.Extensions.Mail_MailAddressExtensions.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 127, "cb": 4, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [100], "bch": [100], "mch": [], "mfch": [], "hc": [{ "et": "7/6/2026 - 9:46:29 PM", "cl": 8, "ucl": 0, "cal": 8, "tl": 127, "lcq": 100, "cb": 4, "tb": 4, "bcq": 100, "cm": 0, "fcm": 0, "tm": 0, "mcq": 0, "mfcq": 0 }], "metrics": { } },
+      { "name": "Wolfgang.Extensions.Mail.MailMessageBuilder", "rp": "Wolfgang.Extensions.Mail_MailMessageBuilder.html", "cl": 138, "ucl": 0, "cal": 138, "tl": 590, "cb": 77, "tb": 80, "cm": 0, "fcm": 0, "tm": 0, "lch": [100], "bch": [96.2], "mch": [], "mfch": [], "hc": [{ "et": "7/6/2026 - 9:46:29 PM", "cl": 138, "ucl": 0, "cal": 138, "tl": 590, "lcq": 100, "cb": 77, "tb": 80, "bcq": 96.2, "cm": 0, "fcm": 0, "tm": 0, "mcq": 0, "mfcq": 0 }], "metrics": { } },
+      { "name": "Wolfgang.Extensions.Mail.MailMessageExtensions", "rp": "Wolfgang.Extensions.Mail_MailMessageExtensions.html", "cl": 182, "ucl": 0, "cal": 182, "tl": 843, "cb": 76, "tb": 86, "cm": 0, "fcm": 0, "tm": 0, "lch": [100], "bch": [88.3], "mch": [], "mfch": [], "hc": [{ "et": "7/6/2026 - 9:46:29 PM", "cl": 182, "ucl": 0, "cal": 182, "tl": 843, "lcq": 100, "cb": 76, "tb": 86, "bcq": 88.3, "cm": 0, "fcm": 0, "tm": 0, "mcq": 0, "mfcq": 0 }], "metrics": { } },
+      { "name": "Wolfgang.Extensions.Mail.Validation.ValidationIssue", "rp": "Wolfgang.Extensions.Mail_ValidationIssue.html", "cl": 18, "ucl": 0, "cal": 18, "tl": 69, "cb": 4, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [100], "bch": [100], "mch": [], "mfch": [], "hc": [{ "et": "7/6/2026 - 9:46:29 PM", "cl": 18, "ucl": 0, "cal": 18, "tl": 69, "lcq": 100, "cb": 4, "tb": 4, "bcq": 100, "cm": 0, "fcm": 0, "tm": 0, "mcq": 0, "mfcq": 0 }], "metrics": { } },
+      { "name": "Wolfgang.Extensions.Mail.Validation.ValidationOptions", "rp": "Wolfgang.Extensions.Mail_ValidationOptions.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 39, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [100], "bch": [], "mch": [], "mfch": [], "hc": [{ "et": "7/6/2026 - 9:46:29 PM", "cl": 4, "ucl": 0, "cal": 4, "tl": 39, "lcq": 100, "cb": 0, "tb": 0, "bcq": 0, "cm": 0, "fcm": 0, "tm": 0, "mcq": 0, "mfcq": 0 }], "metrics": { } },
+      { "name": "Wolfgang.Extensions.Mail.Validation.ValidationResult", "rp": "Wolfgang.Extensions.Mail_ValidationResult.html", "cl": 13, "ucl": 0, "cal": 13, "tl": 62, "cb": 1, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [100], "bch": [50], "mch": [], "mfch": [], "hc": [{ "et": "7/6/2026 - 9:46:29 PM", "cl": 13, "ucl": 0, "cal": 13, "tl": 62, "lcq": 100, "cb": 1, "tb": 2, "bcq": 50, "cm": 0, "fcm": 0, "tm": 0, "mcq": 0, "mfcq": 0 }], "metrics": { } },
     ]},
 ];
 
@@ -315,25 +315,31 @@ var riskHotspotMetrics = [
 
 var riskHotspots = [
   {
-    "assembly": "Wolfgang.Extensions.Mail", "class": "Wolfgang.Extensions.Mail.InlineHtmlBuilder", "reportPath": "Wolfgang.Extensions.Mail_InlineHtmlBuilder.html", "methodName": "InferImageContentType(System.String)", "methodShortName": "InferImageContentType(...)", "fileIndex": 0, "line": 248,
+    "assembly": "Wolfgang.Extensions.Mail", "class": "Wolfgang.Extensions.Mail.InlineHtmlBuilder", "reportPath": "Wolfgang.Extensions.Mail_InlineHtmlBuilder.html", "methodName": "InferImageContentType(System.String)", "methodShortName": "InferImageContentType(...)", "fileIndex": 0, "line": 250,
     "metrics": [
       { "value": 39, "exceeded": true },
       { "value": 39, "exceeded": true },
     ]},
   {
-    "assembly": "Wolfgang.Extensions.Mail", "class": "Wolfgang.Extensions.Mail.EmlParser", "reportPath": "Wolfgang.Extensions.Mail_EmlParser.html", "methodName": "SplitAddresses(System.String)", "methodShortName": "SplitAddresses(...)", "fileIndex": 0, "line": 809,
+    "assembly": "Wolfgang.Extensions.Mail", "class": "Wolfgang.Extensions.Mail.EmlParser", "reportPath": "Wolfgang.Extensions.Mail_EmlParser.html", "methodName": "DecodeQuotedPrintable(System.String)", "methodShortName": "DecodeQuotedPrintable(...)", "fileIndex": 0, "line": 694,
     "metrics": [
-      { "value": 29, "exceeded": false },
+      { "value": 26, "exceeded": false },
+      { "value": 26, "exceeded": true },
+    ]},
+  {
+    "assembly": "Wolfgang.Extensions.Mail", "class": "Wolfgang.Extensions.Mail.EmlParser", "reportPath": "Wolfgang.Extensions.Mail_EmlParser.html", "methodName": "SplitAddresses(System.String)", "methodShortName": "SplitAddresses(...)", "fileIndex": 0, "line": 931,
+    "metrics": [
+      { "value": 20, "exceeded": false },
       { "value": 20, "exceeded": true },
     ]},
   {
-    "assembly": "Wolfgang.Extensions.Mail", "class": "Wolfgang.Extensions.Mail.EmlParser", "reportPath": "Wolfgang.Extensions.Mail_EmlParser.html", "methodName": "ParseHeaders(System.String)", "methodShortName": "ParseHeaders(...)", "fileIndex": 0, "line": 298,
+    "assembly": "Wolfgang.Extensions.Mail", "class": "Wolfgang.Extensions.Mail.EmlParser", "reportPath": "Wolfgang.Extensions.Mail_EmlParser.html", "methodName": "ParseHeaders(System.String)", "methodShortName": "ParseHeaders(...)", "fileIndex": 0, "line": 388,
     "metrics": [
       { "value": 16, "exceeded": false },
       { "value": 16, "exceeded": true },
     ]},
   {
-    "assembly": "Wolfgang.Extensions.Mail", "class": "Wolfgang.Extensions.Mail.EmlParser", "reportPath": "Wolfgang.Extensions.Mail_EmlParser.html", "methodName": "ProcessSinglePart(System.Net.Mail.MailMessage,System.Collections.Generic.Dictionary\u00602\u003CSystem.String,System.String\u003E,System.String,System.String,System.String)", "methodShortName": "ProcessSinglePart(...)", "fileIndex": 0, "line": 443,
+    "assembly": "Wolfgang.Extensions.Mail", "class": "Wolfgang.Extensions.Mail.EmlParser", "reportPath": "Wolfgang.Extensions.Mail_EmlParser.html", "methodName": "ProcessSinglePart(System.Net.Mail.MailMessage,System.Collections.Generic.Dictionary\u00602\u003CSystem.String,System.String\u003E,System.String,System.String,System.String)", "methodShortName": "ProcessSinglePart(...)", "fileIndex": 0, "line": 527,
     "metrics": [
       { "value": 16, "exceeded": false },
       { "value": 16, "exceeded": true },

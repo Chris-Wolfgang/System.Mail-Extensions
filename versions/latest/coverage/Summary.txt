@@ -1,33 +1,33 @@
 Summary
-  Generated on: 6/19/2026 - 12:11:27 PM
-  Coverage date: 6/19/2026 - 12:11:24 PM
-  Parser: Cobertura
+  Generated on: 7/6/2026 - 9:46:29 PM
+  Coverage date: 7/6/2026 - 9:46:25 PM
+  Parser: MultiReport (2x Cobertura)
   Assemblies: 1
   Classes: 11
   Files: 11
-  Line coverage: 96.9%
-  Covered lines: 854
-  Uncovered lines: 27
-  Coverable lines: 881
-  Total lines: 3352
-  Branch coverage: 92.9% (451 of 485)
-  Covered branches: 451
-  Total branches: 485
-  Method coverage: 99.1% (115 of 116)
-  Full method coverage: 86.2% (100 of 116)
-  Covered methods: 115
-  Fully covered methods: 100
-  Total methods: 116
+  Line coverage: 98.5%
+  Covered lines: 903
+  Uncovered lines: 13
+  Coverable lines: 916
+  Total lines: 3626
+  Branch coverage: 91.3% (476 of 521)
+  Covered branches: 476
+  Total branches: 521
+  Method coverage: 100% (120 of 120)
+  Full method coverage: 93.3% (112 of 120)
+  Covered methods: 120
+  Fully covered methods: 112
+  Total methods: 120
 
-Wolfgang.Extensions.Mail                                     96.9%
+Wolfgang.Extensions.Mail                                     98.5%
   Wolfgang.Extensions.Mail.AttachmentCollectionExtensions     100%
   Wolfgang.Extensions.Mail.AttachmentFactory                 97.8%
-  Wolfgang.Extensions.Mail.EmlParser                           93%
+  Wolfgang.Extensions.Mail.EmlParser                         96.6%
   Wolfgang.Extensions.Mail.InlineHtmlBuilder                  100%
   Wolfgang.Extensions.Mail.MailAddressCollectionExtensions    100%
   Wolfgang.Extensions.Mail.MailAddressExtensions              100%
   Wolfgang.Extensions.Mail.MailMessageBuilder                 100%
-  Wolfgang.Extensions.Mail.MailMessageExtensions             98.8%
-  Wolfgang.Extensions.Mail.Validation.ValidationIssue        94.4%
+  Wolfgang.Extensions.Mail.MailMessageExtensions              100%
+  Wolfgang.Extensions.Mail.Validation.ValidationIssue         100%
   Wolfgang.Extensions.Mail.Validation.ValidationOptions       100%
-  Wolfgang.Extensions.Mail.Validation.ValidationResult       92.3%
+  Wolfgang.Extensions.Mail.Validation.ValidationResult        100%
