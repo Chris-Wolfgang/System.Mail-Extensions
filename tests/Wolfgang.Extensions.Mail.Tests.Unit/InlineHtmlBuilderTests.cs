@@ -205,10 +205,7 @@ public class InlineHtmlBuilderTests
         }
         finally
         {
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
+            TestFileHelpers.BestEffortDelete(filePath);
         }
     }
 
