@@ -124,16 +124,17 @@ internal static class EmlCorpus
 
             if (written % 10 == 9)
             {
+                // =C3=A9 is é, which decodes to two bytes.
                 sb.Append("=C3=A9");
                 lineLength += 6;
+                written += 2;
             }
             else
             {
                 sb.Append('a');
                 lineLength++;
+                written++;
             }
-
-            written++;
         }
 
         sb.Append("\r\n");
