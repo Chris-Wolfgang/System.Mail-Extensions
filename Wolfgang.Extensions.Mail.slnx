@@ -34,6 +34,7 @@
     <Project Path="src/Wolfgang.Extensions.Mail/Wolfgang.Extensions.Mail.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Wolfgang.Extensions.Mail.Tests.Integration/Wolfgang.Extensions.Mail.Tests.Integration.csproj" />
     <Project Path="tests/Wolfgang.Extensions.Mail.Tests.Unit/Wolfgang.Extensions.Mail.Tests.Unit.csproj" Id="f132f60b-87f5-4e4a-a13a-c49311d2586d" />
   </Folder>
 </Solution>
