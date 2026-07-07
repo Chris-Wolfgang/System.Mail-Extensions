@@ -79,6 +79,8 @@ await File.WriteAllTextAsync("message.eml", eml);
 
 Produces a complete RFC 2822 MIME document, round-trippable through `EmlParser.Parse`.
 
+> **Trimming / Native AOT:** `ToMimeString` is the one API that is **not** trim- or AOT-safe — it uses reflection to reach the framework's internal MIME writer, so it's annotated `[RequiresUnreferencedCode]` / `[RequiresDynamicCode]` and will warn at compile time in a trimmed or `PublishAot` app. Everything else in the library is trim/AOT-safe (verified by a Native AOT smoke in CI).
+
 ### Validate messages — `Validate()`
 
 ```csharp

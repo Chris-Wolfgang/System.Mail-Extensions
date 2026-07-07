@@ -32,6 +32,17 @@
 	     static analysis (ReSharper / IDE0005). Uniform explicit usings compile
 	     identically on every TFM and keep the analyzers quiet. -->
 
+	<!-- Trim / Native-AOT compatibility. IsAotCompatible turns on the trim, AOT,
+	     and single-file analyzers so any trim-unsafe pattern is caught at build
+	     time (and marks the assembly IsTrimmable). The one genuinely unsafe API,
+	     ToMimeString, is annotated with [RequiresUnreferencedCode] /
+	     [RequiresDynamicCode] so consumers get a compile-time warning instead of
+	     a publish-time failure; everything else is trim/AOT-safe. Modern TFMs
+	     only — the analyzers do not apply to net462 / netstandard. -->
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0' OR '$(TargetFramework)' == 'net9.0' OR '$(TargetFramework)' == 'net10.0'">
+		<IsAotCompatible>true</IsAotCompatible>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
 		<None Include="..\..\assets\icon.png" Pack="true" PackagePath="\" />
