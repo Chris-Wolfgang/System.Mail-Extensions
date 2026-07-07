@@ -139,6 +139,7 @@ public class DocExampleCompilationTests
     )
     {
         var current = new StringBuilder();
+        var inExample = false;
         var inCode = false;
 
         foreach (var raw in lines)
@@ -151,7 +152,20 @@ public class DocExampleCompilationTests
 
             var content = StripDocPrefix(trimmed);
 
-            if (content.Contains("<code>", StringComparison.Ordinal))
+            if (content.Contains("<example>", StringComparison.Ordinal))
+            {
+                inExample = true;
+            }
+
+            if (content.Contains("</example>", StringComparison.Ordinal))
+            {
+                inExample = false;
+            }
+
+            // Only <code> nested inside <example> is a runnable snippet. Inline
+            // <code>…</code> in <summary>/<remarks> is prose, not a statement
+            // body, and would produce spurious compile failures if collected.
+            if (inExample && content.Contains("<code>", StringComparison.Ordinal))
             {
                 inCode = true;
                 current.Clear();
@@ -205,10 +219,14 @@ public class DocExampleCompilationTests
     private static IEnumerable<string> EnumerateSourceFiles()
     {
         var sourceDirectory = SourceDirectory();
+        // Ordinal sort so example numbering — and thus the failure output — is
+        // stable across operating systems and filesystems, which don't agree on
+        // Directory.EnumerateFiles ordering.
         return Directory
             .EnumerateFiles(sourceDirectory, "*.cs", SearchOption.AllDirectories)
             .Where(p => !p.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}", StringComparison.Ordinal)
-                     && !p.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}", StringComparison.Ordinal));
+                     && !p.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}", StringComparison.Ordinal))
+            .OrderBy(p => p, StringComparer.Ordinal);
     }
 
 
