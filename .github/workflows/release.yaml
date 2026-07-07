@@ -397,7 +397,13 @@ jobs:
             exit 0
           }
           
-          # Iterate through each project and create NuGet package
+          # Iterate through each project and create NuGet package.
+          # ABI / binary-compat gate (#134): dotnet pack runs SDK Package
+          # Validation for src projects that set EnablePackageValidation — it
+          # downloads PackageValidationBaselineVersion from NuGet and fails the
+          # pack on a public-API/ABI break not allowed by the version bump.
+          # Intentional MAJOR-release breaks are recorded in
+          # CompatibilitySuppressions.xml next to the csproj.
           foreach ($proj in $projects) {
             Write-Host "📦 Packing $($proj.Name)" -ForegroundColor Cyan
             dotnet pack $proj.FullName --no-build --configuration Release --output $packagesPath
