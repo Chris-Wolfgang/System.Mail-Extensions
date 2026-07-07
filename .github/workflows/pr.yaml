@@ -247,7 +247,8 @@ jobs:
   # SARIF uploads to GitHub Code Scanning (Security tab + inline PR
   # annotations). `error`-severity findings fail the job; `warning`-severity
   # surfaces in Code Scanning but doesn't fail (gated by --severity=WARNING
-  # filter). Tune the noise floor via .DotSettings at the repo root.
+  # filter). The noise floor will be tuned via a repo-root .DotSettings — a
+  # planned follow-up (issue #168); none exists yet, so warnings are expected.
   # Canonical: synced from repo-template.
   # ============================================================================
   inspectcode:
@@ -309,7 +310,13 @@ jobs:
           # SARIF level=error fails the job; warnings still upload (visible in
           # Security → Code scanning) but don't gate merge — raise to `error`
           # later when the noise floor is acceptable.
-          count=$(jq '[.runs[].results[] | select(.level=="error")] | length' inspect.sarif)
+          if [ ! -f inspect.sarif ]; then
+            echo "::error::InspectCode did not produce inspect.sarif"
+            exit 1
+          fi
+          # `?` makes the traversal tolerant of a missing runs/results array so
+          # a clean report (no findings) doesn't produce a confusing jq error.
+          count=$(jq '[.runs[]?.results[]? | select(.level=="error")] | length' inspect.sarif)
           if [ "$count" -gt 0 ]; then
             echo "::error::$count InspectCode error-severity finding(s) — see Security → Code scanning"
             exit 1
