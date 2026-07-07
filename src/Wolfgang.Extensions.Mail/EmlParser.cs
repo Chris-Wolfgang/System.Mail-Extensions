@@ -206,11 +206,24 @@ public static class EmlParser
         var headers = ParseHeaders(headerSection);
         var message = new MailMessage();
 
-        ApplyAddressHeaders(message, headers, context);
-        ApplySubject(message, headers, context);
-        ApplyBodyOrMultipart(message, headers, bodySection, context);
-        ApplyCustomHeaders(message, headers);
-        ApplyPriority(message, headers);
+        // In strict mode any Apply* step can throw EmlParseException partway
+        // through — potentially after ApplyBodyOrMultipart has already attached
+        // Attachments / AlternateViews that own MemoryStreams. Since the partial
+        // message is never returned, the caller can't dispose it, so dispose it
+        // here before rethrowing to avoid leaking those streams.
+        try
+        {
+            ApplyAddressHeaders(message, headers, context);
+            ApplySubject(message, headers, context);
+            ApplyBodyOrMultipart(message, headers, bodySection, context);
+            ApplyCustomHeaders(message, headers);
+            ApplyPriority(message, headers);
+        }
+        catch
+        {
+            message.Dispose();
+            throw;
+        }
 
         return message;
     }
