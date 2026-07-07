@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `EmlParserOptions` with a `Strict` mode: `EmlParser.Parse`/`ParseFile`/`ParseFileAsync` overloads that throw `EmlParseException` on the first malformed construct (address, undecodable transfer encoding, or malformed RFC 2047 encoded word) instead of skipping it.
+- `EmlParser.ParseWithDiagnostics`, returning a `ParseResult` that carries the best-effort message plus the list of skipped constructs as `ValidationIssue`s.
+
 ## [0.2.0] - 2026-07-06
 
 ### Added
