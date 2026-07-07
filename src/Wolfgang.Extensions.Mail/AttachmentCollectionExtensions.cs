@@ -140,14 +140,16 @@ public static class AttachmentCollectionExtensions
 
         // Index-based loop instead of LINQ .Where().Sum() so the method is
         // allocation-free — no iterator, delegate, or boxed enumerator. Guarded
-        // by AllocationBudgetTests.
+        // by AllocationBudgetTests. checked() preserves the overflow-throwing
+        // behavior of the previous Enumerable.Sum(long) (Sum is checked) while
+        // staying allocation-free.
         long total = 0;
         for (var i = 0; i < source.Count; i++)
         {
             var contentStream = source[i].ContentStream;
             if (contentStream.CanSeek)
             {
-                total += contentStream.Length;
+                total = checked(total + contentStream.Length);
             }
         }
 
