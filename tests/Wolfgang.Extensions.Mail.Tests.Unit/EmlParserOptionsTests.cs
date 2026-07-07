@@ -83,14 +83,34 @@ public class EmlParserOptionsTests
     [Fact]
     public void EmlParseException_is_a_FormatException_so_existing_catch_blocks_work()
     {
-        using var message = new MailMessage();
-
         var caught = Assert.Throws<EmlParseException>
         (
             () => EmlParser.Parse(MalformedFromEml, new EmlParserOptions { Strict = true })
         );
 
         Assert.IsAssignableFrom<System.FormatException>(caught);
+    }
+
+
+
+    [Fact]
+    public void Parse_strict_when_base64_attachment_is_undecodable_throws_EmlParseException()
+    {
+        const string eml =
+            "From: sender@example.com\r\nTo: recipient@example.com\r\n" +
+            "Content-Type: multipart/mixed; boundary=\"B\"\r\n\r\n" +
+            "--B\r\nContent-Type: text/plain\r\n\r\nSee attachment.\r\n" +
+            "--B\r\n" +
+            "Content-Type: application/octet-stream; name=\"data.bin\"\r\n" +
+            "Content-Transfer-Encoding: base64\r\n" +
+            "Content-Disposition: attachment; filename=\"data.bin\"\r\n\r\n" +
+            "!!!not-valid-base64!!!\r\n" +
+            "--B--\r\n";
+
+        Assert.Throws<EmlParseException>
+        (
+            () => EmlParser.Parse(eml, new EmlParserOptions { Strict = true })
+        );
     }
 
 

@@ -89,12 +89,15 @@ public class GlobalizationInvarianceTests
     {
         InCulture(culture, () =>
         {
-            // Register with an uppercase extension whose 'I' becomes dotless under
-            // tr-TR; infer with the lowercase form. OrdinalIgnoreCase must match
-            // both regardless of culture.
-            AttachmentFactory.RegisterContentType(".XGLOBINV", "application/x-culture");
+            // Unique per invocation so this can't collide in the process-wide
+            // registry with other tests or the other culture rows. The 'I' in
+            // "XI" becomes dotless under tr-TR; register uppercase and infer the
+            // lowercase form — OrdinalIgnoreCase must match both regardless of
+            // culture.
+            var ext = $".XI{System.Guid.NewGuid():N}";
+            AttachmentFactory.RegisterContentType(ext, "application/x-culture");
 
-            Assert.Equal("application/x-culture", AttachmentFactory.InferContentType("file.xglobinv"));
+            Assert.Equal("application/x-culture", AttachmentFactory.InferContentType($"file{ext.ToLowerInvariant()}"));
         });
     }
 

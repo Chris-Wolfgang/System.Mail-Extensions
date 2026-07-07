@@ -21,6 +21,7 @@ const string eml =
 using var parsed = EmlParser.Parse(eml);
 using var parsedOpts = EmlParser.Parse(eml, new EmlParserOptions { Strict = false });
 ParseResult diag = EmlParser.ParseWithDiagnostics(eml);
+using var diagMessage = diag.Message;   // ParseResult.Message is an IDisposable MailMessage
 Require(parsed.To.Count == 2, "parser: recipient count");
 Require(string.Equals(parsed.Subject, "café", StringComparison.Ordinal), "parser: encoded-word subject");
 Require(!diag.HasIssues, "parser: clean diagnostics");
@@ -42,7 +43,8 @@ Require(string.Equals(AttachmentFactory.InferContentType("f.aot"), "application/
 Require(AttachmentFactory.TryGetRegisteredContentType(".aot", out _), "factory: try-get");
 using var fromBytes = AttachmentFactory.FromBytes(new byte[] { 4, 5 }, "a.bin");
 using var fromB64 = AttachmentFactory.FromBase64(Convert.ToBase64String(new byte[] { 6, 7 }), "b.bin");
-using var fromStream = AttachmentFactory.FromStream(new MemoryStream(new byte[] { 8 }), "c.bin");
+using var sourceStream = new MemoryStream(new byte[] { 8 });
+using var fromStream = AttachmentFactory.FromStream(sourceStream, "c.bin");
 
 // InlineHtmlBuilder.
 using var view = new InlineHtmlBuilder()
