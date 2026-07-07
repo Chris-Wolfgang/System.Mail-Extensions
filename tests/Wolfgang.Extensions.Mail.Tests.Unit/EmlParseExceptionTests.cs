@@ -17,7 +17,7 @@ public class EmlParseExceptionTests
 {
 
     [Fact]
-    public void Ctor_default_creates_a_FormatException_with_a_message()
+    public void Ctor_when_parameterless_creates_a_FormatException_with_a_default_message()
     {
         var exception = new EmlParseException();
 
@@ -33,7 +33,7 @@ public class EmlParseExceptionTests
 
 
     [Fact]
-    public void Ctor_with_message_preserves_the_message()
+    public void Ctor_when_given_a_message_preserves_the_message_and_leaves_inner_null()
     {
         const string message = "Malformed address in From header.";
 
@@ -54,7 +54,7 @@ public class EmlParseExceptionTests
 
 
     [Fact]
-    public void Ctor_with_message_and_inner_preserves_both()
+    public void Ctor_when_given_a_message_and_inner_preserves_both()
     {
         const string message = "Undecodable transfer encoding.";
         var inner = new InvalidOperationException("bad base64");
