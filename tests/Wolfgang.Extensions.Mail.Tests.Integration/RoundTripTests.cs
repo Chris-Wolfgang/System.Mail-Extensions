@@ -9,7 +9,7 @@ namespace Wolfgang.Extensions.Mail.Tests.Integration;
 /// <summary>
 /// End-to-end wire-format fidelity: a message serialized with
 /// <see cref="MailMessageExtensions.ToMimeString"/> must parse back via
-/// <see cref="EmlParser.Parse"/> into an equivalent message.
+/// <see cref="EmlParser.Parse(string)"/> into an equivalent message.
 /// </summary>
 public class RoundTripTests
 {
