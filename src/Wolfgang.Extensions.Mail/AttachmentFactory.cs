@@ -75,6 +75,7 @@ public static class AttachmentFactory
     /// <example>
     /// <code>
     /// AttachmentFactory.RegisterContentType(".heic", "image/heic");
+    /// byte[] data = await File.ReadAllBytesAsync("photo.heic");
     /// var attachment = AttachmentFactory.FromBytes(data, "photo.heic");
     /// // attachment.ContentType.MediaType == "image/heic"
     /// </code>

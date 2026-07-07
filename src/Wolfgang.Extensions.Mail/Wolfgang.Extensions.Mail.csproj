@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>net462;netstandard2.0;netstandard2.1;net8.0;net9.0;net10.0</TargetFrameworks>
 		<LangVersion>14</LangVersion>
-		<Version>0.2.0</Version>
+		<Version>0.3.0</Version>
 		<!-- Pin AssemblyVersion to a fixed binding-stability baseline so consumers
 		     do not need to recompile / add binding redirects on every minor/patch
 		     bump. Bump only on a deliberate breaking API change. FileVersion +
@@ -23,14 +23,35 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<SignAssembly>False</SignAssembly>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+
+		<!-- Binary-compat / ABI gate. During pack, the SDK's Package Validation
+		     (the built-in ApiCompat) downloads the last released package from
+		     NuGet and validates every TFM's assembly against it. Additive
+		     changes pass; a removed or changed public member, a dropped TFM, or
+		     a nullability/default-value break on a non-major bump fails the
+		     pack. Intentional breaks in a MAJOR release are recorded in
+		     CompatibilitySuppressions.xml (regenerate with
+		     -p:GenerateCompatibilitySuppressionFile=true). -->
+		<EnablePackageValidation>true</EnablePackageValidation>
+		<PackageValidationBaselineVersion>0.2.0</PackageValidationBaselineVersion>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.1' OR
-							  '$(TargetFramework)' == 'net8.0' OR
-							  '$(TargetFramework)' == 'net9.0' OR
-							  '$(TargetFramework)' == 'net10.0'
-							  ">
-		<ImplicitUsings>enable</ImplicitUsings>
+	<!-- ImplicitUsings intentionally left disabled (SDK default) for ALL target
+	     frameworks. Enabling it on only some TFMs (previously: on for the modern
+	     TFMs, off for net462 / netstandard2.0) makes the same explicit using
+	     "redundant" on net10 but required on net462 — a cross-TFM inconsistency
+	     that trips static analysis (ReSharper / IDE0005). Uniform explicit usings
+	     compile identically on every TFM and keep the analyzers quiet. -->
+
+	<!-- Trim / Native-AOT compatibility. IsAotCompatible turns on the trim, AOT,
+	     and single-file analyzers so any trim-unsafe pattern is caught at build
+	     time (and marks the assembly IsTrimmable). The one genuinely unsafe API,
+	     ToMimeString, is annotated with [RequiresUnreferencedCode] /
+	     [RequiresDynamicCode] so consumers get a compile-time warning instead of
+	     a publish-time failure; everything else is trim/AOT-safe. Modern TFMs
+	     only — the analyzers do not apply to net462 / netstandard. -->
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0' OR '$(TargetFramework)' == 'net9.0' OR '$(TargetFramework)' == 'net10.0'">
+		<IsAotCompatible>true</IsAotCompatible>
 	</PropertyGroup>
 
 	<ItemGroup>

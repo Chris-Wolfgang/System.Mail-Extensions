@@ -7,8 +7,8 @@ namespace Wolfgang.Extensions.Mail.Tests.Integration;
 
 /// <summary>
 /// End-to-end file I/O: messages written to real .eml files on disk and read
-/// back through <see cref="EmlParser.ParseFile"/> /
-/// <see cref="EmlParser.ParseFileAsync"/>.
+/// back through <see cref="EmlParser.ParseFile(string)"/> /
+/// <see cref="EmlParser.ParseFileAsync(string, System.Threading.CancellationToken)"/>.
 /// </summary>
 public sealed class FileRoundTripTests : IDisposable
 {
