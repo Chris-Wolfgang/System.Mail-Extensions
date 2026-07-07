@@ -1,0 +1,16 @@
+# zizmor configuration — accepted, documented suppressions.
+# https://docs.zizmor.sh/configuration/
+#
+# Each entry records a finding that is a deliberate, reviewed design choice
+# rather than a defect. Everything else is expected to pass; the CI gate
+# (workflow-security.yaml) fails on any high-severity finding.
+rules:
+  dangerous-triggers:
+    ignore:
+      # pr.yaml uses `pull_request_target` on purpose so the staged CI pipeline
+      # runs from the trusted main branch rather than the untrusted PR branch
+      # (see docs/WORKFLOW_SECURITY.md). Jobs that build PR code check out the
+      # PR head explicitly and run with least-privilege `permissions:`. Moving
+      # off pull_request_target would break that trusted-config model, so this
+      # is an accepted, documented risk.
+      - pr.yaml
