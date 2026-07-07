@@ -1,0 +1,87 @@
+name: Workflow Security
+
+# Audits the GitHub Actions workflows themselves — the layer CodeQL / SAST don't
+# inspect. Two complementary tools:
+#   - actionlint: syntax / correctness + shellcheck of `run:` blocks
+#   - zizmor:     security — injection, permissions, unpinned actions, dangerous
+#                 triggers (accepted suppressions documented in .github/zizmor.yml)
+# Runs on every PR (lint-only, fast) and on push to main. zizmor findings upload
+# to Code Scanning (inline PR annotations); the job fails on any high-severity
+# zizmor finding.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    name: "actionlint"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Install actionlint (pinned release binary, checksum-verified)
+        env:
+          ACTIONLINT_VERSION: 1.7.7
+          # sha256 of actionlint_1.7.7_linux_amd64.tar.gz from the release's
+          # published checksums. A security-hardening workflow must not run an
+          # unverified download — bump both together when upgrading actionlint.
+          ACTIONLINT_SHA256: 023070a287cd8cccd71515fedc843f1985bf96c436b7effaecce67290e7e0757
+        run: |
+          curl -sSfL "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz" -o actionlint.tar.gz
+          echo "${ACTIONLINT_SHA256}  actionlint.tar.gz" | sha256sum -c -
+          tar -xzf actionlint.tar.gz actionlint
+
+      - name: Run actionlint
+        run: ./actionlint -color
+
+  zizmor:
+    name: "zizmor"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write   # upload SARIF to Code Scanning
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Install zizmor
+        run: pipx install zizmor==1.26.1
+
+      - name: Run zizmor (SARIF)
+        # Emit all severities to SARIF for Code Scanning. --no-exit-codes lets a
+        # clean audit succeed even when findings exist (the gate below is what
+        # actually decides), while a real failure — bad args, a crash — still
+        # surfaces as a non-zero exit. Do NOT wrap in `|| true`: that masked a
+        # broken run (the old --min-severity info was an invalid value, so this
+        # step exited 2 and uploaded an empty, malformed SARIF). Accepted
+        # suppressions come from .github/zizmor.yml, passed explicitly so the
+        # SARIF and gate runs apply an identical config regardless of cwd.
+        run: zizmor --no-exit-codes --format sarif --min-severity informational -c .github/zizmor.yml .github/workflows/ > zizmor.sarif
+
+      - name: Upload SARIF to Code Scanning
+        # security-events: write is not granted to GITHUB_TOKEN on fork PRs, so
+        # the upload would fail there. The gate step below is the real check and
+        # runs regardless; only the Code Scanning annotation upload is skipped
+        # for forks.
+        if: ${{ !github.event.pull_request.head.repo.fork }}
+        uses: github/codeql-action/upload-sarif@411c4c9a36b3fca4d674f06b6396b2c6d23522c6 # v3
+        with:
+          sarif_file: zizmor.sarif
+          category: zizmor
+
+      - name: Gate on high-severity findings
+        # Same target, cwd, and explicit config as the SARIF run above, so the
+        # .github/zizmor.yml suppressions apply identically in both.
+        run: zizmor --min-severity high -c .github/zizmor.yml .github/workflows/
