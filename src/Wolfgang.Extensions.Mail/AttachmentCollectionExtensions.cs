@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
 
 namespace Wolfgang.Extensions.Mail;
@@ -139,9 +138,20 @@ public static class AttachmentCollectionExtensions
             throw new ArgumentNullException(nameof(source));
         }
 
-        return source
-            .Where(a => a.ContentStream.CanSeek)
-            .Sum(a => a.ContentStream.Length);
+        // Index-based loop instead of LINQ .Where().Sum() so the method is
+        // allocation-free — no iterator, delegate, or boxed enumerator. Guarded
+        // by AllocationBudgetTests.
+        long total = 0;
+        for (var i = 0; i < source.Count; i++)
+        {
+            var contentStream = source[i].ContentStream;
+            if (contentStream.CanSeek)
+            {
+                total += contentStream.Length;
+            }
+        }
+
+        return total;
     }
 
 
