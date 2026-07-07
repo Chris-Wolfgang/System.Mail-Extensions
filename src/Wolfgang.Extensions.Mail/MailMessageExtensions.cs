@@ -161,6 +161,12 @@ public static class MailMessageExtensions
     /// </code>
     /// </example>
     // ReSharper disable once UnusedMember.Global
+#if NET5_0_OR_GREATER
+    [RequiresUnreferencedCode("ToMimeString uses reflection to reach the internal System.Net.Mail.MailWriter type and MailMessage.Send; the trimmer may remove those members.")]
+#endif
+#if NET7_0_OR_GREATER
+    [RequiresDynamicCode("ToMimeString relies on reflection-based method invocation that Native AOT cannot compile ahead of time.")]
+#endif
     public static string ToMimeString
     (
         this MailMessage source
@@ -426,6 +432,12 @@ public static class MailMessageExtensions
 
 #pragma warning disable S3011 // Reflection on non-public members is intentional for MIME serialization
     [ExcludeFromCodeCoverage] // Defensive null checks for runtime-specific reflection targets are unreachable on any single TFM
+#if NET5_0_OR_GREATER
+    [RequiresUnreferencedCode("Uses reflection to reach the internal MailWriter type.")]
+#endif
+#if NET7_0_OR_GREATER
+    [RequiresDynamicCode("Uses reflection-based invocation incompatible with Native AOT.")]
+#endif
     private static void SerializeToMimeStream
     (
         MailMessage source,
@@ -467,6 +479,12 @@ public static class MailMessageExtensions
 #pragma warning disable VSTHRD002 // Synchronous wait is intentional — SendAsync with SyncReadWriteAdapter completes synchronously
 #pragma warning disable RS0030  // GetAwaiter().GetResult() is intentional — SyncReadWriteAdapter completes synchronously
     [ExcludeFromCodeCoverage] // Branches depend on runtime version; each TFM only exercises one path
+#if NET5_0_OR_GREATER
+    [RequiresUnreferencedCode("Uses reflection to invoke the non-public MailMessage.Send.")]
+#endif
+#if NET7_0_OR_GREATER
+    [RequiresDynamicCode("Uses reflection-based invocation incompatible with Native AOT.")]
+#endif
     private static void InvokeMailMessageSend
     (
         MailMessage source,
@@ -707,6 +725,12 @@ public static class MailMessageExtensions
 
 #pragma warning disable S3011 // Reflection on non-public members is intentional for MIME serialization
     [ExcludeFromCodeCoverage] // Constructor signature varies by runtime; only one path hit per TFM
+#if NET5_0_OR_GREATER
+    [RequiresUnreferencedCode("Uses reflection to construct the internal MailWriter type.")]
+#endif
+#if NET7_0_OR_GREATER
+    [RequiresDynamicCode("Uses reflection-based construction incompatible with Native AOT.")]
+#endif
     private static object CreateMailWriter
     (
         Type mailWriterType,

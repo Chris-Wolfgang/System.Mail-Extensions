@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Native-AOT smoke consumer for issue #140. Not part of the solution build
+       or the test/coverage run — it is published with PublishAot by the
+       aot-smoke CI job to prove the library's trim/AOT-safe surface survives
+       the trimmer and Native AOT and runs without MissingMethodException /
+       NotSupportedException. It deliberately does NOT call ToMimeString, which
+       is annotated [RequiresUnreferencedCode]/[RequiresDynamicCode] because its
+       reflection is genuinely not AOT-safe. -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <PublishAot>true</PublishAot>
+    <!-- PublishAot implies trimming; setting PublishTrimmed explicitly matches
+         the #140 acceptance criteria (AOT + trimming) and keeps intent clear. -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <IsPackable>false</IsPackable>
+    <!-- Any IL2xxx/IL3xxx trim or AOT warning from the library must fail the smoke. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Wolfgang.Extensions.Mail\Wolfgang.Extensions.Mail.csproj" />
+  </ItemGroup>
+
+</Project>
