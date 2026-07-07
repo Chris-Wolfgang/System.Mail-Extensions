@@ -1,17 +1,1 @@
 #nullable enable
-Wolfgang.Extensions.Mail.EmlParseException
-Wolfgang.Extensions.Mail.EmlParseException.EmlParseException() -> void
-Wolfgang.Extensions.Mail.EmlParseException.EmlParseException(string! message) -> void
-Wolfgang.Extensions.Mail.EmlParseException.EmlParseException(string! message, System.Exception! innerException) -> void
-Wolfgang.Extensions.Mail.EmlParserOptions
-Wolfgang.Extensions.Mail.EmlParserOptions.EmlParserOptions() -> void
-Wolfgang.Extensions.Mail.EmlParserOptions.Strict.get -> bool
-Wolfgang.Extensions.Mail.EmlParserOptions.Strict.set -> void
-Wolfgang.Extensions.Mail.ParseResult
-Wolfgang.Extensions.Mail.ParseResult.HasIssues.get -> bool
-Wolfgang.Extensions.Mail.ParseResult.Issues.get -> System.Collections.Generic.IReadOnlyList<Wolfgang.Extensions.Mail.Validation.ValidationIssue!>!
-Wolfgang.Extensions.Mail.ParseResult.Message.get -> System.Net.Mail.MailMessage!
-static Wolfgang.Extensions.Mail.EmlParser.Parse(string! emlContent, Wolfgang.Extensions.Mail.EmlParserOptions! options) -> System.Net.Mail.MailMessage!
-static Wolfgang.Extensions.Mail.EmlParser.ParseFile(string! filePath, Wolfgang.Extensions.Mail.EmlParserOptions! options) -> System.Net.Mail.MailMessage!
-static Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync(string! filePath, Wolfgang.Extensions.Mail.EmlParserOptions! options, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.Net.Mail.MailMessage!>!
-static Wolfgang.Extensions.Mail.EmlParser.ParseWithDiagnostics(string! emlContent, Wolfgang.Extensions.Mail.EmlParserOptions? options = null) -> Wolfgang.Extensions.Mail.ParseResult!

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-07-07
+
 ### Changed
 - `AttachmentCollection.TotalSize()` (and therefore `ExceedsLimit()`) is now allocation-free — an index-based loop replaces the LINQ `Where`/`Sum`, removing the iterator, delegate, and boxed-enumerator allocations.
 
