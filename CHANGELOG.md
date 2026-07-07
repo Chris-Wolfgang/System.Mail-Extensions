@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- `AttachmentCollection.TotalSize()` (and therefore `ExceedsLimit()`) is now allocation-free — an index-based loop replaces the LINQ `Where`/`Sum`, removing the iterator, delegate, and boxed-enumerator allocations.
+
 ### Added
 - Trim / Native-AOT compatibility: the library is marked `IsAotCompatible` and its one reflection-based API, `ToMimeString`, is annotated `[RequiresUnreferencedCode]` / `[RequiresDynamicCode]` so trimmed / `PublishAot` consumers get a compile-time warning instead of a publish-time failure. A Native AOT smoke consumer runs in CI to verify the rest of the surface survives trimming and AOT.
 - `EmlParserOptions` with a `Strict` mode: `EmlParser.Parse`/`ParseFile`/`ParseFileAsync` overloads that throw `EmlParseException` on the first malformed construct (address, undecodable transfer encoding, or malformed RFC 2047 encoded word) instead of skipping it.
