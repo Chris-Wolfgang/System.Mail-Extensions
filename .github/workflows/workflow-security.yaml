@@ -1,0 +1,67 @@
+name: Workflow Security
+
+# Audits the GitHub Actions workflows themselves — the layer CodeQL / SAST don't
+# inspect. Two complementary tools:
+#   - actionlint: syntax / correctness + shellcheck of `run:` blocks
+#   - zizmor:     security — injection, permissions, unpinned actions, dangerous
+#                 triggers (accepted suppressions documented in .github/zizmor.yml)
+# Runs on every PR (lint-only, fast) and on push to main. zizmor findings upload
+# to Code Scanning (inline PR annotations); the job fails on any high-severity
+# zizmor finding.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    name: "actionlint"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Install actionlint (pinned release binary)
+        run: |
+          curl -sSfL https://github.com/rhysd/actionlint/releases/download/v1.7.7/actionlint_1.7.7_linux_amd64.tar.gz \
+            | tar -xz actionlint
+
+      - name: Run actionlint
+        run: ./actionlint -color
+
+  zizmor:
+    name: "zizmor"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write   # upload SARIF to Code Scanning
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Install zizmor
+        run: pipx install zizmor==1.26.1
+
+      - name: Run zizmor (SARIF)
+        # All severities to SARIF for Code Scanning; never fail this step — the
+        # gate below decides. Accepted suppressions live in .github/zizmor.yml.
+        run: zizmor --format sarif --min-severity info .github/workflows/ > zizmor.sarif || true
+
+      - name: Upload SARIF to Code Scanning
+        uses: github/codeql-action/upload-sarif@411c4c9a36b3fca4d674f06b6396b2c6d23522c6 # v3
+        with:
+          sarif_file: zizmor.sarif
+          category: zizmor
+
+      - name: Gate on high-severity findings
+        run: zizmor --min-severity high .github/workflows/
