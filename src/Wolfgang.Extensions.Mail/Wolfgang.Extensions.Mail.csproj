@@ -23,6 +23,17 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<SignAssembly>False</SignAssembly>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+
+		<!-- Binary-compat / ABI gate. During pack, the SDK's Package Validation
+		     (the built-in ApiCompat) downloads the last released package from
+		     NuGet and validates every TFM's assembly against it. Additive
+		     changes pass; a removed or changed public member, a dropped TFM, or
+		     a nullability/default-value break on a non-major bump fails the
+		     pack. Intentional breaks in a MAJOR release are recorded in
+		     CompatibilitySuppressions.xml (regenerate with
+		     -p:GenerateCompatibilitySuppressionFile=true). -->
+		<EnablePackageValidation>true</EnablePackageValidation>
+		<PackageValidationBaselineVersion>0.2.0</PackageValidationBaselineVersion>
 	</PropertyGroup>
 
 	<!-- ImplicitUsings intentionally left disabled (SDK default) for ALL target
