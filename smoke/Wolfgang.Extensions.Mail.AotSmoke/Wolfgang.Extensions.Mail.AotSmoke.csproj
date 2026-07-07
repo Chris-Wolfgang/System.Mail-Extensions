@@ -14,6 +14,9 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <PublishAot>true</PublishAot>
+    <!-- PublishAot implies trimming; setting PublishTrimmed explicitly matches
+         the #140 acceptance criteria (AOT + trimming) and keeps intent clear. -->
+    <PublishTrimmed>true</PublishTrimmed>
     <InvariantGlobalization>true</InvariantGlobalization>
     <IsPackable>false</IsPackable>
     <!-- Any IL2xxx/IL3xxx trim or AOT warning from the library must fail the smoke. -->
