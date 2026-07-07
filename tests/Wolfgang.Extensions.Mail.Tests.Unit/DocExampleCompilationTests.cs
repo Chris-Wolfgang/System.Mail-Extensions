@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -231,15 +230,26 @@ public class DocExampleCompilationTests
 
 
 
-    private static string SourceDirectory
-    (
-        [CallerFilePath] string thisFile = ""
-    )
+    private static string SourceDirectory()
     {
-        // thisFile = <repo>/tests/Wolfgang.Extensions.Mail.Tests.Unit/DocExampleCompilationTests.cs
-        var testProjectDirectory = Path.GetDirectoryName(thisFile)!;
-        var repoRoot = Directory.GetParent(testProjectDirectory)!.Parent!.FullName;
-        return Path.Combine(repoRoot, "src", "Wolfgang.Extensions.Mail");
+        // Walk up from the test assembly to the repo root (the ancestor that
+        // contains src/Wolfgang.Extensions.Mail). [CallerFilePath] can't be used
+        // here: CI maps source paths deterministically (ContinuousIntegrationBuild
+        // rewrites them to "/_/…"), so the compile-time path does not exist on the
+        // test runner and enumeration throws DirectoryNotFoundException.
+        for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir != null; dir = dir.Parent)
+        {
+            var candidate = Path.Combine(dir.FullName, "src", "Wolfgang.Extensions.Mail");
+            if (Directory.Exists(candidate))
+            {
+                return candidate;
+            }
+        }
+
+        throw new DirectoryNotFoundException
+        (
+            $"Could not locate src/Wolfgang.Extensions.Mail by walking up from {AppContext.BaseDirectory}."
+        );
     }
 }
 
