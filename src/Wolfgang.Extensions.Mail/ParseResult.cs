@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net.Mail;
 using Wolfgang.Extensions.Mail.Validation;
 
@@ -31,7 +32,18 @@ public sealed class ParseResult
     )
     {
         Message = message ?? throw new ArgumentNullException(nameof(message));
-        _issues = issues ?? throw new ArgumentNullException(nameof(issues));
+
+        if (issues == null)
+        {
+            throw new ArgumentNullException(nameof(issues));
+        }
+
+        // Wrap in a genuinely read-only view so a caller can't down-cast the
+        // exposed IReadOnlyList back to the underlying List and mutate it.
+        _issues = new ReadOnlyCollection<ValidationIssue>
+        (
+            issues as IList<ValidationIssue> ?? new List<ValidationIssue>(issues)
+        );
     }
 
 
