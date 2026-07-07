@@ -92,8 +92,20 @@ with automatic content type inference from file extensions.</p>
 </dd>
     </dl>
     <dl class="jumplist">
+      <dt><a class="xref" href="Wolfgang.Extensions.Mail.EmlParseException.html">EmlParseException</a></dt>
+      <dd><p>Thrown by <a class="xref" href="Wolfgang.Extensions.Mail.EmlParser.html">EmlParser</a> when a malformed construct is encountered
+while parsing in strict mode (see <a class="xref" href="Wolfgang.Extensions.Mail.EmlParserOptions.html#Wolfgang_Extensions_Mail_EmlParserOptions_Strict">Strict</a>).</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
       <dt><a class="xref" href="Wolfgang.Extensions.Mail.EmlParser.html">EmlParser</a></dt>
       <dd><p>Provides methods to parse EML (RFC 2822 MIME) content into <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.net.mail.mailmessage">MailMessage</a> objects.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Wolfgang.Extensions.Mail.EmlParserOptions.html">EmlParserOptions</a></dt>
+      <dd><p>Controls how <a class="xref" href="Wolfgang.Extensions.Mail.EmlParser.html">EmlParser</a> handles malformed constructs it
+encounters while parsing EML/MIME content.</p>
 </dd>
     </dl>
     <dl class="jumplist">
@@ -122,6 +134,12 @@ Simplifies the verbose ceremony of setting up mail messages.</p>
     <dl class="jumplist">
       <dt><a class="xref" href="Wolfgang.Extensions.Mail.MailMessageExtensions.html">MailMessageExtensions</a></dt>
       <dd><p>A collection of extension methods for the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.net.mail.mailmessage">MailMessage</a> class.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="Wolfgang.Extensions.Mail.ParseResult.html">ParseResult</a></dt>
+      <dd><p>The result of a diagnostic parse: the parsed <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.net.mail.mailmessage">MailMessage</a>
+together with the list of malformed constructs the lenient parser skipped.</p>
 </dd>
     </dl>
 

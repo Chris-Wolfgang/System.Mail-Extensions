@@ -1,33 +1,36 @@
 Summary
-  Generated on: 7/6/2026 - 9:46:29 PM
-  Coverage date: 7/6/2026 - 9:46:25 PM
+  Generated on: 7/7/2026 - 10:48:51 PM
+  Coverage date: 7/7/2026 - 10:48:46 PM - 7/7/2026 - 10:48:47 PM
   Parser: MultiReport (2x Cobertura)
   Assemblies: 1
-  Classes: 11
-  Files: 11
-  Line coverage: 98.5%
-  Covered lines: 903
-  Uncovered lines: 13
-  Coverable lines: 916
-  Total lines: 3626
-  Branch coverage: 91.3% (476 of 521)
-  Covered branches: 476
-  Total branches: 521
-  Method coverage: 100% (120 of 120)
-  Full method coverage: 93.3% (112 of 120)
-  Covered methods: 120
-  Fully covered methods: 112
-  Total methods: 120
+  Classes: 14
+  Files: 14
+  Line coverage: 98%
+  Covered lines: 970
+  Uncovered lines: 19
+  Coverable lines: 989
+  Total lines: 4073
+  Branch coverage: 90.1% (495 of 549)
+  Covered branches: 495
+  Total branches: 549
+  Method coverage: 100% (137 of 137)
+  Full method coverage: 91.2% (125 of 137)
+  Covered methods: 137
+  Fully covered methods: 125
+  Total methods: 137
 
-Wolfgang.Extensions.Mail                                     98.5%
+Wolfgang.Extensions.Mail                                       98%
   Wolfgang.Extensions.Mail.AttachmentCollectionExtensions     100%
   Wolfgang.Extensions.Mail.AttachmentFactory                 97.8%
-  Wolfgang.Extensions.Mail.EmlParser                         96.6%
+  Wolfgang.Extensions.Mail.EmlParseException                  100%
+  Wolfgang.Extensions.Mail.EmlParser                         95.7%
+  Wolfgang.Extensions.Mail.EmlParserOptions                   100%
   Wolfgang.Extensions.Mail.InlineHtmlBuilder                  100%
   Wolfgang.Extensions.Mail.MailAddressCollectionExtensions    100%
   Wolfgang.Extensions.Mail.MailAddressExtensions              100%
   Wolfgang.Extensions.Mail.MailMessageBuilder                 100%
   Wolfgang.Extensions.Mail.MailMessageExtensions              100%
+  Wolfgang.Extensions.Mail.ParseResult                       93.7%
   Wolfgang.Extensions.Mail.Validation.ValidationIssue         100%
   Wolfgang.Extensions.Mail.Validation.ValidationOptions       100%
   Wolfgang.Extensions.Mail.Validation.ValidationResult        100%

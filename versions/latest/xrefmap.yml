@@ -187,6 +187,49 @@ references:
   isSpec: "True"
   fullName: Wolfgang.Extensions.Mail.AttachmentFactory.TryGetRegisteredContentType
   nameWithType: AttachmentFactory.TryGetRegisteredContentType
+- uid: Wolfgang.Extensions.Mail.EmlParseException
+  name: EmlParseException
+  href: api/Wolfgang.Extensions.Mail.EmlParseException.html
+  commentId: T:Wolfgang.Extensions.Mail.EmlParseException
+  fullName: Wolfgang.Extensions.Mail.EmlParseException
+  nameWithType: EmlParseException
+- uid: Wolfgang.Extensions.Mail.EmlParseException.#ctor
+  name: EmlParseException()
+  href: api/Wolfgang.Extensions.Mail.EmlParseException.html#Wolfgang_Extensions_Mail_EmlParseException__ctor
+  commentId: M:Wolfgang.Extensions.Mail.EmlParseException.#ctor
+  name.vb: New()
+  fullName: Wolfgang.Extensions.Mail.EmlParseException.EmlParseException()
+  fullName.vb: Wolfgang.Extensions.Mail.EmlParseException.New()
+  nameWithType: EmlParseException.EmlParseException()
+  nameWithType.vb: EmlParseException.New()
+- uid: Wolfgang.Extensions.Mail.EmlParseException.#ctor(System.String)
+  name: EmlParseException(string)
+  href: api/Wolfgang.Extensions.Mail.EmlParseException.html#Wolfgang_Extensions_Mail_EmlParseException__ctor_System_String_
+  commentId: M:Wolfgang.Extensions.Mail.EmlParseException.#ctor(System.String)
+  name.vb: New(String)
+  fullName: Wolfgang.Extensions.Mail.EmlParseException.EmlParseException(string)
+  fullName.vb: Wolfgang.Extensions.Mail.EmlParseException.New(String)
+  nameWithType: EmlParseException.EmlParseException(string)
+  nameWithType.vb: EmlParseException.New(String)
+- uid: Wolfgang.Extensions.Mail.EmlParseException.#ctor(System.String,System.Exception)
+  name: EmlParseException(string, Exception)
+  href: api/Wolfgang.Extensions.Mail.EmlParseException.html#Wolfgang_Extensions_Mail_EmlParseException__ctor_System_String_System_Exception_
+  commentId: M:Wolfgang.Extensions.Mail.EmlParseException.#ctor(System.String,System.Exception)
+  name.vb: New(String, Exception)
+  fullName: Wolfgang.Extensions.Mail.EmlParseException.EmlParseException(string, System.Exception)
+  fullName.vb: Wolfgang.Extensions.Mail.EmlParseException.New(String, System.Exception)
+  nameWithType: EmlParseException.EmlParseException(string, Exception)
+  nameWithType.vb: EmlParseException.New(String, Exception)
+- uid: Wolfgang.Extensions.Mail.EmlParseException.#ctor*
+  name: EmlParseException
+  href: api/Wolfgang.Extensions.Mail.EmlParseException.html#Wolfgang_Extensions_Mail_EmlParseException__ctor_
+  commentId: Overload:Wolfgang.Extensions.Mail.EmlParseException.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Wolfgang.Extensions.Mail.EmlParseException.EmlParseException
+  fullName.vb: Wolfgang.Extensions.Mail.EmlParseException.New
+  nameWithType: EmlParseException.EmlParseException
+  nameWithType.vb: EmlParseException.New
 - uid: Wolfgang.Extensions.Mail.EmlParser
   name: EmlParser
   href: api/Wolfgang.Extensions.Mail.EmlParser.html
@@ -202,6 +245,15 @@ references:
   fullName.vb: Wolfgang.Extensions.Mail.EmlParser.Parse(String)
   nameWithType: EmlParser.Parse(string)
   nameWithType.vb: EmlParser.Parse(String)
+- uid: Wolfgang.Extensions.Mail.EmlParser.Parse(System.String,Wolfgang.Extensions.Mail.EmlParserOptions)
+  name: Parse(string, EmlParserOptions)
+  href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_Parse_System_String_Wolfgang_Extensions_Mail_EmlParserOptions_
+  commentId: M:Wolfgang.Extensions.Mail.EmlParser.Parse(System.String,Wolfgang.Extensions.Mail.EmlParserOptions)
+  name.vb: Parse(String, EmlParserOptions)
+  fullName: Wolfgang.Extensions.Mail.EmlParser.Parse(string, Wolfgang.Extensions.Mail.EmlParserOptions)
+  fullName.vb: Wolfgang.Extensions.Mail.EmlParser.Parse(String, Wolfgang.Extensions.Mail.EmlParserOptions)
+  nameWithType: EmlParser.Parse(string, EmlParserOptions)
+  nameWithType.vb: EmlParser.Parse(String, EmlParserOptions)
 - uid: Wolfgang.Extensions.Mail.EmlParser.Parse*
   name: Parse
   href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_Parse_
@@ -218,6 +270,15 @@ references:
   fullName.vb: Wolfgang.Extensions.Mail.EmlParser.ParseFile(String)
   nameWithType: EmlParser.ParseFile(string)
   nameWithType.vb: EmlParser.ParseFile(String)
+- uid: Wolfgang.Extensions.Mail.EmlParser.ParseFile(System.String,Wolfgang.Extensions.Mail.EmlParserOptions)
+  name: ParseFile(string, EmlParserOptions)
+  href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_ParseFile_System_String_Wolfgang_Extensions_Mail_EmlParserOptions_
+  commentId: M:Wolfgang.Extensions.Mail.EmlParser.ParseFile(System.String,Wolfgang.Extensions.Mail.EmlParserOptions)
+  name.vb: ParseFile(String, EmlParserOptions)
+  fullName: Wolfgang.Extensions.Mail.EmlParser.ParseFile(string, Wolfgang.Extensions.Mail.EmlParserOptions)
+  fullName.vb: Wolfgang.Extensions.Mail.EmlParser.ParseFile(String, Wolfgang.Extensions.Mail.EmlParserOptions)
+  nameWithType: EmlParser.ParseFile(string, EmlParserOptions)
+  nameWithType.vb: EmlParser.ParseFile(String, EmlParserOptions)
 - uid: Wolfgang.Extensions.Mail.EmlParser.ParseFile*
   name: ParseFile
   href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_ParseFile_
@@ -234,6 +295,15 @@ references:
   fullName.vb: Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync(String, System.Threading.CancellationToken)
   nameWithType: EmlParser.ParseFileAsync(string, CancellationToken)
   nameWithType.vb: EmlParser.ParseFileAsync(String, CancellationToken)
+- uid: Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync(System.String,Wolfgang.Extensions.Mail.EmlParserOptions,System.Threading.CancellationToken)
+  name: ParseFileAsync(string, EmlParserOptions, CancellationToken)
+  href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_ParseFileAsync_System_String_Wolfgang_Extensions_Mail_EmlParserOptions_System_Threading_CancellationToken_
+  commentId: M:Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync(System.String,Wolfgang.Extensions.Mail.EmlParserOptions,System.Threading.CancellationToken)
+  name.vb: ParseFileAsync(String, EmlParserOptions, CancellationToken)
+  fullName: Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync(string, Wolfgang.Extensions.Mail.EmlParserOptions, System.Threading.CancellationToken)
+  fullName.vb: Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync(String, Wolfgang.Extensions.Mail.EmlParserOptions, System.Threading.CancellationToken)
+  nameWithType: EmlParser.ParseFileAsync(string, EmlParserOptions, CancellationToken)
+  nameWithType.vb: EmlParser.ParseFileAsync(String, EmlParserOptions, CancellationToken)
 - uid: Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync*
   name: ParseFileAsync
   href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_ParseFileAsync_
@@ -241,6 +311,41 @@ references:
   isSpec: "True"
   fullName: Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync
   nameWithType: EmlParser.ParseFileAsync
+- uid: Wolfgang.Extensions.Mail.EmlParser.ParseWithDiagnostics(System.String,Wolfgang.Extensions.Mail.EmlParserOptions)
+  name: ParseWithDiagnostics(string, EmlParserOptions?)
+  href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_ParseWithDiagnostics_System_String_Wolfgang_Extensions_Mail_EmlParserOptions_
+  commentId: M:Wolfgang.Extensions.Mail.EmlParser.ParseWithDiagnostics(System.String,Wolfgang.Extensions.Mail.EmlParserOptions)
+  name.vb: ParseWithDiagnostics(String, EmlParserOptions)
+  fullName: Wolfgang.Extensions.Mail.EmlParser.ParseWithDiagnostics(string, Wolfgang.Extensions.Mail.EmlParserOptions?)
+  fullName.vb: Wolfgang.Extensions.Mail.EmlParser.ParseWithDiagnostics(String, Wolfgang.Extensions.Mail.EmlParserOptions)
+  nameWithType: EmlParser.ParseWithDiagnostics(string, EmlParserOptions?)
+  nameWithType.vb: EmlParser.ParseWithDiagnostics(String, EmlParserOptions)
+- uid: Wolfgang.Extensions.Mail.EmlParser.ParseWithDiagnostics*
+  name: ParseWithDiagnostics
+  href: api/Wolfgang.Extensions.Mail.EmlParser.html#Wolfgang_Extensions_Mail_EmlParser_ParseWithDiagnostics_
+  commentId: Overload:Wolfgang.Extensions.Mail.EmlParser.ParseWithDiagnostics
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.EmlParser.ParseWithDiagnostics
+  nameWithType: EmlParser.ParseWithDiagnostics
+- uid: Wolfgang.Extensions.Mail.EmlParserOptions
+  name: EmlParserOptions
+  href: api/Wolfgang.Extensions.Mail.EmlParserOptions.html
+  commentId: T:Wolfgang.Extensions.Mail.EmlParserOptions
+  fullName: Wolfgang.Extensions.Mail.EmlParserOptions
+  nameWithType: EmlParserOptions
+- uid: Wolfgang.Extensions.Mail.EmlParserOptions.Strict
+  name: Strict
+  href: api/Wolfgang.Extensions.Mail.EmlParserOptions.html#Wolfgang_Extensions_Mail_EmlParserOptions_Strict
+  commentId: P:Wolfgang.Extensions.Mail.EmlParserOptions.Strict
+  fullName: Wolfgang.Extensions.Mail.EmlParserOptions.Strict
+  nameWithType: EmlParserOptions.Strict
+- uid: Wolfgang.Extensions.Mail.EmlParserOptions.Strict*
+  name: Strict
+  href: api/Wolfgang.Extensions.Mail.EmlParserOptions.html#Wolfgang_Extensions_Mail_EmlParserOptions_Strict_
+  commentId: Overload:Wolfgang.Extensions.Mail.EmlParserOptions.Strict
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.EmlParserOptions.Strict
+  nameWithType: EmlParserOptions.Strict
 - uid: Wolfgang.Extensions.Mail.InlineHtmlBuilder
   name: InlineHtmlBuilder
   href: api/Wolfgang.Extensions.Mail.InlineHtmlBuilder.html
@@ -722,6 +827,51 @@ references:
   isSpec: "True"
   fullName: Wolfgang.Extensions.Mail.MailMessageExtensions.Validate
   nameWithType: MailMessageExtensions.Validate
+- uid: Wolfgang.Extensions.Mail.ParseResult
+  name: ParseResult
+  href: api/Wolfgang.Extensions.Mail.ParseResult.html
+  commentId: T:Wolfgang.Extensions.Mail.ParseResult
+  fullName: Wolfgang.Extensions.Mail.ParseResult
+  nameWithType: ParseResult
+- uid: Wolfgang.Extensions.Mail.ParseResult.HasIssues
+  name: HasIssues
+  href: api/Wolfgang.Extensions.Mail.ParseResult.html#Wolfgang_Extensions_Mail_ParseResult_HasIssues
+  commentId: P:Wolfgang.Extensions.Mail.ParseResult.HasIssues
+  fullName: Wolfgang.Extensions.Mail.ParseResult.HasIssues
+  nameWithType: ParseResult.HasIssues
+- uid: Wolfgang.Extensions.Mail.ParseResult.HasIssues*
+  name: HasIssues
+  href: api/Wolfgang.Extensions.Mail.ParseResult.html#Wolfgang_Extensions_Mail_ParseResult_HasIssues_
+  commentId: Overload:Wolfgang.Extensions.Mail.ParseResult.HasIssues
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.ParseResult.HasIssues
+  nameWithType: ParseResult.HasIssues
+- uid: Wolfgang.Extensions.Mail.ParseResult.Issues
+  name: Issues
+  href: api/Wolfgang.Extensions.Mail.ParseResult.html#Wolfgang_Extensions_Mail_ParseResult_Issues
+  commentId: P:Wolfgang.Extensions.Mail.ParseResult.Issues
+  fullName: Wolfgang.Extensions.Mail.ParseResult.Issues
+  nameWithType: ParseResult.Issues
+- uid: Wolfgang.Extensions.Mail.ParseResult.Issues*
+  name: Issues
+  href: api/Wolfgang.Extensions.Mail.ParseResult.html#Wolfgang_Extensions_Mail_ParseResult_Issues_
+  commentId: Overload:Wolfgang.Extensions.Mail.ParseResult.Issues
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.ParseResult.Issues
+  nameWithType: ParseResult.Issues
+- uid: Wolfgang.Extensions.Mail.ParseResult.Message
+  name: Message
+  href: api/Wolfgang.Extensions.Mail.ParseResult.html#Wolfgang_Extensions_Mail_ParseResult_Message
+  commentId: P:Wolfgang.Extensions.Mail.ParseResult.Message
+  fullName: Wolfgang.Extensions.Mail.ParseResult.Message
+  nameWithType: ParseResult.Message
+- uid: Wolfgang.Extensions.Mail.ParseResult.Message*
+  name: Message
+  href: api/Wolfgang.Extensions.Mail.ParseResult.html#Wolfgang_Extensions_Mail_ParseResult_Message_
+  commentId: Overload:Wolfgang.Extensions.Mail.ParseResult.Message
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Mail.ParseResult.Message
+  nameWithType: ParseResult.Message
 - uid: Wolfgang.Extensions.Mail.Validation
   name: Wolfgang.Extensions.Mail.Validation
   href: api/Wolfgang.Extensions.Mail.Validation.html

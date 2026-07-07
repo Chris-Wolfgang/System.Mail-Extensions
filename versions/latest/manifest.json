@@ -40,6 +40,20 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.EmlParseException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.EmlParseException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.EmlParseException",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.EmlParseException.yml\" sourcestartlinenumber=\"1\">Thrown by <xref href=\"Wolfgang.Extensions.Mail.EmlParser\" data-throw-if-not-resolved=\"false\"></xref> when a malformed construct is encountered\nwhile parsing in strict mode (see <xref href=\"Wolfgang.Extensions.Mail.EmlParserOptions.Strict\" data-throw-if-not-resolved=\"false\"></xref>).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Wolfgang.Extensions.Mail.EmlParser.yml",
       "output": {
         ".html": {
@@ -51,6 +65,20 @@
       "IsMRef": true,
       "Title": "Wolfgang.Extensions.Mail.EmlParser",
       "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.EmlParser.yml\" sourcestartlinenumber=\"1\">Provides methods to parse EML (RFC 2822 MIME) content into <xref href=\"System.Net.Mail.MailMessage\" data-throw-if-not-resolved=\"false\"></xref> objects.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.EmlParserOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.EmlParserOptions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.EmlParserOptions",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.EmlParserOptions.yml\" sourcestartlinenumber=\"1\">Controls how <xref href=\"Wolfgang.Extensions.Mail.EmlParser\" data-throw-if-not-resolved=\"false\"></xref> handles malformed constructs it\nencounters while parsing EML/MIME content.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -121,6 +149,20 @@
       "IsMRef": true,
       "Title": "Wolfgang.Extensions.Mail.MailMessageExtensions",
       "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.MailMessageExtensions.yml\" sourcestartlinenumber=\"1\">A collection of extension methods for the <xref href=\"System.Net.Mail.MailMessage\" data-throw-if-not-resolved=\"false\"></xref> class.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Mail.ParseResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Mail.ParseResult.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Mail.ParseResult",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Mail.ParseResult.yml\" sourcestartlinenumber=\"1\">The result of a diagnostic parse: the parsed <xref href=\"System.Net.Mail.MailMessage\" data-throw-if-not-resolved=\"false\"></xref>\ntogether with the list of malformed constructs the lenient parser skipped.</p>\n"
     },
     {
       "type": "ManagedReference",
