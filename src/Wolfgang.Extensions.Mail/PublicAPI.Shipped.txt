@@ -1,7 +1,15 @@
 #nullable enable
 Wolfgang.Extensions.Mail.AttachmentCollectionExtensions
 Wolfgang.Extensions.Mail.AttachmentFactory
+Wolfgang.Extensions.Mail.EmlParseException
+Wolfgang.Extensions.Mail.EmlParseException.EmlParseException() -> void
+Wolfgang.Extensions.Mail.EmlParseException.EmlParseException(string! message) -> void
+Wolfgang.Extensions.Mail.EmlParseException.EmlParseException(string! message, System.Exception! innerException) -> void
 Wolfgang.Extensions.Mail.EmlParser
+Wolfgang.Extensions.Mail.EmlParserOptions
+Wolfgang.Extensions.Mail.EmlParserOptions.EmlParserOptions() -> void
+Wolfgang.Extensions.Mail.EmlParserOptions.Strict.get -> bool
+Wolfgang.Extensions.Mail.EmlParserOptions.Strict.set -> void
 Wolfgang.Extensions.Mail.InlineHtmlBuilder
 Wolfgang.Extensions.Mail.InlineHtmlBuilder.Build() -> System.Net.Mail.AlternateView!
 Wolfgang.Extensions.Mail.InlineHtmlBuilder.EmbedImage(System.IO.Stream! imageStream, string! fileName, string? contentType = null) -> Wolfgang.Extensions.Mail.InlineHtmlBuilder!
@@ -34,6 +42,10 @@ Wolfgang.Extensions.Mail.MailMessageBuilder.SubjectEncoding(System.Text.Encoding
 Wolfgang.Extensions.Mail.MailMessageBuilder.To(params string![]! addresses) -> Wolfgang.Extensions.Mail.MailMessageBuilder!
 Wolfgang.Extensions.Mail.MailMessageBuilder.To(string! address, string! displayName) -> Wolfgang.Extensions.Mail.MailMessageBuilder!
 Wolfgang.Extensions.Mail.MailMessageExtensions
+Wolfgang.Extensions.Mail.ParseResult
+Wolfgang.Extensions.Mail.ParseResult.HasIssues.get -> bool
+Wolfgang.Extensions.Mail.ParseResult.Issues.get -> System.Collections.Generic.IReadOnlyList<Wolfgang.Extensions.Mail.Validation.ValidationIssue!>!
+Wolfgang.Extensions.Mail.ParseResult.Message.get -> System.Net.Mail.MailMessage!
 Wolfgang.Extensions.Mail.Validation.ValidationIssue
 Wolfgang.Extensions.Mail.Validation.ValidationIssue.Message.get -> string!
 Wolfgang.Extensions.Mail.Validation.ValidationIssue.PropertyName.get -> string?
@@ -71,8 +83,12 @@ static Wolfgang.Extensions.Mail.AttachmentFactory.InferContentType(string! fileN
 static Wolfgang.Extensions.Mail.AttachmentFactory.RegisterContentType(string! extension, string! contentType) -> void
 static Wolfgang.Extensions.Mail.AttachmentFactory.TryGetRegisteredContentType(string! extension, out string? contentType) -> bool
 static Wolfgang.Extensions.Mail.EmlParser.Parse(string! emlContent) -> System.Net.Mail.MailMessage!
+static Wolfgang.Extensions.Mail.EmlParser.Parse(string! emlContent, Wolfgang.Extensions.Mail.EmlParserOptions! options) -> System.Net.Mail.MailMessage!
 static Wolfgang.Extensions.Mail.EmlParser.ParseFile(string! filePath) -> System.Net.Mail.MailMessage!
+static Wolfgang.Extensions.Mail.EmlParser.ParseFile(string! filePath, Wolfgang.Extensions.Mail.EmlParserOptions! options) -> System.Net.Mail.MailMessage!
 static Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync(string! filePath, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.Net.Mail.MailMessage!>!
+static Wolfgang.Extensions.Mail.EmlParser.ParseFileAsync(string! filePath, Wolfgang.Extensions.Mail.EmlParserOptions! options, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.Net.Mail.MailMessage!>!
+static Wolfgang.Extensions.Mail.EmlParser.ParseWithDiagnostics(string! emlContent, Wolfgang.Extensions.Mail.EmlParserOptions? options = null) -> Wolfgang.Extensions.Mail.ParseResult!
 static Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(this System.Net.Mail.MailAddressCollection! source, System.Collections.Generic.IEnumerable<System.Net.Mail.MailAddress!>! addresses) -> void
 static Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(this System.Net.Mail.MailAddressCollection! source, System.Collections.Generic.IEnumerable<string!>! addresses) -> void
 static Wolfgang.Extensions.Mail.MailAddressCollectionExtensions.AddRange(this System.Net.Mail.MailAddressCollection! source, params System.Net.Mail.MailAddress![]! addresses) -> void
