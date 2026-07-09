@@ -76,7 +76,7 @@ jobs:
         # runs regardless; only the Code Scanning annotation upload is skipped
         # for forks.
         if: ${{ !github.event.pull_request.head.repo.fork }}
-        uses: github/codeql-action/upload-sarif@411c4c9a36b3fca4d674f06b6396b2c6d23522c6 # v3
+        uses: github/codeql-action/upload-sarif@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 # v3
         with:
           sarif_file: zizmor.sarif
           category: zizmor
