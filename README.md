@@ -179,14 +179,15 @@ string formatted = message.To.ToFormattedString();
 string one = new MailAddress("alice@example.com", "Alice Smith").FormatMailAddress();
 ```
 
-## Supported Frameworks
+## 🎯 Supported Frameworks
 
-- .NET Framework 4.6.2+
-- .NET Standard 2.0
-- .NET Standard 2.1
-- .NET 8.0
-- .NET 9.0
-- .NET 10.0
+This library targets:
+
+- **.NET Framework:** 4.6.2
+- **.NET Standard:** 2.0, 2.1
+- **.NET:** 8.0, 9.0, 10.0
+
+See the [NuGet package page](https://www.nuget.org/packages/Wolfgang.Extensions.Mail/) for the authoritative per-TFM compatibility matrix.
 
 ## License
 
