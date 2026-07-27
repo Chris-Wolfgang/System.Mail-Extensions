@@ -278,7 +278,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           ref: refs/pull/${{ github.event.pull_request.number }}/head
           persist-credentials: false
@@ -305,6 +305,7 @@ jobs:
             "BannedSymbols.txt"
             "*.globalconfig"
             "*.ruleset"
+            "*.DotSettings"
             ".github/workflows/*.yml"
             ".github/workflows/*.yaml"
           )
@@ -340,7 +341,7 @@ jobs:
           echo "✅ Configuration files secured - using versions from main branch"
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
         with:
           dotnet-version: '10.0.x'
 
@@ -390,7 +391,7 @@ jobs:
             --no-build
 
       - name: Upload SARIF to Code Scanning
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 # v3
         with:
           sarif_file: inspect.sarif
 
@@ -402,10 +403,28 @@ jobs:
         # later when the noise floor is acceptable.
         shell: pwsh
         run: |
+          # Explicit SARIF-presence check so a missing/empty file surfaces
+          # as a clear "InspectCode never produced output" message rather
+          # than a less-actionable Get-Content / ConvertFrom-Json path
+          # exception. If we got here, the earlier "Run InspectCode" step
+          # thinks it succeeded — so a missing SARIF is an integration bug
+          # (arg mismatch, output-path typo, silent runner crash) that we
+          # want to fail loudly on.
+          if (-not (Test-Path 'inspect.sarif')) {
+            Write-Error "inspect.sarif was not produced by the Run InspectCode step. Failing the gate loudly instead of silently passing an unrun analyzer."
+            exit 1
+          }
+
           $sarif = Get-Content inspect.sarif -Raw | ConvertFrom-Json
+
+          # Null-safe traversal: the SARIF spec allows `runs` and each
+          # `runs[].results` to be omitted (or emitted as `null`) on a
+          # clean run. `@()` coerces null to an empty enumerable so the
+          # foreach short-circuits instead of throwing "You cannot call a
+          # method on a null-valued expression".
           $count = @(
-            foreach ($run in $sarif.runs) {
-              foreach ($result in $run.results) {
+            foreach ($run in @($sarif.runs)) {
+              foreach ($result in @($run.results)) {
                 if ($result.level -eq 'error') { $result }
               }
             }
