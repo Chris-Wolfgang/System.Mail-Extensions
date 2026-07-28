@@ -1,7 +1,12 @@
 # Wolfgang.Extensions.Mail
 
-[![NuGet](https://img.shields.io/nuget/v/Wolfgang.Extensions.Mail.svg)](https://www.nuget.org/packages/Wolfgang.Extensions.Mail)
+[![NuGet](https://img.shields.io/nuget/v/Wolfgang.Extensions.Mail.svg?logo=nuget&label=NuGet)](https://www.nuget.org/packages/Wolfgang.Extensions.Mail/)
+[![Downloads](https://img.shields.io/nuget/dt/Wolfgang.Extensions.Mail.svg?logo=nuget&label=downloads)](https://www.nuget.org/packages/Wolfgang.Extensions.Mail/)
+[![PR build](https://img.shields.io/github/actions/workflow/status/Chris-Wolfgang/System.Mail-Extensions/pr.yaml?event=pull_request_target&label=PR%20build&logo=github)](https://github.com/Chris-Wolfgang/System.Mail-Extensions/actions/workflows/pr.yaml)
+[![release](https://img.shields.io/github/actions/workflow/status/Chris-Wolfgang/System.Mail-Extensions/release.yaml?event=release&label=release&logo=github)](https://github.com/Chris-Wolfgang/System.Mail-Extensions/actions/workflows/release.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![.NET](https://img.shields.io/badge/.NET-Multi--Targeted-purple.svg)](https://dotnet.microsoft.com/)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)](https://github.com/Chris-Wolfgang/System.Mail-Extensions)
 
 Extension methods and helpers for `System.Net.Mail`: a fluent message builder, an EML parser and serializer, message validation and cloning, attachment factories with content-type inference, inline-HTML image embedding, and collection conveniences.
 
@@ -179,14 +184,15 @@ string formatted = message.To.ToFormattedString();
 string one = new MailAddress("alice@example.com", "Alice Smith").FormatMailAddress();
 ```
 
-## Supported Frameworks
+## 🎯 Supported Frameworks
 
-- .NET Framework 4.6.2+
-- .NET Standard 2.0
-- .NET Standard 2.1
-- .NET 8.0
-- .NET 9.0
-- .NET 10.0
+This library targets:
+
+- **.NET Framework:** 4.6.2
+- **.NET Standard:** 2.0, 2.1
+- **.NET:** 8.0, 9.0, 10.0
+
+See the [NuGet package page](https://www.nuget.org/packages/Wolfgang.Extensions.Mail/) for the authoritative per-TFM compatibility matrix.
 
 ## License
 
