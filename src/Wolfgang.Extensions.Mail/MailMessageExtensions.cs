@@ -538,7 +538,7 @@ public static class MailMessageExtensions
         var result = closedMethod.Invoke
         (
             source,
-            new[] { mailWriter, true, false, (object)CancellationToken.None }
+            new[] { mailWriter, true, false, CancellationToken.None }
         );
 
         if (result is Task task)
