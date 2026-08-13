@@ -1,5 +1,4 @@
 using System.Text;
-using Wolfgang.Extensions.Mail;
 using Xunit;
 
 namespace Wolfgang.Extensions.Mail.Tests.Integration;

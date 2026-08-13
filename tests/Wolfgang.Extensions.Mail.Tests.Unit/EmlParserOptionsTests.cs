@@ -1,5 +1,3 @@
-using System.Net.Mail;
-using Wolfgang.Extensions.Mail;
 using Wolfgang.Extensions.Mail.Validation;
 using Xunit;
 using Assert = Xunit.Assert;
@@ -88,7 +86,7 @@ public class EmlParserOptionsTests
             () => EmlParser.Parse(MalformedFromEml, new EmlParserOptions { Strict = true })
         );
 
-        Assert.IsAssignableFrom<System.FormatException>(caught);
+        Assert.IsAssignableFrom<FormatException>(caught);
     }
 
 
@@ -200,7 +198,7 @@ public class EmlParserOptionsTests
     {
         Assert.Throws<ArgumentNullException>
         (
-            () => EmlParser.Parse("From: a@b.com\r\n\r\n", (EmlParserOptions)null!)
+            () => EmlParser.Parse("From: a@b.com\r\n\r\n", null!)
         );
     }
 

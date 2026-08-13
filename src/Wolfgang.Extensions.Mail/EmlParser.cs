@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;       // [NotNullWhen(true)] on TFMs that ship it
+#endif
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
@@ -1104,7 +1106,11 @@ public static class EmlParser
 
             if (TryParseMailAddress(trimmed, out var parsed))
             {
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+                collection.Add(parsed);
+#else
                 collection.Add(parsed!);
+#endif
             }
             else
             {

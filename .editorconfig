@@ -360,52 +360,6 @@ dotnet_diagnostic.MA0004.severity = none     # Meziantou: Use ConfigureAwait
 dotnet_diagnostic.S3216.severity = none      # SonarAnalyzer: ConfigureAwait
 dotnet_diagnostic.CA2007.severity = none     # .NET Analyzer: Use ConfigureAwait
 
-# -----------------------------------------------------------------------
-# InspectCode / ReSharper false positives from multi-TFM library code.
-# These fire when InspectCode analyzes a single TFM slice while the
-# source deliberately uses conditional-compilation or nullable-suppression
-# patterns needed across the full TFM matrix (net462 / netstandard2.0
-# through net10). All are false positives in src/ context.
-# -----------------------------------------------------------------------
-
-# S8969: Nullable `!` operator flagged as redundant. Needed on net462 /
-# netstandard2.0 where [NotNullWhen] isn't polyfilled; redundant on
-# newer TFMs. Multi-TFM library concession.
-dotnet_diagnostic.S8969.severity = none
-
-# RedundantUsingDirective: Usings that appear redundant on the analyzed
-# TFM but are needed inside #if blocks for other TFMs (e.g. `using
-# System;` for FormatException catch on net462, `using System.Diagnostics
-# .CodeAnalysis;` for [NotNullWhen] on modern TFMs).
-resharper_redundant_using_directive_highlighting = none
-
-# RedundantSuppressNullableWarningExpression: Same rationale as S8969
-# from the R#-native rule engine.
-resharper_redundant_suppress_nullable_warning_expression_highlighting = none
-
-# PossibleNullReferenceException: BCL types (ContentType.Parameters,
-# ContentDisposition, etc.) have nullable annotations that don't reflect
-# actual runtime behavior; defensive foreach-with-null-guard patterns
-# look wrong to the analyzer but are correct at runtime.
-resharper_possible_null_reference_exception_highlighting = none
-
-# ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract: Defensive
-# null checks on nullable-contract non-null framework properties (like
-# ContentDisposition on MimePart, which is lazy-init and may be null
-# internally despite the annotation).
-resharper_condition_is_always_true_or_false_according_to_nullable_api_contract_highlighting = none
-
-# MailAddressExtensions uses C# 14 extension member syntax
-# (`extension(MailAddress) { ... }`) which is understood by
-# Microsoft.CodeAnalysis.PublicApiAnalyzers 5.6.0+ (used by MSBuild) but
-# not by the older bundled analyzer InspectCode's ReSharper toolchain
-# ships with. MSBuild reads the extension-syntax entries in
-# PublicAPI.Shipped.txt correctly; InspectCode reports them as missing
-# via the flat form. File-scoped opt-out until the InspectCode tooling
-# catches up.
-[src/Wolfgang.Extensions.Mail/MailAddressExtensions.cs]
-dotnet_diagnostic.RS0016.severity = none
-
 # Test projects - relaxed naming, no doc requirements
 [tests/**/*.cs]
 # Allow Test_Method_Names_With_Underscores

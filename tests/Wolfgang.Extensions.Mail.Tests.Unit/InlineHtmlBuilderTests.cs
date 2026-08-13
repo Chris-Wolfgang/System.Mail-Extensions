@@ -180,7 +180,7 @@ public class InlineHtmlBuilderTests
 
         Assert.Throws<ArgumentNullException>
         (
-            () => builder.EmbedImage((string)null!)
+            () => builder.EmbedImage(null!)
         );
     }
 

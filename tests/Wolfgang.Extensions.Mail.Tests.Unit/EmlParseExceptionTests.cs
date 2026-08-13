@@ -1,4 +1,3 @@
-using Wolfgang.Extensions.Mail;
 using Xunit;
 using Assert = Xunit.Assert;
 

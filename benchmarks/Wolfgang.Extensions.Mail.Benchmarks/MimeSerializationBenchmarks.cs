@@ -1,6 +1,5 @@
 using System;
 using System.Net.Mail;
-using System.Net.Mime;
 using System.Text;
 using BenchmarkDotNet.Attributes;
 
@@ -21,6 +20,7 @@ public class MimeSerializationBenchmarks : IDisposable
 
 
 
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global — [Params] is written by BenchmarkDotNet via reflection
     [Params(0, 64)]
     public int AttachmentSizeKb { get; set; }
 
@@ -98,7 +98,7 @@ public class MimeSerializationBenchmarks : IDisposable
     {
         if (disposing)
         {
-            _message?.Dispose();
+            _message.Dispose();
         }
     }
 }

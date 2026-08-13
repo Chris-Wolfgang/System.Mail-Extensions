@@ -1,6 +1,5 @@
 using System.Net.Mail;
 using System.Text;
-using Wolfgang.Extensions.Mail;
 using Xunit;
 
 namespace Wolfgang.Extensions.Mail.Tests.Integration;
@@ -17,11 +16,9 @@ public class RoundTripTests
     [Fact]
     public void ToMimeString_when_parsed_back_preserves_subject_and_addresses()
     {
-        using var original = new MailMessage("sender@example.com", "recipient@example.com")
-        {
-            Subject = "Round trip subject",
-            Body = "Round trip body."
-        };
+        using var original = new MailMessage("sender@example.com", "recipient@example.com");
+        original.Subject = "Round trip subject";
+        original.Body = "Round trip body.";
         original.CC.Add("copy@example.com");
 
         using var parsed = EmlParser.Parse(original.ToMimeString());
@@ -39,11 +36,9 @@ public class RoundTripTests
     {
         var payload = Enumerable.Range(0, 8_192).Select(i => (byte)(i % 256)).ToArray();
 
-        using var original = new MailMessage("sender@example.com", "recipient@example.com")
-        {
-            Subject = "Attachment round trip",
-            Body = "See attachment."
-        };
+        using var original = new MailMessage("sender@example.com", "recipient@example.com");
+        original.Subject = "Attachment round trip";
+        original.Body = "See attachment.";
         original.Attachments.Add(AttachmentFactory.FromBytes(payload, "data.bin"));
 
         using var parsed = EmlParser.Parse(original.ToMimeString());
@@ -60,11 +55,9 @@ public class RoundTripTests
     {
         const string html = "<html><body><p>alternate view content</p></body></html>";
 
-        using var original = new MailMessage("sender@example.com", "recipient@example.com")
-        {
-            Subject = "Alternate view round trip",
-            Body = "Plain fallback."
-        };
+        using var original = new MailMessage("sender@example.com", "recipient@example.com");
+        original.Subject = "Alternate view round trip";
+        original.Body = "Plain fallback.";
         original.AlternateViews.Add
         (
             AlternateView.CreateAlternateViewFromString(html, Encoding.UTF8, "text/html")
@@ -85,11 +78,9 @@ public class RoundTripTests
     [Fact]
     public void ToMimeString_when_serialize_parse_repeated_body_is_stable()
     {
-        using var original = new MailMessage("sender@example.com", "recipient@example.com")
-        {
-            Subject = "Stability",
-            Body = "The body must survive repeated round trips unchanged."
-        };
+        using var original = new MailMessage("sender@example.com", "recipient@example.com");
+        original.Subject = "Stability";
+        original.Body = "The body must survive repeated round trips unchanged.";
 
         using var firstPass = EmlParser.Parse(original.ToMimeString());
         using var secondPass = EmlParser.Parse(firstPass.ToMimeString());

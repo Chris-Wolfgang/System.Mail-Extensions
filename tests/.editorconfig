@@ -47,64 +47,11 @@ dotnet_diagnostic.S1144.severity = none
 # xUnit2013: Use Assert.Single instead of Assert.Equal for collection size
 dotnet_diagnostic.xUnit2013.severity = none
 
-# -----------------------------------------------------------------------
-# InspectCode-only suppressions (rules already NoWarn'd in the tests csproj
-# but InspectCode doesn't read csproj <NoWarn>). Duplicating here so both
-# MSBuild-time analyzers and InspectCode agree on the test scope.
-# -----------------------------------------------------------------------
-
 # RS0016 / RS0037: PublicApiAnalyzer — the analyzer is opt-in per project
 # via <AdditionalFiles Condition="Exists('PublicAPI.Shipped.txt')" /> in
 # Directory.Build.props. Test projects have no PublicAPI.Shipped.txt and
 # should not be tracked as a public surface. MSBuild honors the Condition;
-# InspectCode doesn't, so we silence explicitly here.
+# InspectCode doesn't, so we silence explicitly here — the analyzer's
+# premise (tracking a library's public API) doesn't apply to test code.
 dotnet_diagnostic.RS0016.severity = none
 dotnet_diagnostic.RS0037.severity = none
-
-# S1481: Unused local — the `unused` variable is intentional in
-# "does not throw" test patterns; renaming would mask the test's purpose.
-dotnet_diagnostic.S1481.severity = none
-
-# S4487: Unread private field — test fixtures occasionally hold references
-# for lifetime, not read.
-dotnet_diagnostic.S4487.severity = none
-
-# S8969: Redundant null-forgiving operator — test code often uses `!` after
-# Assert.NotNull for chaining and R# flags it once flow analysis kicks in.
-dotnet_diagnostic.S8969.severity = none
-
-# -----------------------------------------------------------------------
-# ReSharper-native inspections (no dotnet_diagnostic ID). These fire from
-# R#'s own rule engine, not from a Roslyn analyzer package, so they take
-# the `resharper_<snake_rule>_highlighting` form.
-# -----------------------------------------------------------------------
-
-# AccessToDisposedClosure: cancellation-token tests capture a CTS in a
-# local function that is guaranteed to complete before the `using` block
-# exits. R# can't see that ordering; the finding is a false positive.
-resharper_access_to_disposed_closure_highlighting = none
-
-# RedundantSuppressNullableWarningExpression: cosmetic; test code
-# occasionally uses `!` after Assert.NotNull for chaining and R# flags
-# it once flow analysis kicks in.
-resharper_redundant_suppress_nullable_warning_expression_highlighting = none
-
-# RedundantUsingDirective: test files use different imports per TFM slice;
-# a using that's redundant on net10 may be required on net462.
-resharper_redundant_using_directive_highlighting = none
-
-# RedundantNameQualifier: tests may use fully-qualified names to disambiguate
-# between MailAddress overloads across TFMs.
-resharper_redundant_name_qualifier_highlighting = none
-
-# RedundantCast: test code often uses explicit casts for readability
-# (e.g. `(object)null` when asserting null-behavior).
-resharper_redundant_cast_highlighting = none
-
-# UsingStatementResourceInitialization: tests sometimes initialize
-# disposables inside the using block for setup readability.
-resharper_using_statement_resource_initialization_highlighting = none
-
-# NotAccessedField.Local: test fixtures may hold private fields solely
-# to keep a disposable alive for the fixture lifetime.
-resharper_not_accessed_field_local_highlighting = none
