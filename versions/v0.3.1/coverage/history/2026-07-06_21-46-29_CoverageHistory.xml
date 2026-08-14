@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<coverage version="1.0" date="2026-07-06_21-46-29" tag="">
+  <assembly name="Wolfgang.Extensions.Mail">
+    <class name="Wolfgang.Extensions.Mail.AttachmentCollectionExtensions" coveredlines="22" coverablelines="22" totallines="167" coveredbranches="14" totalbranches="14" coveredcodeelements="6" fullcoveredcodeelements="6" totalcodeelements="6" />
+    <class name="Wolfgang.Extensions.Mail.AttachmentFactory" coveredlines="89" coverablelines="91" totallines="309" coveredbranches="32" totalbranches="34" coveredcodeelements="8" fullcoveredcodeelements="6" totalcodeelements="8" />
+    <class name="Wolfgang.Extensions.Mail.EmlParser" coveredlines="319" coverablelines="330" totallines="971" coveredbranches="191" totalbranches="218" coveredcodeelements="31" fullcoveredcodeelements="25" totalcodeelements="31" />
+    <class name="Wolfgang.Extensions.Mail.InlineHtmlBuilder" coveredlines="79" coverablelines="79" totallines="263" coveredbranches="59" totalbranches="61" coveredcodeelements="8" fullcoveredcodeelements="8" totalcodeelements="8" />
+    <class name="Wolfgang.Extensions.Mail.MailAddressCollectionExtensions" coveredlines="31" coverablelines="31" totallines="186" coveredbranches="18" totalbranches="18" coveredcodeelements="6" fullcoveredcodeelements="6" totalcodeelements="6" />
+    <class name="Wolfgang.Extensions.Mail.MailAddressExtensions" coveredlines="8" coverablelines="8" totallines="127" coveredbranches="4" totalbranches="4" coveredcodeelements="2" fullcoveredcodeelements="2" totalcodeelements="2" />
+    <class name="Wolfgang.Extensions.Mail.MailMessageBuilder" coveredlines="138" coverablelines="138" totallines="590" coveredbranches="77" totalbranches="80" coveredcodeelements="24" fullcoveredcodeelements="24" totalcodeelements="24" />
+    <class name="Wolfgang.Extensions.Mail.MailMessageExtensions" coveredlines="182" coverablelines="182" totallines="843" coveredbranches="76" totalbranches="86" coveredcodeelements="21" fullcoveredcodeelements="21" totalcodeelements="21" />
+    <class name="Wolfgang.Extensions.Mail.Validation.ValidationIssue" coveredlines="18" coverablelines="18" totallines="69" coveredbranches="4" totalbranches="4" coveredcodeelements="5" fullcoveredcodeelements="5" totalcodeelements="5" />
+    <class name="Wolfgang.Extensions.Mail.Validation.ValidationOptions" coveredlines="4" coverablelines="4" totallines="39" coveredbranches="0" totalbranches="0" coveredcodeelements="4" fullcoveredcodeelements="4" totalcodeelements="4" />
+    <class name="Wolfgang.Extensions.Mail.Validation.ValidationResult" coveredlines="13" coverablelines="13" totallines="62" coveredbranches="1" totalbranches="2" coveredcodeelements="5" fullcoveredcodeelements="5" totalcodeelements="5" />
+  </assembly>
+</coverage>
