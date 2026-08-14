@@ -402,7 +402,7 @@ public class MailMessageBuilderTests
 
         Assert.Throws<ArgumentNullException>
         (
-            () => builder.To((string[])null!)
+            () => builder.To(null!)
         );
     }
 
