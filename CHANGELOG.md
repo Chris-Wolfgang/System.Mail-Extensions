@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-08-14
+
+### Fixed
+- Code-scanning noise floor: drove open InspectCode findings from 400 to 0 through a mix of real fixes (redundant usings deleted, redundant casts and qualifiers removed, `Cast<object>()` for `string.Format` args in `InlineHtmlBuilder`, `_textBody ?? string.Empty` in `MailMessageBuilder`, dropped defensive `?? new List<>()` on a non-nullable constructor parameter in `ValidationResult`, `using`-statement resource-initialization splits in the integration tests, conditional-compilation guards on the `using System;` / `System.Diagnostics.CodeAnalysis` directives in the `MailAddressExtensions` / `EmlParser` multi-TFM paths) plus narrowly-scoped analyzer opt-outs for a handful of true false positives (`RS0016` for the `extension(MailAddress)` C# 14 members where InspectCode's bundled `PublicApiAnalyzers` version doesn't understand the extension-syntax entries in `PublicAPI.Shipped.txt`; `S8969` / `RedundantSuppressNullableWarningExpression` on `Assert.NotNull` follow-up sites where the `!` is required on net462 / netstandard2.0 but redundant on modern TFMs). `RS0016` / `RS0037` are silenced at test-project and benchmark-project scope in the respective `.editorconfig` files (the `PublicApiAnalyzers` premise — tracking a library's public API — doesn't apply to test or benchmark projects).
+- zizmor findings: driven from 5 to 0. Four `template-injection` alerts in `codeql.yaml` fixed by moving step-outcome inlines into an `env:` block (the values reach the pwsh script through the data channel, not template expansion). One `superfluous-actions` alert on `release.yaml` documented as an accepted design choice in `.github/zizmor.yml` — `softprops/action-gh-release` is the fleet-canonical glob-matched multi-file uploader.
+- Line-ending drift: `docfx_project/docfx.json` was committed to git with CRLF while `.gitattributes` declares `* text=auto eol=lf`, leaving the file permanently dirty on Windows worktrees. Renormalized to LF via `git add --renormalize`.
+
 ## [0.3.0] - 2026-07-07
 
 ### Changed
@@ -44,6 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release: `MailMessageBuilder`, `EmlParser` (parse and serialize EML/MIME), `MailMessageExtensions` (`Validate`, `Clone`, `ToMimeString`), `AttachmentFactory`, `InlineHtmlBuilder`, `MailAddress.TryParse`, and attachment / address collection helpers.
 
-[Unreleased]: https://github.com/Chris-Wolfgang/System.Mail-Extensions/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/Chris-Wolfgang/System.Mail-Extensions/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/Chris-Wolfgang/System.Mail-Extensions/compare/v0.3.0...v0.3.1
+[0.3.0]: https://github.com/Chris-Wolfgang/System.Mail-Extensions/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Chris-Wolfgang/System.Mail-Extensions/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Chris-Wolfgang/System.Mail-Extensions/releases/tag/v0.1.0
