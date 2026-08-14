@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Mail;
 using System.Net.Mime;
 
@@ -216,7 +217,7 @@ public sealed class InlineHtmlBuilder
             );
         }
 
-        var html = string.Format(System.Globalization.CultureInfo.InvariantCulture, _htmlTemplate, _contentIds.ToArray());
+        var html = string.Format(System.Globalization.CultureInfo.InvariantCulture, _htmlTemplate, _contentIds.Cast<object>().ToArray());
 
         var view = AlternateView.CreateAlternateViewFromString
         (

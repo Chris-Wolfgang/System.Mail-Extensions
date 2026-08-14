@@ -46,3 +46,12 @@ dotnet_diagnostic.S1144.severity = none
 
 # xUnit2013: Use Assert.Single instead of Assert.Equal for collection size
 dotnet_diagnostic.xUnit2013.severity = none
+
+# RS0016 / RS0037: PublicApiAnalyzer — the analyzer is opt-in per project
+# via <AdditionalFiles Condition="Exists('PublicAPI.Shipped.txt')" /> in
+# Directory.Build.props. Test projects have no PublicAPI.Shipped.txt and
+# should not be tracked as a public surface. MSBuild honors the Condition;
+# InspectCode doesn't, so we silence explicitly here — the analyzer's
+# premise (tracking a library's public API) doesn't apply to test code.
+dotnet_diagnostic.RS0016.severity = none
+dotnet_diagnostic.RS0037.severity = none

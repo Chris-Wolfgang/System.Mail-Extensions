@@ -66,7 +66,9 @@ public class MailMessageExtensions_Clone_Tests
         using var clone = original.Clone();
 
         Assert.NotNull(clone.Sender);
+#pragma warning disable S8969 // `!` is redundant on TFMs where xunit's Assert.NotNull has [NotNull]; required on net462/netstandard2.0 where it doesn't.
         Assert.Equal("sender@example.com", clone.Sender!.Address);
+#pragma warning restore S8969
         Assert.Equal("Actual Sender", clone.Sender.DisplayName);
     }
 

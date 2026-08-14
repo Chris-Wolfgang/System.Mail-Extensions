@@ -1,6 +1,4 @@
-using System.Net.Mail;
 using System.Text;
-using Wolfgang.Extensions.Mail;
 using Xunit;
 using Assert = Xunit.Assert;
 

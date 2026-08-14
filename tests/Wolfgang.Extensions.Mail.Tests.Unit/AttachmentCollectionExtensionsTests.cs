@@ -135,7 +135,7 @@ public class AttachmentCollectionExtensionsTests
         var list = new List<Attachment> { a };
         var ex = Assert.Throws<ArgumentNullException>
         (
-            () => AttachmentCollectionExtensions.AddRange(null!, (IEnumerable<Attachment>)list)
+            () => AttachmentCollectionExtensions.AddRange(null!, list)
         );
         Assert.Equal("source", ex.ParamName);
     }

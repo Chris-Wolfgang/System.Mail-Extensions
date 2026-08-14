@@ -1,5 +1,4 @@
 using System.Net.Mail;
-using Wolfgang.Extensions.Mail;
 using Xunit;
 
 namespace Wolfgang.Extensions.Mail.Tests.Integration;
@@ -42,11 +41,9 @@ public sealed class FileRoundTripTests : IDisposable
     [Fact]
     public async Task ParseFileAsync_when_file_contains_serialized_message_returns_equivalent_message()
     {
-        using var original = new MailMessage("sender@example.com", "recipient@example.com")
-        {
-            Subject = "File round trip",
-            Body = "Body persisted to disk."
-        };
+        using var original = new MailMessage("sender@example.com", "recipient@example.com");
+        original.Subject = "File round trip";
+        original.Body = "Body persisted to disk.";
         var path = await WriteEmlAsync(original);
 
         using var parsed = await EmlParser.ParseFileAsync(path);
@@ -60,11 +57,9 @@ public sealed class FileRoundTripTests : IDisposable
     [Fact]
     public async Task ParseFile_when_file_contains_serialized_message_returns_equivalent_message()
     {
-        using var original = new MailMessage("sender@example.com", "recipient@example.com")
-        {
-            Subject = "Sync file round trip",
-            Body = "Body persisted to disk."
-        };
+        using var original = new MailMessage("sender@example.com", "recipient@example.com");
+        original.Subject = "Sync file round trip";
+        original.Body = "Body persisted to disk.";
         var path = await WriteEmlAsync(original);
 
         using var parsed = EmlParser.ParseFile(path);
@@ -84,11 +79,9 @@ public sealed class FileRoundTripTests : IDisposable
             payload[i] = (byte)(i % 256);
         }
 
-        using var original = new MailMessage("sender@example.com", "recipient@example.com")
-        {
-            Subject = "Large attachment",
-            Body = "See attachment."
-        };
+        using var original = new MailMessage("sender@example.com", "recipient@example.com");
+        original.Subject = "Large attachment";
+        original.Body = "See attachment.";
         original.Attachments.Add(AttachmentFactory.FromBytes(payload, "large.bin"));
         var path = await WriteEmlAsync(original);
 
@@ -105,11 +98,9 @@ public sealed class FileRoundTripTests : IDisposable
     [Fact]
     public async Task ParseFileAsync_when_token_already_cancelled_throws_OperationCanceledException()
     {
-        using var original = new MailMessage("sender@example.com", "recipient@example.com")
-        {
-            Subject = "Cancelled",
-            Body = "Never read."
-        };
+        using var original = new MailMessage("sender@example.com", "recipient@example.com");
+        original.Subject = "Cancelled";
+        original.Body = "Never read.";
         var path = await WriteEmlAsync(original);
 
         using var cts = new CancellationTokenSource();

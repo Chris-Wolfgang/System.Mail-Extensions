@@ -25,10 +25,9 @@ public sealed class ValidationResult
         List<ValidationIssue> issues
     )
     {
-        var allIssues = issues ?? new List<ValidationIssue>();
-        _allIssues = allIssues.AsReadOnly();
-        _errors = allIssues.Where(i => i.Severity == ValidationSeverity.Error).ToList().AsReadOnly();
-        _warnings = allIssues.Where(i => i.Severity == ValidationSeverity.Warning).ToList().AsReadOnly();
+        _allIssues = issues.AsReadOnly();
+        _errors = issues.Where(i => i.Severity == ValidationSeverity.Error).ToList().AsReadOnly();
+        _warnings = issues.Where(i => i.Severity == ValidationSeverity.Warning).ToList().AsReadOnly();
     }
 
 

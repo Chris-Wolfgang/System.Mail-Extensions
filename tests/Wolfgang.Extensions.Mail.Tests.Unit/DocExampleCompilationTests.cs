@@ -4,14 +4,9 @@
 // resolves the library's C# 14 extension members targets net8.0, and the
 // examples don't vary by TFM, so running on net8/9/10 is sufficient.
 #if NET8_0_OR_GREATER
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Wolfgang.Extensions.Mail;
 using Xunit;
 using Assert = Xunit.Assert;
 

@@ -3,10 +3,8 @@
 // refactor they protect is still exercised on every TFM by
 // AttachmentCollectionExtensionsTests.
 #if NET5_0_OR_GREATER
-using System;
 using System.Net.Mail;
 using System.Text;
-using Wolfgang.Extensions.Mail;
 using Xunit;
 using Assert = Xunit.Assert;
 
@@ -36,6 +34,7 @@ public class AllocationBudgetTests
     {
         using var message = BuildMessageWithAttachments(4);
 
+        // ReSharper disable once AccessToDisposedClosure — MeasureMinAllocations runs the lambda synchronously, before `message` leaves scope
         var allocated = MeasureMinAllocations(() => Consume(message.Attachments.TotalSize()));
 
         Assert.True(allocated == 0, $"TotalSize allocated {allocated:N0} bytes; expected 0 (a LINQ/enumerator regression allocates ~100+).");
@@ -48,6 +47,7 @@ public class AllocationBudgetTests
     {
         using var message = BuildMessageWithAttachments(4);
 
+        // ReSharper disable once AccessToDisposedClosure — MeasureMinAllocations runs the lambda synchronously, before `message` leaves scope
         var allocated = MeasureMinAllocations(() => Consume(message.Attachments.ExceedsLimit(1)));
 
         Assert.True(allocated == 0, $"ExceedsLimit allocated {allocated:N0} bytes; expected 0.");
@@ -126,8 +126,13 @@ public class AllocationBudgetTests
 
 
 
-    // Kept in a field so the JIT cannot elide the measured work.
+    // Kept in a field so the JIT cannot elide the measured work. The field is
+    // write-only by design — reading it back would be observable and let the
+    // JIT prove the work was unused, defeating the point.
+#pragma warning disable S4487 // Sonar: unread private field — intentional (JIT-elision guard).
+    // ReSharper disable once NotAccessedField.Local
     private static long _sink;
+#pragma warning restore S4487
 
     private static void Consume(long value) => _sink = value;
 

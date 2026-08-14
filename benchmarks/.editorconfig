@@ -30,3 +30,10 @@ dotnet_diagnostic.CA1024.severity = none
 
 # VSTHRD200: Use Async suffix — benchmark methods follow BenchmarkDotNet naming conventions
 dotnet_diagnostic.VSTHRD200.severity = none
+
+# RS0016 / RS0037: PublicApiAnalyzer — opt-in per project via Exists() gate
+# in Directory.Build.props. Benchmark projects have no PublicAPI.Shipped.txt
+# and are not part of the tracked public surface — the analyzer's premise
+# (tracking a library's public API) doesn't apply to benchmark code.
+dotnet_diagnostic.RS0016.severity = none
+dotnet_diagnostic.RS0037.severity = none

@@ -14,3 +14,15 @@ rules:
       # off pull_request_target would break that trusted-config model, so this
       # is an accepted, documented risk.
       - pr.yaml
+
+  superfluous-actions:
+    ignore:
+      # release.yaml uses softprops/action-gh-release to attach NuGet packages,
+      # symbol packages, SBOM JSON, and the coverage zip to the release. zizmor
+      # suggests replacing it with `gh release` script steps, but the action
+      # gives us tag-aware upload, glob matching across multiple file patterns,
+      # and idempotent re-upload on release re-publish that a hand-rolled
+      # `gh release` loop would have to reimplement. Fleet convention (see
+      # `reference_release_pipeline_multipackage`) uses this action across
+      # every releasable repo.
+      - release.yaml
