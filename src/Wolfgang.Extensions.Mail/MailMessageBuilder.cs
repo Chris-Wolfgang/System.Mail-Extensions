@@ -576,7 +576,7 @@ public sealed class MailMessageBuilder
         else
         {
             message.IsBodyHtml = false;
-            message.Body = _textBody;
+            message.Body = _textBody ?? string.Empty;
         }
     }
 

@@ -17,6 +17,7 @@ public class AttachmentFactoryBenchmarks
 
 
 
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global — [Params] is written by BenchmarkDotNet via reflection
     [Params(1_024, 1_048_576)]
     public int PayloadSizeBytes { get; set; }
 

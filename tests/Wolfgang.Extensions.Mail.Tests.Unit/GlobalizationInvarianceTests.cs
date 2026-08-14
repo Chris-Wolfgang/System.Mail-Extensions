@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Mail;
-using Wolfgang.Extensions.Mail;
 using Xunit;
 using Assert = Xunit.Assert;
 
@@ -94,7 +92,7 @@ public class GlobalizationInvarianceTests
             // "XI" becomes dotless under tr-TR; register uppercase and infer the
             // lowercase form — OrdinalIgnoreCase must match both regardless of
             // culture.
-            var ext = $".XI{System.Guid.NewGuid():N}";
+            var ext = $".XI{Guid.NewGuid():N}";
             AttachmentFactory.RegisterContentType(ext, "application/x-culture");
 
             Assert.Equal("application/x-culture", AttachmentFactory.InferContentType($"file{ext.ToLowerInvariant()}"));
@@ -128,7 +126,7 @@ public class GlobalizationInvarianceTests
     [MemberData(nameof(HostileCultures))]
     public void EncodedWord_B_and_Q_decode_the_same_regardless_of_culture(string culture)
     {
-        var bEncoded = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("Ünïcödé"));
+        var bEncoded = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("Ünïcödé"));
         var eml =
             "From: a@example.com\r\nTo: b@example.com\r\n" +
             $"Subject: =?utf-8?B?{bEncoded}?= and =?utf-8?Q?caf=C3=A9?=\r\n\r\nBody.\r\n";
@@ -145,7 +143,7 @@ public class GlobalizationInvarianceTests
     private static void InCulture
     (
         string name,
-        System.Action action
+        Action action
     )
     {
         var originalCulture = CultureInfo.CurrentCulture;

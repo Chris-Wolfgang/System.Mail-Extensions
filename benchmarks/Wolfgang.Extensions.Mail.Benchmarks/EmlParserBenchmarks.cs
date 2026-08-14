@@ -19,6 +19,7 @@ public class EmlParserBenchmarks
 
 
 
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global — [Params] is written by BenchmarkDotNet via reflection
     [Params(1_000, 100_000)]
     public int PayloadSizeBytes { get; set; }
 

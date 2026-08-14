@@ -1,5 +1,9 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
+#if !NET5_0_OR_GREATER
+using System;                                // FormatException, ArgumentException in catch blocks (pre-net5 path only)
+#endif
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;       // [NotNullWhen(true)] on TFMs that ship it
+#endif
 using System.Net.Mail;
 
 namespace Wolfgang.Extensions.Mail;
@@ -17,6 +21,14 @@ namespace Wolfgang.Extensions.Mail;
 public static class MailAddressExtensions
 {
 
+    // RS0016: MSBuild's PublicApiAnalyzers 5.6.0 records the two TryParse
+    // members below in PublicAPI.Shipped.txt using the C# 14 extension-syntax
+    // form (`static ...extension(MailAddress!).TryParse(...)`) and does NOT
+    // fire. The older PublicApiAnalyzers bundled with InspectCode's
+    // ReSharper toolchain doesn't yet recognize that form and reports the
+    // flat name as missing from the declared API — a pure tooling-version
+    // false positive, silenced only for this file.
+#pragma warning disable RS0016
     extension(MailAddress)
     {
 
@@ -124,4 +136,5 @@ public static class MailAddressExtensions
 #endif
         }
     }
+#pragma warning restore RS0016
 }

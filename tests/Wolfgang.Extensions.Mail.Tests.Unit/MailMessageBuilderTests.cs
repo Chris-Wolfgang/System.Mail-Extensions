@@ -321,7 +321,9 @@ public class MailMessageBuilderTests
             .Build();
 
         Assert.NotNull(msg.Sender);
+#pragma warning disable S8969 // `!` is redundant on TFMs where xunit's Assert.NotNull has [NotNull]; required on net462/netstandard2.0 where it doesn't.
         Assert.Equal("actual@example.com", msg.Sender!.Address);
+#pragma warning restore S8969
     }
 
 
@@ -400,7 +402,7 @@ public class MailMessageBuilderTests
 
         Assert.Throws<ArgumentNullException>
         (
-            () => builder.To((string[])null!)
+            () => builder.To(null!)
         );
     }
 
@@ -493,7 +495,7 @@ public class MailMessageBuilderTests
 
         Assert.Throws<ArgumentNullException>
         (
-            () => builder.Attach((string)null!)
+            () => builder.Attach(null!)
         );
     }
 
@@ -506,7 +508,7 @@ public class MailMessageBuilderTests
 
         Assert.Throws<ArgumentNullException>
         (
-            () => builder.Attach((System.IO.Stream)null!, "name")
+            () => builder.Attach((Stream)null!, "name")
         );
     }
 
@@ -519,7 +521,7 @@ public class MailMessageBuilderTests
 
         Assert.Throws<ArgumentNullException>
         (
-            () => builder.Attach(new System.IO.MemoryStream(), null!)
+            () => builder.Attach(new MemoryStream(), null!)
         );
     }
 
@@ -570,8 +572,8 @@ public class MailMessageBuilderTests
     [Fact]
     public void Attach_filePath_adds_attachment_from_file()
     {
-        var filePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"test_{Guid.NewGuid():N}.txt");
-        System.IO.File.WriteAllText(filePath, "test content");
+        var filePath = Path.Combine(Path.GetTempPath(), $"test_{Guid.NewGuid():N}.txt");
+        File.WriteAllText(filePath, "test content");
 
         try
         {

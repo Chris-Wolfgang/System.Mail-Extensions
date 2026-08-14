@@ -538,7 +538,7 @@ public static class MailMessageExtensions
         var result = closedMethod.Invoke
         (
             source,
-            new[] { mailWriter, true, false, (object)CancellationToken.None }
+            new[] { mailWriter, true, false, CancellationToken.None }
         );
 
         if (result is Task task)
@@ -605,8 +605,13 @@ public static class MailMessageExtensions
             clone.ContentId = source.ContentId;
         }
 
-        // Copy ContentDisposition properties
+        // Copy ContentDisposition properties. Both null checks are kept: on
+        // some target frameworks the nullable annotation says `ContentDisposition`
+        // is non-null (lazy-init getter), on others it is nullable — the guard
+        // is defensive across the whole matrix.
+        // ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (source.ContentDisposition != null && clone.ContentDisposition != null)
+        // ReSharper restore ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         {
             clone.ContentDisposition.FileName = source.ContentDisposition.FileName;
             clone.ContentDisposition.Inline = source.ContentDisposition.Inline;
@@ -682,6 +687,11 @@ public static class MailMessageExtensions
         // and boundary alongside any custom parameters.
         var clone = new ContentType(source.MediaType);
 
+        // ContentType.Parameters is a lazy-init StringDictionary that is never
+        // null at runtime, but is annotated as such on older TFMs — the R#
+        // NRE analyzer can't see the lazy-init contract, so silence at the
+        // one place it fires.
+        // ReSharper disable PossibleNullReferenceException
         foreach (string? key in source.Parameters.Keys)
         {
             if (key != null)
@@ -689,6 +699,7 @@ public static class MailMessageExtensions
                 clone.Parameters[key] = source.Parameters[key];
             }
         }
+        // ReSharper restore PossibleNullReferenceException
 
         return clone;
     }
