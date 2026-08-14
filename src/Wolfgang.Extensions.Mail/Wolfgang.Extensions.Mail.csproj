@@ -33,7 +33,7 @@
 		     CompatibilitySuppressions.xml (regenerate with
 		     -p:GenerateCompatibilitySuppressionFile=true). -->
 		<EnablePackageValidation>true</EnablePackageValidation>
-		<PackageValidationBaselineVersion>0.3.0</PackageValidationBaselineVersion>
+		<PackageValidationBaselineVersion>0.3.1</PackageValidationBaselineVersion>
 	</PropertyGroup>
 
 	<!-- ImplicitUsings intentionally left disabled (SDK default) for ALL target
