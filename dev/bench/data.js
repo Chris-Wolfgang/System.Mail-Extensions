@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1786724402403,
+  "lastUpdate": 1786889568003,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "BenchmarkDotNet": [
@@ -120,6 +120,126 @@ window.BENCHMARK_DATA = {
             "value": 8808.226399739584,
             "unit": "ns",
             "range": "± 43.998631587481626"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "9234cdbfd529dc522af0685a8b47bbddcb7edd0a",
+          "message": "Merge pull request #231 from Chris-Wolfgang/chore/bump-baseline-to-0.3.1\n\nchore(release): advance PackageValidationBaselineVersion to 0.3.1",
+          "timestamp": "2026-08-16T10:10:38-04:00",
+          "tree_id": "3c20bf6ff87a8fe6ddf793fd9574ee5fc1143053",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/9234cdbfd529dc522af0685a8b47bbddcb7edd0a"
+        },
+        "date": 1786889565908,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1024)",
+            "value": 1297.9579855600994,
+            "unit": "ns",
+            "range": "± 8.269310510271385"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1024)",
+            "value": 3165.765427271525,
+            "unit": "ns",
+            "range": "± 67.51110445066485"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1048576)",
+            "value": 1245.7166970570881,
+            "unit": "ns",
+            "range": "± 32.42204667448257"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1048576)",
+            "value": 1996174.1041666667,
+            "unit": "ns",
+            "range": "± 16496.95156424684"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 1000)",
+            "value": 3999.112836201986,
+            "unit": "ns",
+            "range": "± 74.67954100275153"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 1000)",
+            "value": 9325.586130777994,
+            "unit": "ns",
+            "range": "± 118.35029524614309"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 1000)",
+            "value": 14432.4443359375,
+            "unit": "ns",
+            "range": "± 110.25343855011083"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 1000)",
+            "value": 7304.954650878906,
+            "unit": "ns",
+            "range": "± 16.72793980435273"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 100000)",
+            "value": 62204.38175455729,
+            "unit": "ns",
+            "range": "± 1284.2361973677037"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 100000)",
+            "value": 285766.1207682292,
+            "unit": "ns",
+            "range": "± 11571.930251624366"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 100000)",
+            "value": 706278.9147135416,
+            "unit": "ns",
+            "range": "± 16678.54169059469"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 100000)",
+            "value": 382114.9078776042,
+            "unit": "ns",
+            "range": "± 11685.635861720883"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 0)",
+            "value": 18152.321126302082,
+            "unit": "ns",
+            "range": "± 835.0251452753056"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 0)",
+            "value": 2204.026226043701,
+            "unit": "ns",
+            "range": "± 9.740040747120933"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 64)",
+            "value": 977504.76171875,
+            "unit": "ns",
+            "range": "± 37428.37714771678"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 64)",
+            "value": 11620.247904459635,
+            "unit": "ns",
+            "range": "± 306.38254818074785"
           }
         ]
       }
