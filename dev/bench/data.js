@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1786889568003,
+  "lastUpdate": 1789611179404,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "BenchmarkDotNet": [
@@ -240,6 +240,126 @@ window.BENCHMARK_DATA = {
             "value": 11620.247904459635,
             "unit": "ns",
             "range": "± 306.38254818074785"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "41fc580b1563c143d1385f40530b9e4c9dbdd8d3",
+          "message": "ci: pin every workflow action to a commit SHA with an exact # vX.Y.Z comment (#249)\n\nRan repo-template's scripts/pin-actions.ps1 -PinTags: tag references become\nSHA pins and major-only comments (# v7) become the exact tag on the pinned\ncommit (# v7.0.1), so zizmor's ref-version-mismatch stops firing when the\nmajor tag moves on. Only the ref/comment text changed. Dependabot keeps the\nprecision it finds, so this stays converted.\n\n20 already exact, 30 line(s) rewritten, 0 tag reference(s), 0 pinned SHA(s) with no tag\n\nRefs Chris-Wolfgang/repo-template#447\n\nCo-authored-by: Chris Wolfgang <cwolfgan@ptd.net>\nCo-authored-by: Claude Opus 5 <noreply@anthropic.com>",
+          "timestamp": "2026-09-16T22:10:51-04:00",
+          "tree_id": "d9a2fe7f3654e86437373d9b99c8049ff4b97f44",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/41fc580b1563c143d1385f40530b9e4c9dbdd8d3"
+        },
+        "date": 1789611178076,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1024)",
+            "value": 1334.7245928446453,
+            "unit": "ns",
+            "range": "± 4.1186966777828555"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1024)",
+            "value": 3250.1852480570474,
+            "unit": "ns",
+            "range": "± 28.61718386533947"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1048576)",
+            "value": 1326.3064047495525,
+            "unit": "ns",
+            "range": "± 11.206107927641023"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1048576)",
+            "value": 2106262.625,
+            "unit": "ns",
+            "range": "± 20763.082502699737"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 1000)",
+            "value": 4129.119361877441,
+            "unit": "ns",
+            "range": "± 43.2144844440388"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 1000)",
+            "value": 10893.31923421224,
+            "unit": "ns",
+            "range": "± 487.9091677384927"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 1000)",
+            "value": 15641.442372639975,
+            "unit": "ns",
+            "range": "± 298.6426514045888"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 1000)",
+            "value": 7616.546401977539,
+            "unit": "ns",
+            "range": "± 118.25730437463932"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 100000)",
+            "value": 64783.85900878906,
+            "unit": "ns",
+            "range": "± 3253.9268574394696"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 100000)",
+            "value": 321753.103515625,
+            "unit": "ns",
+            "range": "± 7376.969600305818"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 100000)",
+            "value": 795073.6927083334,
+            "unit": "ns",
+            "range": "± 44296.34608685252"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 100000)",
+            "value": 411148.0302734375,
+            "unit": "ns",
+            "range": "± 14693.16974959754"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 0)",
+            "value": 19031.598510742188,
+            "unit": "ns",
+            "range": "± 485.585782371495"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 0)",
+            "value": 2316.392021179199,
+            "unit": "ns",
+            "range": "± 22.102995528086232"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 64)",
+            "value": 1043476.7877604166,
+            "unit": "ns",
+            "range": "± 13795.157063957466"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 64)",
+            "value": 13485.942993164062,
+            "unit": "ns",
+            "range": "± 230.21348201852715"
           }
         ]
       }
