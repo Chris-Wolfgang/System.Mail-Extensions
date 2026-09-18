@@ -34,11 +34,7 @@ internal static class TestFileHelpers
             {
                 File.Delete(path);
             }
-            catch (IOException)
-            {
-                // Best-effort cleanup only.
-            }
-            catch (UnauthorizedAccessException)
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
                 // Best-effort cleanup only.
             }
