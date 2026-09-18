@@ -7,6 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-Multi--Targeted-purple.svg)](https://dotnet.microsoft.com/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)](https://github.com/Chris-Wolfgang/System.Mail-Extensions)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/Chris-Wolfgang/System.Mail-Extensions/badge)](https://scorecard.dev/viewer/?uri=github.com/Chris-Wolfgang/System.Mail-Extensions)
 
 Extension methods and helpers for `System.Net.Mail`: a fluent message builder, an EML parser and serializer, message validation and cloning, attachment factories with content-type inference, inline-HTML image embedding, and collection conveniences.
 
@@ -193,6 +194,37 @@ This library targets:
 - **.NET:** 8.0, 9.0, 10.0
 
 See the [NuGet package page](https://www.nuget.org/packages/Wolfgang.Extensions.Mail/) for the authoritative per-TFM compatibility matrix.
+
+## 🛠️ Building from Source
+
+### Prerequisites
+- [.NET SDK](https://dotnet.microsoft.com/download) - the current release (10.0); see *Supported Frameworks* for the targets that are built
+- [PowerShell 7](https://github.com/PowerShell/PowerShell) (`pwsh`) for the scripts under `scripts/`
+
+### Build Steps
+
+```bash
+# Clone the repository
+git clone https://github.com/Chris-Wolfgang/System.Mail-Extensions.git
+cd System.Mail-Extensions
+
+# Restore dependencies
+dotnet restore
+
+# Build the solution
+dotnet build --configuration Release
+
+# Run tests
+dotnet test --configuration Release
+
+# Run code formatting
+pwsh ./scripts/format.ps1
+
+# Run the PR workflow's Windows stage locally (build, tests on every TFM, coverage gates, DevSkim, gitleaks)
+pwsh ./scripts/build-pr.ps1
+```
+
+
 
 ## License
 
