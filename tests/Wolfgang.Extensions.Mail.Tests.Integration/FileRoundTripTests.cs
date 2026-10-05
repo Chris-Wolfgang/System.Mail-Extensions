@@ -24,17 +24,7 @@ public sealed class FileRoundTripTests : IDisposable
 
 
 
-    public void Dispose()
-    {
-        try
-        {
-            Directory.Delete(_tempDirectory, recursive: true);
-        }
-        catch (IOException)
-        {
-            // Best-effort cleanup; leaked temp directories are harmless.
-        }
-    }
+    public void Dispose() => TempDirectory.DeleteQuietly(_tempDirectory);
 
 
 

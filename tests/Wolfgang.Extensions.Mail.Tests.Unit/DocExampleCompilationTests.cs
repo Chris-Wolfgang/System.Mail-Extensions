@@ -212,7 +212,7 @@ public class DocExampleCompilationTests
 
     private static IEnumerable<string> EnumerateSourceFiles()
     {
-        var sourceDirectory = SourceDirectory();
+        var sourceDirectory = SourceDirectory(AppContext.BaseDirectory);
         // Ordinal sort so example numbering — and thus the failure output — is
         // stable across operating systems and filesystems, which don't agree on
         // Directory.EnumerateFiles ordering.
@@ -225,14 +225,26 @@ public class DocExampleCompilationTests
 
 
 
-    private static string SourceDirectory()
+    [Fact]
+    public void SourceDirectory_when_no_ancestor_contains_the_library_throws_DirectoryNotFoundException()
+    {
+        var root = Path.GetPathRoot(AppContext.BaseDirectory)!;
+
+        var exception = Assert.Throws<DirectoryNotFoundException>(() => SourceDirectory(root));
+
+        Assert.Contains(root, exception.Message, StringComparison.Ordinal);
+    }
+
+
+
+    internal static string SourceDirectory(string startDirectory)
     {
         // Walk up from the test assembly to the repo root (the ancestor that
         // contains src/Wolfgang.Extensions.Mail). [CallerFilePath] can't be used
         // here: CI maps source paths deterministically (ContinuousIntegrationBuild
         // rewrites them to "/_/…"), so the compile-time path does not exist on the
         // test runner and enumeration throws DirectoryNotFoundException.
-        for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir != null; dir = dir.Parent)
+        for (var dir = new DirectoryInfo(startDirectory); dir != null; dir = dir.Parent)
         {
             var candidate = Path.Combine(dir.FullName, "src", "Wolfgang.Extensions.Mail");
             if (Directory.Exists(candidate))
@@ -243,7 +255,7 @@ public class DocExampleCompilationTests
 
         throw new DirectoryNotFoundException
         (
-            $"Could not locate src/Wolfgang.Extensions.Mail by walking up from {AppContext.BaseDirectory}."
+            $"Could not locate src/Wolfgang.Extensions.Mail by walking up from {startDirectory}."
         );
     }
 }
