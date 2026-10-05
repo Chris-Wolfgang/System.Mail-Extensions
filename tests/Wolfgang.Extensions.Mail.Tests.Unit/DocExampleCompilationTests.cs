@@ -212,7 +212,7 @@ public class DocExampleCompilationTests
 
     private static IEnumerable<string> EnumerateSourceFiles()
     {
-        var sourceDirectory = SourceDirectory(AppContext.BaseDirectory);
+        var sourceDirectory = SourceDirectory(AppContext.BaseDirectory, Path.Combine("src", "Wolfgang.Extensions.Mail"));
         // Ordinal sort so example numbering — and thus the failure output — is
         // stable across operating systems and filesystems, which don't agree on
         // Directory.EnumerateFiles ordering.
@@ -228,16 +228,17 @@ public class DocExampleCompilationTests
     [Fact]
     public void SourceDirectory_when_no_ancestor_contains_the_library_throws_DirectoryNotFoundException()
     {
-        var root = Path.GetPathRoot(AppContext.BaseDirectory)!;
+        // A relative path no checkout can contain, so the walk always reaches the root.
+        var missing = Path.Combine("src", $"missing-{Guid.NewGuid():N}");
 
-        var exception = Assert.Throws<DirectoryNotFoundException>(() => SourceDirectory(root));
+        var exception = Assert.Throws<DirectoryNotFoundException>(() => SourceDirectory(AppContext.BaseDirectory, missing));
 
-        Assert.Contains(root, exception.Message, StringComparison.Ordinal);
+        Assert.Contains(missing, exception.Message, StringComparison.Ordinal);
     }
 
 
 
-    internal static string SourceDirectory(string startDirectory)
+    internal static string SourceDirectory(string startDirectory, string relativePath)
     {
         // Walk up from the test assembly to the repo root (the ancestor that
         // contains src/Wolfgang.Extensions.Mail). [CallerFilePath] can't be used
@@ -246,7 +247,7 @@ public class DocExampleCompilationTests
         // test runner and enumeration throws DirectoryNotFoundException.
         for (var dir = new DirectoryInfo(startDirectory); dir != null; dir = dir.Parent)
         {
-            var candidate = Path.Combine(dir.FullName, "src", "Wolfgang.Extensions.Mail");
+            var candidate = Path.Combine(dir.FullName, relativePath);
             if (Directory.Exists(candidate))
             {
                 return candidate;
@@ -255,7 +256,7 @@ public class DocExampleCompilationTests
 
         throw new DirectoryNotFoundException
         (
-            $"Could not locate src/Wolfgang.Extensions.Mail by walking up from {startDirectory}."
+            $"Could not locate {relativePath} by walking up from {startDirectory}."
         );
     }
 }
