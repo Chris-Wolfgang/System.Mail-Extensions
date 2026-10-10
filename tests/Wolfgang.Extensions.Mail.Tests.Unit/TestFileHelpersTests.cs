@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Xunit;
 using Assert = Xunit.Assert;
 #pragma warning disable CA1707
