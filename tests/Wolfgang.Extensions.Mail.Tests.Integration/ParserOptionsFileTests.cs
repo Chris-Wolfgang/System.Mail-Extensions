@@ -25,17 +25,7 @@ public sealed class ParserOptionsFileTests : IDisposable
 
 
 
-    public void Dispose()
-    {
-        try
-        {
-            Directory.Delete(_tempDirectory, recursive: true);
-        }
-        catch (IOException)
-        {
-            // Best-effort cleanup.
-        }
-    }
+    public void Dispose() => TempDirectory.DeleteQuietly(_tempDirectory);
 
 
 
