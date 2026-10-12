@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Xunit;
 
 namespace Wolfgang.Extensions.Mail.Tests.Integration;
