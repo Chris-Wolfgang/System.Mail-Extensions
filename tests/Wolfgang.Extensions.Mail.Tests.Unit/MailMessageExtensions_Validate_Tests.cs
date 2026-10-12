@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Net.Mail;
 using Wolfgang.Extensions.Mail.Validation;
 using Xunit;

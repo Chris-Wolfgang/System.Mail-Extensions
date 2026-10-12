@@ -1,4 +1,7 @@
-    using System.Net.Mail;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mail;
 using Xunit;
 using Assert = Xunit.Assert;
 // ReSharper disable InvokeAsExtensionMember

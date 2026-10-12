@@ -3,6 +3,7 @@
 // refactor they protect is still exercised on every TFM by
 // AttachmentCollectionExtensionsTests.
 #if NET5_0_OR_GREATER
+using System;
 using System.Net.Mail;
 using System.Text;
 using Xunit;

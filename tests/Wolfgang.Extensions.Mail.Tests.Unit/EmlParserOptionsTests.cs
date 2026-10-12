@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Wolfgang.Extensions.Mail.Validation;
 using Xunit;
 using Assert = Xunit.Assert;
