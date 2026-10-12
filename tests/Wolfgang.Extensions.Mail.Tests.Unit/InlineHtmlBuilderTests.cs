@@ -231,8 +231,7 @@ public class InlineHtmlBuilderTests
     [Fact]
     public void EmbedImage_stream_when_non_seekable_copies_content()
     {
-        var seekable = new MemoryStream(new byte[] { 1, 2, 3 });
-        using var nonSeekable = new NonSeekableStream(seekable);
+        using var nonSeekable = new NonSeekableStream(new byte[] { 1, 2, 3 });
 
         var builder = new InlineHtmlBuilder()
             .Html("<img src='cid:{0}' />")
@@ -268,34 +267,5 @@ public class InlineHtmlBuilderTests
         using var view = builder.Build();
 
         Assert.Equal(expectedType, view.LinkedResources[0].ContentType.MediaType);
-    }
-
-
-
-    // ---------- Helper ----------
-
-    private sealed class NonSeekableStream : Stream
-    {
-        private readonly Stream _inner;
-        public NonSeekableStream(Stream inner) { _inner = inner; _inner.Position = 0; }
-        public override bool CanRead => _inner.CanRead;
-        public override bool CanSeek => false;
-        public override bool CanWrite => false;
-        public override long Length => throw new NotSupportedException();
-        public override long Position { get => _inner.Position; set => throw new NotSupportedException(); }
-        public override void Flush() => _inner.Flush();
-        public override int Read(byte[] buffer, int offset, int count) => _inner.Read(buffer, offset, count);
-        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
-        public override void SetLength(long value) => throw new NotSupportedException();
-        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _inner.Dispose();
-            }
-
-            base.Dispose(disposing);
-        }
     }
 }
