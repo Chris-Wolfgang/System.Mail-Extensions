@@ -6,7 +6,7 @@ using Xunit;
 using Assert = Xunit.Assert;
 #pragma warning disable CA1707
 #pragma warning disable MA0074 // xUnit Assert.Contains triggers this for string overloads
-#pragma warning disable S3878 // Array creation is intentional to disambiguate To(IEnumerable) overload
+#pragma warning disable S3878 // Array creation is intentional: two string arguments would bind to the To(address, displayName) overload
 
 namespace Wolfgang.Extensions.Mail.Tests.Unit;
 
@@ -404,12 +404,13 @@ public class MailMessageBuilderTests
 
         Assert.Throws<ArgumentNullException>
         (
-            () => builder.To(null!)
+            () => builder.To((string[])null!)
         );
     }
 
 
 
+#pragma warning disable CS0618 // The obsolete To(address, displayName) overload is still part of the API and still tested
     [Fact]
     public void To_with_displayName_when_null_throws_ArgumentNullException()
     {
@@ -434,6 +435,70 @@ public class MailMessageBuilderTests
         var to = Assert.Single(msg.To);
         Assert.Equal("alice@example.com", to.Address);
         Assert.Equal("Alice Smith", to.DisplayName);
+    }
+
+
+
+    [Fact]
+    public void To_when_called_with_two_address_strings_adds_one_recipient_with_the_second_as_display_name()
+    {
+        // Pins the overload trap (#302): normal-form applicability of To(string, string) beats the
+        // expanded form of To(params string[]), so this is ONE recipient, not two. The overload is
+        // [Obsolete] so callers see a warning at exactly this call shape.
+        using var msg = new MailMessageBuilder()
+            .From("from@example.com")
+            .To("alice@example.com", "bob@example.com")
+            .Build();
+
+        var to = Assert.Single(msg.To);
+        Assert.Equal("alice@example.com", to.Address);
+        Assert.Equal("bob@example.com", to.DisplayName);
+    }
+#pragma warning restore CS0618
+
+
+
+    [Fact]
+    public void To_when_called_with_three_address_strings_adds_three_recipients()
+    {
+        using var msg = new MailMessageBuilder()
+            .From("from@example.com")
+            .To("a@example.com", "b@example.com", "c@example.com")
+            .Build();
+
+        Assert.Equal(3, msg.To.Count);
+    }
+
+
+
+    [Fact]
+    public void To_with_MailAddress_when_null_throws_ArgumentNullException()
+    {
+        var builder = new MailMessageBuilder();
+
+        var ex = Assert.Throws<ArgumentNullException>
+        (
+            () => builder.To((MailAddress)null!)
+        );
+
+        Assert.Equal("address", ex.ParamName);
+    }
+
+
+
+    [Fact]
+    public void To_with_MailAddress_adds_recipient_with_display_name()
+    {
+        using var msg = new MailMessageBuilder()
+            .From("from@example.com")
+            .To(new MailAddress("alice@example.com", "Alice Smith"))
+            .To("bob@example.com")
+            .Build();
+
+        Assert.Equal(2, msg.To.Count);
+        Assert.Equal("alice@example.com", msg.To[0].Address);
+        Assert.Equal("Alice Smith", msg.To[0].DisplayName);
+        Assert.Equal("bob@example.com", msg.To[1].Address);
     }
 
 

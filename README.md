@@ -24,11 +24,13 @@ dotnet add package Wolfgang.Extensions.Mail
 ### Build messages fluently — `MailMessageBuilder`
 
 ```csharp
+using System.Net.Mail;
 using Wolfgang.Extensions.Mail;
 
 using var message = new MailMessageBuilder()
     .From("sender@example.com", "Sender Name")
-    .To("alice@example.com", "bob@example.com")
+    .To("alice@example.com", "bob@example.com", "carol@example.com")
+    .To(new MailAddress("dave@example.com", "Dave Jones"))
     .Cc("archive@example.com")
     .Subject("Monthly Report")
     .PlainTextBody("The report is attached.")
@@ -36,6 +38,8 @@ using var message = new MailMessageBuilder()
     .Attach("report.pdf")
     .Build();
 ```
+
+`To` takes any number of addresses, but a call with exactly **two** strings binds to the obsolete `To(address, displayName)` overload and adds one recipient; pass a `MailAddress` for a display name, an array, or chain `To` calls.
 
 `Build()` throws `InvalidOperationException` if the message has no From address or no recipient, reporting every missing part in one message. Also available: `Bcc`, `ReplyTo`, `SenderAddress`, `Priority`, `DeliveryNotification`, `BodyEncoding`, `SubjectEncoding`, `Header`, and `Attach` overloads for byte arrays and streams.
 
