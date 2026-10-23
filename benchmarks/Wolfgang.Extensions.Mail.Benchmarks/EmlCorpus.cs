@@ -5,7 +5,7 @@ namespace Wolfgang.Extensions.Mail.Benchmarks;
 
 /// <summary>
 /// Builds deterministic EML documents of the shapes the parser benchmarks exercise.
-/// Kept separate from the benchmark classes so the corpus can be smoke-tested.
+/// Kept separate from the benchmark classes so every parser benchmark reads the same documents.
 /// </summary>
 internal static class EmlCorpus
 {

@@ -120,7 +120,7 @@ using var clone = original.Clone();
 clone.To.Add("extra@example.com");   // original is unchanged
 ```
 
-Copies addresses, headers, bodies, alternate views, linked resources, and attachments (with independent streams).
+Copies addresses, headers, bodies, alternate views, linked resources, and attachments (with independent streams). A non-seekable attachment stream is read to its end by the copy, so the original attachment cannot be sent afterwards; seekable streams are rewound and left where they were.
 
 ### Create attachments — `AttachmentFactory`
 

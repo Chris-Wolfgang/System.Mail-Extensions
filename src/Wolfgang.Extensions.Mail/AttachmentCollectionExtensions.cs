@@ -17,8 +17,8 @@ public static class AttachmentCollectionExtensions
     /// </summary>
     /// <param name="source">The collection to add to</param>
     /// <param name="attachments">The list of <see cref="Attachment"/> to add</param>
-    /// <exception cref="ArgumentNullException">source is null</exception>
-    /// <exception cref="ArgumentNullException">attachments is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="attachments"/> is null.</exception>
     // ReSharper disable once UnusedMember.Global
     public static void AddRange
     (
@@ -35,8 +35,8 @@ public static class AttachmentCollectionExtensions
     /// </summary>
     /// <param name="source">The collection to add to</param>
     /// <param name="attachments">The list of <see cref="Attachment"/> to add</param>
-    /// <exception cref="ArgumentNullException">source is null</exception>
-    /// <exception cref="ArgumentNullException">attachments is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="attachments"/> is null.</exception>
     // ReSharper disable once MemberCanBePrivate.Global
     // ReSharper disable once ConvertToExtensionBlock
     public static void AddRange
@@ -68,8 +68,11 @@ public static class AttachmentCollectionExtensions
     /// </summary>
     /// <param name="source">The collection to add to</param>
     /// <param name="fileNames">The list of <see cref="string"/> containing file names to add</param>
-    /// <exception cref="ArgumentNullException">source is null</exception>
-    /// <exception cref="ArgumentNullException">fileNames is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="fileNames"/> is null.</exception>
+    /// <exception cref="System.IO.FileNotFoundException">A file in <paramref name="fileNames"/> does not exist.</exception>
+    /// <exception cref="System.IO.DirectoryNotFoundException">The directory of a file in <paramref name="fileNames"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read a file in <paramref name="fileNames"/>.</exception>
     // ReSharper disable once MemberCanBePrivate.Global
     public static void AddRange
     (
@@ -100,8 +103,11 @@ public static class AttachmentCollectionExtensions
     /// </summary>
     /// <param name="source">The collection to add to</param>
     /// <param name="fileNames">The list of <see cref="string"/> containing file names to add</param>
-    /// <exception cref="ArgumentNullException">source is null</exception>
-    /// <exception cref="ArgumentNullException">fileNames is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="fileNames"/> is null.</exception>
+    /// <exception cref="System.IO.FileNotFoundException">A file in <paramref name="fileNames"/> does not exist.</exception>
+    /// <exception cref="System.IO.DirectoryNotFoundException">The directory of a file in <paramref name="fileNames"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read a file in <paramref name="fileNames"/>.</exception>
     // ReSharper disable once UnusedMember.Global
     public static void AddRange
     (

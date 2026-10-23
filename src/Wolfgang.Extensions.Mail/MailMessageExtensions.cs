@@ -101,6 +101,13 @@ public static class MailMessageExtensions
     /// attachments, alternate views, and linked resources are independently copied.
     /// The returned message can be modified and disposed independently of the original.
     /// </summary>
+    /// <remarks>
+    /// Attachment, alternate-view and linked-resource streams are copied into new
+    /// <see cref="System.IO.MemoryStream"/>s. A seekable source stream is read from position 0 and
+    /// its position is restored. A <b>non-seekable</b> source stream is read to its end and cannot
+    /// be rewound, so after <c>Clone()</c> the original attachment has no content left to send or
+    /// serialize; clone before the original is used, or use seekable streams.
+    /// </remarks>
     /// <param name="source">The <see cref="MailMessage"/> to clone.</param>
     /// <returns>A new <see cref="MailMessage"/> that is an independent deep copy of <paramref name="source"/>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
