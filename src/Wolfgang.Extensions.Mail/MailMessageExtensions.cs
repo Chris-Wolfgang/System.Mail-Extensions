@@ -148,6 +148,11 @@ public static class MailMessageExtensions
     /// Serializes the <see cref="MailMessage"/> to a raw MIME/EML format string.
     /// The output conforms to RFC 2822 and can be saved as a <c>.eml</c> file.
     /// </summary>
+    /// <remarks>
+    /// The output is the message only: Bcc recipients are not written, and neither is the SMTP
+    /// pickup-directory envelope (<c>X-Sender</c> / <c>X-Receiver</c>). Non-ASCII header values are
+    /// RFC 2047-encoded.
+    /// </remarks>
     /// <param name="source">The <see cref="MailMessage"/> to serialize.</param>
     /// <returns>A string containing the complete MIME representation of the message.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
@@ -488,6 +493,14 @@ public static class MailMessageExtensions
         object mailWriter
     )
     {
+        // The internal Send/SendAsync take (writer, sendEnvelope, allowUnicode[, token]).
+        // sendEnvelope is false: with true, MailMessage writes the SMTP pickup-directory
+        // envelope (X-Sender, plus one X-Receiver per To, Cc AND Bcc recipient), which would
+        // disclose Bcc recipients in the EML text. allowUnicode is false so non-ASCII header
+        // values are RFC 2047-encoded, as on the wire to a server without SMTPUTF8.
+        const bool sendEnvelope = false;
+        const bool allowUnicode = false;
+
         // Try synchronous Send first (.NET Framework / .NET Core / .NET 5-9)
         var sendMethod = typeof(MailMessage).GetMethod
         (
@@ -497,7 +510,7 @@ public static class MailMessageExtensions
 
         if (sendMethod != null)
         {
-            sendMethod.Invoke(source, new[] { mailWriter, true, false });
+            sendMethod.Invoke(source, new[] { mailWriter, sendEnvelope, allowUnicode });
             return;
         }
 
@@ -524,7 +537,7 @@ public static class MailMessageExtensions
         var result = closedMethod.Invoke
         (
             source,
-            new[] { mailWriter, true, false, CancellationToken.None }
+            new[] { mailWriter, sendEnvelope, allowUnicode, CancellationToken.None }
         );
 
         if (result is Task task)
