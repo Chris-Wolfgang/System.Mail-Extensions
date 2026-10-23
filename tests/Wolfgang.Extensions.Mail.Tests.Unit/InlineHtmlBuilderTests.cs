@@ -52,6 +52,33 @@ public class InlineHtmlBuilderTests
     }
 
 
+    [Fact]
+    public void Build_when_template_has_an_undoubled_brace_throws_FormatException()
+    {
+        var builder = new InlineHtmlBuilder()
+            .Html("<style>h1 { color: red; }</style><h1>Hello</h1>");
+
+        Assert.Throws<FormatException>
+        (
+            () => builder.Build()
+        );
+    }
+
+
+
+    [Fact]
+    public void Build_when_template_braces_are_doubled_emits_single_braces()
+    {
+        var builder = new InlineHtmlBuilder()
+            .Html("<style>h1 {{ color: red; }}</style><h1>Hello</h1>");
+
+        using var view = builder.Build();
+        using var reader = new StreamReader(view.ContentStream);
+
+        Assert.Equal("<style>h1 { color: red; }</style><h1>Hello</h1>", reader.ReadToEnd());
+    }
+
+
 
     // ---------- EmbedImage(byte[], string) ----------
 

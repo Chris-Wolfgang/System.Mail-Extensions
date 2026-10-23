@@ -323,7 +323,7 @@ public class MailMessageBuilderTests
             .Build();
 
         Assert.NotNull(msg.Sender);
-#pragma warning disable S8969 // `!` is redundant on TFMs where xunit's Assert.NotNull has [NotNull]; required on net462/netstandard2.0 where it doesn't.
+#pragma warning disable S8969 // `!` is redundant on TFMs where xunit's Assert.NotNull has [NotNull]; required on the .NET Framework TFMs where it doesn't.
         Assert.Equal("actual@example.com", msg.Sender!.Address);
 #pragma warning restore S8969
     }

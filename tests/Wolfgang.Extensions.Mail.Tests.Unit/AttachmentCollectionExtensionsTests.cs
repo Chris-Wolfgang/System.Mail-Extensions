@@ -316,6 +316,16 @@ public class AttachmentCollectionExtensionsTests
     }
 
 
+    [Fact]
+    public void ExceedsLimit_when_total_equals_max_returns_false()
+    {
+        using var msg = new MailMessage();
+        msg.Attachments.Add(new Attachment(new MemoryStream(new byte[512]), "exact.bin"));
+
+        Assert.False(msg.Attachments.ExceedsLimit(512));
+    }
+
+
 
     // ---------- Helpers ----------
 

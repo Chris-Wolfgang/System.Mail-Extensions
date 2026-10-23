@@ -76,9 +76,12 @@ public class MimeSerializationBenchmarks : IDisposable
 
 
     [Benchmark]
-    public MailMessage Clone()
+    public int Clone()
     {
-        return _message.Clone();
+        // Disposed here so each iteration does not leak the cloned streams into the measured
+        // allocations; the return value keeps the clone observable.
+        using var clone = _message.Clone();
+        return clone.Attachments.Count + clone.AlternateViews.Count;
     }
 
 
