@@ -1,1 +1,2 @@
 #nullable enable
+Wolfgang.Extensions.Mail.MailMessageBuilder.To(System.Net.Mail.MailAddress! address) -> Wolfgang.Extensions.Mail.MailMessageBuilder!
