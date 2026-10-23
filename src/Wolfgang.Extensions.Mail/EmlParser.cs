@@ -99,6 +99,11 @@ public static class EmlParser
         RegexTimeout
     );
 
+    // Shared by Parse(string): the parser only reads options, and the instance never escapes
+    // this class, so one default instance replaces an allocation per call. EmlParserOptions is
+    // mutable, which is why this stays private.
+    private static readonly EmlParserOptions DefaultOptions = new EmlParserOptions();
+
     private static readonly HashSet<string> StandardHeaderNames =
         new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
@@ -127,7 +132,7 @@ public static class EmlParser
             throw new ArgumentNullException(nameof(emlContent));
         }
 
-        return ParseCore(emlContent, new ParseContext(new EmlParserOptions()));
+        return ParseCore(emlContent, new ParseContext(DefaultOptions));
     }
 
 
@@ -184,7 +189,7 @@ public static class EmlParser
             throw new ArgumentNullException(nameof(emlContent));
         }
 
-        var context = new ParseContext(options ?? new EmlParserOptions());
+        var context = new ParseContext(options ?? DefaultOptions);
         var message = ParseCore(emlContent, context);
         return new ParseResult(message, context.Issues);
     }
@@ -509,11 +514,12 @@ public static class EmlParser
         Dictionary<string, string> headers
     )
     {
-        var customHeaders = headers.Where(kvp => !StandardHeaderNames.Contains(kvp.Key));
-
-        foreach (var kvp in customHeaders)
+        foreach (var kvp in headers)
         {
-            message.Headers[kvp.Key] = kvp.Value;
+            if (!StandardHeaderNames.Contains(kvp.Key))
+            {
+                message.Headers[kvp.Key] = kvp.Value;
+            }
         }
     }
 
@@ -1017,30 +1023,34 @@ public static class EmlParser
         Encoding enc
     )
     {
-        var qText = encodedText.Replace('_', ' ');
-        var byteList = new List<byte>();
+        // One pre-sized buffer (the encoding's worst case per character), like
+        // DecodeQuotedPrintable: =XX escapes are written as raw bytes, '_' is a space
+        // (RFC 2047 4.2), and any other character is encoded with the charset in place.
+        // checked: fail explicitly rather than allocate a wrong-sized buffer on overflow.
+        var buffer = new byte[checked(encodedText.Length * enc.GetMaxByteCount(1))];
+        var byteCount = 0;
         var i = 0;
 
-        while (i < qText.Length)
+        while (i < encodedText.Length)
         {
-            if (qText[i] == '=' && i + 2 < qText.Length
-                && IsHexChar(qText[i + 1]) && IsHexChar(qText[i + 2]))
+            var current = encodedText[i];
+
+            if (current == '=' && i + 2 < encodedText.Length
+                && IsHexChar(encodedText[i + 1]) && IsHexChar(encodedText[i + 2]))
             {
-                byteList.Add(Convert.ToByte(qText.Substring(i + 1, 2), 16));
+                buffer[byteCount++] = (byte)((HexValue(encodedText[i + 1]) << 4) | HexValue(encodedText[i + 2]));
                 i += 3;
             }
             else
             {
-                foreach (var b in enc.GetBytes(new[] { qText[i] }))
-                {
-                    byteList.Add(b);
-                }
-
+                byteCount += current == '_'
+                    ? enc.GetBytes(" ", 0, 1, buffer, byteCount)
+                    : enc.GetBytes(encodedText, i, 1, buffer, byteCount);
                 i++;
             }
         }
 
-        return enc.GetString(byteList.ToArray());
+        return enc.GetString(buffer, 0, byteCount);
     }
 
 
