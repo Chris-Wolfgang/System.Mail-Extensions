@@ -15,7 +15,6 @@ namespace Wolfgang.Extensions.Mail;
 /// Provides factory methods for creating <see cref="Attachment"/> objects from common sources
 /// with automatic content type inference from file extensions.
 /// </summary>
-// ReSharper disable once UnusedType.Global
 public static class AttachmentFactory
 {
 
@@ -83,7 +82,6 @@ public static class AttachmentFactory
     /// // attachment.ContentType.MediaType == "image/heic"
     /// </code>
     /// </example>
-    // ReSharper disable once UnusedMember.Global
     public static void RegisterContentType
     (
         string extension,
@@ -121,7 +119,6 @@ public static class AttachmentFactory
     /// <param name="contentType">When this method returns, contains the registered content type if found; otherwise, <c>null</c>.</param>
     /// <returns><c>true</c> if a content type was registered for the extension; otherwise, <c>false</c>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="extension"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static bool TryGetRegisteredContentType
     (
         string extension,
@@ -163,7 +160,6 @@ public static class AttachmentFactory
     /// var attachment = AttachmentFactory.FromBytes(pdfBytes, "report.pdf");
     /// </code>
     /// </example>
-    // ReSharper disable once UnusedMember.Global
     public static Attachment FromBytes
     (
         byte[] content,
@@ -199,7 +195,6 @@ public static class AttachmentFactory
     /// <exception cref="ArgumentNullException"><paramref name="base64Content"/> is null.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="fileName"/> is null.</exception>
     /// <exception cref="FormatException"><paramref name="base64Content"/> is not valid base64.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static Attachment FromBase64
     (
         string base64Content,
@@ -233,7 +228,6 @@ public static class AttachmentFactory
     /// <returns>A new <see cref="Attachment"/> backed by a <see cref="MemoryStream"/>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="content"/> is null.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="fileName"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static Attachment FromStream
     (
         Stream content,
@@ -266,7 +260,6 @@ public static class AttachmentFactory
     /// <param name="fileName">The file name to infer the content type from.</param>
     /// <returns>The inferred MIME content type string.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="fileName"/> is null.</exception>
-    // ReSharper disable once MemberCanBePrivate.Global
     public static string InferContentType
     (
         string fileName

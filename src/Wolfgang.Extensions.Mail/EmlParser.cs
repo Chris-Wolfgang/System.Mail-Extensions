@@ -34,7 +34,6 @@ namespace Wolfgang.Extensions.Mail;
 /// Console.WriteLine(message.Subject);
 /// </code>
 /// </example>
-// ReSharper disable once UnusedType.Global
 public static class EmlParser
 {
 
@@ -121,7 +120,6 @@ public static class EmlParser
     /// <param name="emlContent">The EML content string.</param>
     /// <returns>A new <see cref="MailMessage"/> populated from the EML content.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="emlContent"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static MailMessage Parse
     (
         string emlContent
@@ -146,7 +144,6 @@ public static class EmlParser
     /// <returns>A new <see cref="MailMessage"/> populated from the EML content.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="emlContent"/> or <paramref name="options"/> is null.</exception>
     /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static MailMessage Parse
     (
         string emlContent,
@@ -177,7 +174,6 @@ public static class EmlParser
     /// <returns>A <see cref="ParseResult"/> containing the message and any diagnostics.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="emlContent"/> is null.</exception>
     /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static ParseResult ParseWithDiagnostics
     (
         string emlContent,
@@ -246,7 +242,6 @@ public static class EmlParser
     /// <exception cref="FileNotFoundException">The file does not exist.</exception>
     /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static MailMessage ParseFile
     (
         string filePath
@@ -278,7 +273,6 @@ public static class EmlParser
     /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
     /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static MailMessage ParseFile
     (
         string filePath,
@@ -314,7 +308,6 @@ public static class EmlParser
     /// <exception cref="FileNotFoundException">The file does not exist.</exception>
     /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static async Task<MailMessage> ParseFileAsync
     (
         string filePath,
@@ -355,7 +348,6 @@ public static class EmlParser
     /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
     /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static async Task<MailMessage> ParseFileAsync
     (
         string filePath,
@@ -562,10 +554,16 @@ public static class EmlParser
     {
         // Headers and body are separated by a blank line (\r\n\r\n or \n\n)
         var idx = content.IndexOf("\r\n\r\n", StringComparison.Ordinal);
-        if (idx >= 0) return idx + 4;
+        if (idx >= 0)
+        {
+            return idx + 4;
+        }
 
         idx = content.IndexOf("\n\n", StringComparison.Ordinal);
-        if (idx >= 0) return idx + 2;
+        if (idx >= 0)
+        {
+            return idx + 2;
+        }
 
         return -1;
     }
@@ -657,7 +655,10 @@ public static class EmlParser
             }
 
             var partHeaderEnd = FindHeaderBodySeparator(part);
-            if (partHeaderEnd < 0) continue;
+            if (partHeaderEnd < 0)
+            {
+                continue;
+            }
 
             var partHeaders = ParseHeaders(part.Substring(0, partHeaderEnd));
             var partBody = part.Substring(partHeaderEnd).TrimStart('\r', '\n');
@@ -809,7 +810,10 @@ public static class EmlParser
         if (contentDisposition != null)
         {
             var match = FileNameRegex.Match(contentDisposition);
-            if (match.Success) return match.Groups["filename"].Value;
+            if (match.Success)
+            {
+                return match.Groups["filename"].Value;
+            }
         }
 
         var nameMatch = NameRegex.Match(contentType);
@@ -1124,7 +1128,10 @@ public static class EmlParser
         foreach (var addr in addresses)
         {
             var trimmed = addr.Trim();
-            if (string.IsNullOrWhiteSpace(trimmed)) continue;
+            if (string.IsNullOrWhiteSpace(trimmed))
+            {
+                continue;
+            }
 
             if (TryParseMailAddress(trimmed, out var parsed))
             {

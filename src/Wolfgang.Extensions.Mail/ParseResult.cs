@@ -68,6 +68,5 @@ public sealed class ParseResult
     /// <summary>
     /// <c>true</c> when the parser skipped at least one malformed construct.
     /// </summary>
-    // ReSharper disable once UnusedMember.Global
     public bool HasIssues => _issues.Count > 0;
 }

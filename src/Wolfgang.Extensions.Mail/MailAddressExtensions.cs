@@ -17,7 +17,6 @@ namespace Wolfgang.Extensions.Mail;
 /// On .NET 5.0+, <c>TryParse</c> delegates to the built-in <c>MailAddress.TryCreate</c>.
 /// On .NET Framework 4.6.2 and .NET Standard 2.0, it wraps the constructor in a try/catch.
 /// </remarks>
-// ReSharper disable once UnusedType.Global
 public static class MailAddressExtensions
 {
 
@@ -49,7 +48,6 @@ public static class MailAddressExtensions
         /// }
         /// </code>
         /// </example>
-        // ReSharper disable once UnusedMember.Global
         public static bool TryParse
         (
             string? address,
@@ -98,7 +96,6 @@ public static class MailAddressExtensions
         /// or <c>null</c> if parsing failed.
         /// </param>
         /// <returns><c>true</c> if <paramref name="address"/> was parsed successfully; otherwise, <c>false</c>.</returns>
-        // ReSharper disable once UnusedMember.Global
         public static bool TryParse
         (
             string? address,
