@@ -2,14 +2,20 @@
 
   <PropertyGroup>
     <TargetFrameworks>net462;net47;net471;net472;net48;net481;net5.0;net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
-    <Version>0.1.0</Version>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>disable</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <Copyright>Copyright 2026 Chris Wolfgang</Copyright>
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
-    <NoWarn>NU1701</NoWarn>
+  </PropertyGroup>
+
+
+
+  <!-- NU1701 (package restored for a different framework) is expected only on the
+       .NET Framework slots, so the suppression is scoped to them. -->
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net4'))">
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
   </PropertyGroup>
 
 
@@ -35,7 +41,25 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio" Condition="'$(TargetFramework)' != 'net5.0'" Version="[2.8.2,3.0.0)">
+  </ItemGroup>
+
+
+
+  <!-- xunit.runner.visualstudio, split by target-framework slot. Runner 3.x runs xunit v2
+       tests but supports only net8.0+, so the .NET Framework and net6.0/net7.0 slots keep
+       the last 2.x runner, capped so Dependabot cannot move them to 3.x. net5.0 has its own
+       2.4.5 reference below. -->
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) OR '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net7.0'">
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" allowedVersions="(,3.0.0)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+
+
+  <ItemGroup Condition="!$(TargetFramework.StartsWith('net4')) AND '$(TargetFramework)' != 'net5.0' AND '$(TargetFramework)' != 'net6.0' AND '$(TargetFramework)' != 'net7.0'">
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
