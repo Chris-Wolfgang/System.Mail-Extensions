@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
@@ -23,7 +24,6 @@ namespace Wolfgang.Extensions.Mail;
 /// message.AlternateViews.Add(builder.Build());
 /// </code>
 /// </example>
-// ReSharper disable once UnusedType.Global
 public sealed class InlineHtmlBuilder
 {
 
@@ -46,7 +46,6 @@ public sealed class InlineHtmlBuilder
     /// <param name="htmlTemplate">The HTML template string with <c>{n}</c> placeholders for inline images.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="htmlTemplate"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public InlineHtmlBuilder Html
     (
         string htmlTemplate
@@ -70,7 +69,6 @@ public sealed class InlineHtmlBuilder
     /// <param name="filePath">The path to the image file.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public InlineHtmlBuilder EmbedImage
     (
         string filePath
@@ -111,7 +109,6 @@ public sealed class InlineHtmlBuilder
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="imageStream"/> is null.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="fileName"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public InlineHtmlBuilder EmbedImage
     (
         Stream imageStream,
@@ -155,7 +152,6 @@ public sealed class InlineHtmlBuilder
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="imageBytes"/> is null.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="fileName"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public InlineHtmlBuilder EmbedImage
     (
         byte[] imageBytes,
@@ -200,7 +196,6 @@ public sealed class InlineHtmlBuilder
     /// The template contains a literal <c>{</c> or <c>}</c> that is not doubled, or a placeholder
     /// index with no matching <see cref="EmbedImage(string)"/> call.
     /// </exception>
-    // ReSharper disable once UnusedMember.Global
     public AlternateView Build()
     {
         if (_htmlTemplate == null)
@@ -211,7 +206,12 @@ public sealed class InlineHtmlBuilder
             );
         }
 
-        var html = string.Format(System.Globalization.CultureInfo.InvariantCulture, _htmlTemplate, _contentIds.Cast<object>().ToArray());
+        var html = string.Format
+        (
+            CultureInfo.InvariantCulture,
+            _htmlTemplate,
+            _contentIds.Cast<object>().ToArray()
+        );
 
         var view = AlternateView.CreateAlternateViewFromString
         (
