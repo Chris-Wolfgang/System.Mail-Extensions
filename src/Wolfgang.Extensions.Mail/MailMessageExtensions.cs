@@ -697,31 +697,13 @@ public static class MailMessageExtensions
 
 
 
-#pragma warning disable RS0030 // BannedSymbols: Stream.CopyTo is banned for async-first,
-                               // but these are in-memory streams where sync copy is appropriate.
     private static MemoryStream CloneStream
     (
         Stream source
     )
     {
-        var destination = new MemoryStream();
-
-        if (source.CanSeek)
-        {
-            var originalPosition = source.Position;
-            source.Position = 0;
-            source.CopyTo(destination);
-            source.Position = originalPosition;
-        }
-        else
-        {
-            source.CopyTo(destination);
-        }
-
-        destination.Position = 0;
-        return destination;
+        return StreamCopy.ToMemoryStream(source);
     }
-#pragma warning restore RS0030
 
 
 
