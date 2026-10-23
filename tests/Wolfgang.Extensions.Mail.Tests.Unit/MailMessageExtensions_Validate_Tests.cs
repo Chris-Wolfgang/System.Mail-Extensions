@@ -195,7 +195,7 @@ public class MailMessageExtensions_Validate_Tests
 
         var result = msg.Validate();
 
-        Assert.True(result.Errors.Count >= 2);
+        Assert.Equal(2, result.Errors.Count);
     }
 
 
