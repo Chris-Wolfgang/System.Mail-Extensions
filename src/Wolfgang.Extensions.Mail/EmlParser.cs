@@ -219,7 +219,7 @@ public static class EmlParser
             ApplyAddressHeaders(message, headers, context);
             ApplySubject(message, headers, context);
             ApplyBodyOrMultipart(message, headers, bodySection, context);
-            ApplyCustomHeaders(message, headers);
+            ApplyCustomHeaders(message, headers, context);
             ApplyPriority(message, headers);
         }
         catch
@@ -503,14 +503,32 @@ public static class EmlParser
     private static void ApplyCustomHeaders
     (
         MailMessage message,
-        Dictionary<string, string> headers
+        Dictionary<string, string> headers,
+        ParseContext context
     )
     {
         foreach (var kvp in headers)
         {
-            if (!StandardHeaderNames.Contains(kvp.Key))
+            if (StandardHeaderNames.Contains(kvp.Key))
+            {
+                continue;
+            }
+
+            // RFC 5322 allows an empty value, but MailMessage.Headers rejects one with
+            // ArgumentException. There is nothing to keep, so the header is dropped.
+            if (string.IsNullOrWhiteSpace(kvp.Value))
+            {
+                continue;
+            }
+
+            try
             {
                 message.Headers[kvp.Key] = kvp.Value;
+            }
+            catch (FormatException)
+            {
+                // A field name outside printable ASCII (RFC 5322 section 2.2) is malformed.
+                context.Report($"Malformed header name '{kvp.Key}'; header skipped.", "Headers");
             }
         }
     }
