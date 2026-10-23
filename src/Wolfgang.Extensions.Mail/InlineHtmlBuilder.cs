@@ -81,7 +81,7 @@ public sealed class InlineHtmlBuilder
             throw new ArgumentNullException(nameof(filePath));
         }
 
-        var contentType = InferImageContentType(Path.GetExtension(filePath));
+        var contentType = AttachmentFactory.InferContentType(filePath);
         var contentId = GenerateContentId();
 
 #pragma warning disable RS0030 // File I/O — reading image file into memory for embedding
@@ -129,26 +129,10 @@ public sealed class InlineHtmlBuilder
             throw new ArgumentNullException(nameof(fileName));
         }
 
-        var resolvedContentType = contentType ?? InferImageContentType(Path.GetExtension(fileName));
+        var resolvedContentType = contentType ?? AttachmentFactory.InferContentType(fileName);
         var contentId = GenerateContentId();
 
-        var destination = new MemoryStream();
-
-#pragma warning disable RS0030 // In-memory stream copy
-        if (imageStream.CanSeek)
-        {
-            var originalPosition = imageStream.Position;
-            imageStream.Position = 0;
-            imageStream.CopyTo(destination);
-            imageStream.Position = originalPosition;
-        }
-        else
-        {
-            imageStream.CopyTo(destination);
-        }
-#pragma warning restore RS0030
-
-        destination.Position = 0;
+        var destination = StreamCopy.ToMemoryStream(imageStream);
 
         var resource = new LinkedResource(destination, resolvedContentType)
         {
@@ -189,7 +173,7 @@ public sealed class InlineHtmlBuilder
             throw new ArgumentNullException(nameof(fileName));
         }
 
-        var resolvedContentType = contentType ?? InferImageContentType(Path.GetExtension(fileName));
+        var resolvedContentType = contentType ?? AttachmentFactory.InferContentType(fileName);
         var contentId = GenerateContentId();
         var stream = new MemoryStream(imageBytes, writable: false);
 
@@ -249,26 +233,5 @@ public sealed class InlineHtmlBuilder
     private static string GenerateContentId()
     {
         return Guid.NewGuid().ToString("N");
-    }
-
-
-
-    private static string InferImageContentType
-    (
-        string extension
-    )
-    {
-        switch (extension.ToLowerInvariant())
-        {
-            case ".png": return "image/png";
-            case ".jpg":
-            case ".jpeg": return "image/jpeg";
-            case ".gif": return "image/gif";
-            case ".bmp": return "image/bmp";
-            case ".svg": return "image/svg+xml";
-            case ".webp": return "image/webp";
-            case ".ico": return "image/x-icon";
-            default: return MediaTypeNames.Application.Octet;
-        }
     }
 }

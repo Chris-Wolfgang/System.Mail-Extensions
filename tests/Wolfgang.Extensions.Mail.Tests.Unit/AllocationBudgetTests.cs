@@ -25,6 +25,7 @@ namespace Wolfgang.Extensions.Mail.Tests.Unit;
 /// <item><c>AttachmentCollection.TotalSize()</c> / <c>ExceedsLimit()</c> — allocation-free (index loop, no LINQ / enumerator).</item>
 /// <item><c>AttachmentFactory.FromBytes()</c> — wraps the payload without copying, so allocation is independent of payload size.</item>
 /// <item><c>EmlParser.Parse()</c> of a quoted-printable body — bounded allocation (the single-pass decoder, not the old per-character path).</item>
+/// <item><c>EmlParser.Parse()</c> of an RFC 2047 Q-encoded subject — bounded allocation (one buffer, not a list plus two arrays per character).</item>
 /// </list>
 /// </remarks>
 public class AllocationBudgetTests
@@ -96,6 +97,25 @@ public class AllocationBudgetTests
 
 
 
+    [Fact]
+    public void QEncoded_subject_parse_stays_within_budget()
+    {
+        var eml = BuildQEncodedSubjectEml(2_000);
+
+        var allocated = MeasureMinAllocations(() =>
+        {
+            var message = EmlParser.Parse(eml);
+            Consume(message.Subject.Length);
+            message.Dispose();
+        });
+
+        // Measured on net10.0: ~71.5 KB for the whole parse with the single-buffer Q decoder,
+        // ~198 KB with the old List<byte> + two arrays per character. Budget sits between.
+        Assert.True(allocated < 120_000, $"Parsing a 2,000-character Q-encoded subject allocated {allocated:N0} bytes; expected < 120,000 (the single-buffer Q decoder may have regressed).");
+    }
+
+
+
     // ------------------------------------------------------------------
 
     private static long MeasureMinAllocations
@@ -155,6 +175,35 @@ public class AllocationBudgetTests
         }
 
         return message;
+    }
+
+
+
+    private static string BuildQEncodedSubjectEml
+    (
+        int encodedChars
+    )
+    {
+        var sb = new StringBuilder(encodedChars * 2 + 256);
+        sb.Append("From: a@example.com\r\nTo: b@example.com\r\nSubject: =?utf-8?Q?");
+        for (var i = 0; i < encodedChars; i++)
+        {
+            switch (i % 10)
+            {
+                case 9:
+                    sb.Append("=C3=A9");   // é — the =XX escape path
+                    break;
+                case 4:
+                    sb.Append('_');        // '_' decodes to a space
+                    break;
+                default:
+                    sb.Append('a');
+                    break;
+            }
+        }
+
+        sb.Append("?=\r\n\r\nBody\r\n");
+        return sb.ToString();
     }
 
 
