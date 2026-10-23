@@ -16,7 +16,6 @@ namespace Wolfgang.Extensions.Mail;
 /// <summary>
 /// A collection of extension methods for the <see cref="MailMessage"/> class.
 /// </summary>
-// ReSharper disable once UnusedType.Global
 public static class MailMessageExtensions
 {
 
@@ -42,7 +41,6 @@ public static class MailMessageExtensions
     /// }
     /// </code>
     /// </example>
-    // ReSharper disable once UnusedMember.Global
     public static ValidationResult Validate
     (
         this MailMessage source
@@ -62,7 +60,6 @@ public static class MailMessageExtensions
     /// <param name="options">Optional validation configuration. Pass <c>null</c> for default behavior.</param>
     /// <returns>A <see cref="ValidationResult"/> indicating whether the message is valid.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-    // ReSharper disable once MemberCanBePrivate.Global
     public static ValidationResult Validate
     (
         this MailMessage source,
@@ -120,7 +117,6 @@ public static class MailMessageExtensions
     /// // original.To is unchanged
     /// </code>
     /// </example>
-    // ReSharper disable once UnusedMember.Global
     public static MailMessage Clone
     (
         this MailMessage source
@@ -167,7 +163,6 @@ public static class MailMessageExtensions
     /// string eml = message.ToMimeString();
     /// </code>
     /// </example>
-    // ReSharper disable once UnusedMember.Global
 #if NET5_0_OR_GREATER
     [RequiresUnreferencedCode("ToMimeString uses reflection to reach the internal System.Net.Mail.MailWriter type and MailMessage.Send; the trimmer may remove those members.")]
 #endif
