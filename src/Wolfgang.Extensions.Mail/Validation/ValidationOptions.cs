@@ -10,6 +10,9 @@ public sealed class ValidationOptions
     /// <summary>
     /// Gets or sets the maximum allowed size in bytes for a single attachment.
     /// When set, attachments exceeding this size will produce a warning.
+    /// Only attachments whose <see cref="System.Net.Mail.AttachmentBase.ContentStream"/> is seekable
+    /// are measured; a non-seekable stream has no length to read and is skipped, so it counts as
+    /// zero bytes toward this limit.
     /// </summary>
     public long? MaxAttachmentSizeBytes { get; set; }
 
@@ -18,6 +21,9 @@ public sealed class ValidationOptions
     /// <summary>
     /// Gets or sets the maximum allowed total size in bytes for all attachments combined.
     /// When set, a total size exceeding this value will produce a warning.
+    /// Only attachments whose <see cref="System.Net.Mail.AttachmentBase.ContentStream"/> is seekable
+    /// are measured; a non-seekable stream has no length to read and is skipped, so it counts as
+    /// zero bytes toward this limit.
     /// </summary>
     public long? MaxTotalAttachmentSizeBytes { get; set; }
 

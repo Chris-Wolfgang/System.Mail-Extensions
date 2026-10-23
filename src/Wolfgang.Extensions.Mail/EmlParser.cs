@@ -238,6 +238,9 @@ public static class EmlParser
     /// <param name="filePath">The path to the EML file.</param>
     /// <returns>A new <see cref="MailMessage"/> populated from the file.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
+    /// <exception cref="FileNotFoundException">The file does not exist.</exception>
+    /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
     // ReSharper disable once UnusedMember.Global
     public static MailMessage ParseFile
     (
@@ -266,6 +269,9 @@ public static class EmlParser
     /// <param name="options">Parsing options. Set <see cref="EmlParserOptions.Strict"/> to reject malformed input.</param>
     /// <returns>A new <see cref="MailMessage"/> populated from the file.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="filePath"/> or <paramref name="options"/> is null.</exception>
+    /// <exception cref="FileNotFoundException">The file does not exist.</exception>
+    /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
     /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
     // ReSharper disable once UnusedMember.Global
     public static MailMessage ParseFile
@@ -300,6 +306,9 @@ public static class EmlParser
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A task containing the parsed <see cref="MailMessage"/>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
+    /// <exception cref="FileNotFoundException">The file does not exist.</exception>
+    /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
     // ReSharper disable once UnusedMember.Global
     public static async Task<MailMessage> ParseFileAsync
     (
@@ -337,6 +346,9 @@ public static class EmlParser
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A task containing the parsed <see cref="MailMessage"/>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="filePath"/> or <paramref name="options"/> is null.</exception>
+    /// <exception cref="FileNotFoundException">The file does not exist.</exception>
+    /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
     /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
     // ReSharper disable once UnusedMember.Global
     public static async Task<MailMessage> ParseFileAsync
