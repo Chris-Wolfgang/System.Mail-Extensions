@@ -227,6 +227,7 @@ jobs:
                   --no-build `
                   --no-restore `
                   --collect:"XPlat Code Coverage" `
+                  --settings coverlet.runsettings `
                   --results-directory "./TestResults" `
                   --logger "console;verbosity=minimal"
 
@@ -241,6 +242,9 @@ jobs:
               Write-Host "Testing framework: $fw" -ForegroundColor Yellow
 
               # Collect coverage only for .NET 5.0+ TFMs; still run tests for all frameworks
+              # --settings coverlet.runsettings: the same coverage settings as pr.yaml, so the test
+              # assemblies are instrumented (IncludeTestAssembly) and the CODECOV_TEST_MINIMUM gate in
+              # "Verify coverage threshold" has test rows to check, and the exclusions match PR CI (#232).
               if ($fw -match '^net([5-9]|[1-9][0-9]+)\.') {
                 dotnet test $testProj.FullName `
                   --configuration Release `
@@ -248,6 +252,7 @@ jobs:
                   --no-build `
                   --no-restore `
                   --collect:"XPlat Code Coverage" `
+                  --settings coverlet.runsettings `
                   --results-directory "./TestResults" `
                   --logger "console;verbosity=minimal"
               } else {
