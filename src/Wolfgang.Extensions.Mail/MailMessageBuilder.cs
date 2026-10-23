@@ -16,7 +16,8 @@ namespace Wolfgang.Extensions.Mail;
 /// <code>
 /// using var message = new MailMessageBuilder()
 ///     .From("sender@example.com", "Sender Name")
-///     .To("alice@example.com", "bob@example.com")
+///     .To("alice@example.com")
+///     .To(new MailAddress("bob@example.com", "Bob Jones"))
 ///     .Subject("Monthly Report")
 ///     .HtmlBody("&lt;h1&gt;Report&lt;/h1&gt;")
 ///     .Attach("report.pdf")
@@ -129,11 +130,19 @@ public sealed class MailMessageBuilder
     /// <summary>
     /// Adds a To recipient with a display name.
     /// </summary>
+    /// <remarks>
+    /// C# overload resolution prefers this overload over <see cref="To(string[])"/> whenever exactly
+    /// two strings are passed, so <c>.To("alice@example.com", "bob@example.com")</c> adds <b>one</b>
+    /// recipient (alice, with the display name "bob@example.com"), not two. Use
+    /// <see cref="To(MailAddress)"/> to add a recipient with a display name, and
+    /// <see cref="To(string[])"/> (or chained <c>To</c> calls) to add several addresses.
+    /// </remarks>
     /// <param name="address">The recipient email address.</param>
     /// <param name="displayName">The display name.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="address"/> is null.</exception>
     // ReSharper disable once UnusedMember.Global
+    [Obsolete("A call with two strings binds here, not to To(params string[]), and adds one recipient with a display name. Use To(new MailAddress(address, displayName)) for a display name, or To(new[] { a, b }) / chained To calls for several addresses.")]
     public MailMessageBuilder To
     (
         string address,
@@ -146,6 +155,29 @@ public sealed class MailMessageBuilder
         }
 
         _to.Add(new MailAddress(address, displayName));
+        return this;
+    }
+
+
+
+    /// <summary>
+    /// Adds a To recipient, keeping its display name.
+    /// </summary>
+    /// <param name="address">The recipient, e.g. <c>new MailAddress("alice@example.com", "Alice Smith")</c>.</param>
+    /// <returns>This builder instance for chaining.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="address"/> is null.</exception>
+    // ReSharper disable once UnusedMember.Global
+    public MailMessageBuilder To
+    (
+        MailAddress address
+    )
+    {
+        if (address == null)
+        {
+            throw new ArgumentNullException(nameof(address));
+        }
+
+        _to.Add(address);
         return this;
     }
 
