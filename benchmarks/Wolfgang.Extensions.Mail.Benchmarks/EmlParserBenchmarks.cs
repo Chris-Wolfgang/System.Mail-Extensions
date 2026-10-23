@@ -1,4 +1,3 @@
-using System.Net.Mail;
 using BenchmarkDotNet.Attributes;
 
 namespace Wolfgang.Extensions.Mail.Benchmarks;
@@ -37,32 +36,44 @@ public class EmlParserBenchmarks
 
 
     [Benchmark(Baseline = true)]
-    public MailMessage ParsePlainText()
+    public int ParsePlainText()
     {
-        return EmlParser.Parse(_plainTextEml);
+        // Disposed here so each iteration does not leak its attachment streams into the
+        // measured allocations; the return value keeps the parse observable.
+        using var message = EmlParser.Parse(_plainTextEml);
+        return message.Attachments.Count + message.AlternateViews.Count;
     }
 
 
 
     [Benchmark]
-    public MailMessage ParseMultipartAlternative()
+    public int ParseMultipartAlternative()
     {
-        return EmlParser.Parse(_multipartAlternativeEml);
+        // Disposed here so each iteration does not leak its attachment streams into the
+        // measured allocations; the return value keeps the parse observable.
+        using var message = EmlParser.Parse(_multipartAlternativeEml);
+        return message.Attachments.Count + message.AlternateViews.Count;
     }
 
 
 
     [Benchmark]
-    public MailMessage ParseWithBase64Attachment()
+    public int ParseWithBase64Attachment()
     {
-        return EmlParser.Parse(_attachmentEml);
+        // Disposed here so each iteration does not leak its attachment streams into the
+        // measured allocations; the return value keeps the parse observable.
+        using var message = EmlParser.Parse(_attachmentEml);
+        return message.Attachments.Count + message.AlternateViews.Count;
     }
 
 
 
     [Benchmark]
-    public MailMessage ParseQuotedPrintable()
+    public int ParseQuotedPrintable()
     {
-        return EmlParser.Parse(_quotedPrintableEml);
+        // Disposed here so each iteration does not leak its attachment streams into the
+        // measured allocations; the return value keeps the parse observable.
+        using var message = EmlParser.Parse(_quotedPrintableEml);
+        return message.Attachments.Count + message.AlternateViews.Count;
     }
 }

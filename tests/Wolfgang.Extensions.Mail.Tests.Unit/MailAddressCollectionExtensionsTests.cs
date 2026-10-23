@@ -307,4 +307,23 @@ public class MailAddressCollectionExtensionsTests
         );
         Assert.Equal("address", ex.ParamName);
     }
+
+
+    [Fact]
+    public void FormatMailAddress_when_display_name_has_quotes_escapes_them()
+    {
+        var address = new MailAddress("a@example.com", "Display \"Quoted\" Name");
+
+        Assert.Equal("\"Display \\\"Quoted\\\" Name\" <a@example.com>", address.FormatMailAddress());
+    }
+
+
+
+    [Fact]
+    public void FormatMailAddress_when_display_name_has_backslash_escapes_it()
+    {
+        var address = new MailAddress("a@example.com", "Back\\slash");
+
+        Assert.Equal("\"Back\\\\slash\" <a@example.com>", address.FormatMailAddress());
+    }
 }
