@@ -37,6 +37,12 @@ public sealed class InlineHtmlBuilder
     /// Sets the HTML template. Use <c>{0}</c>, <c>{1}</c>, etc. as placeholders for
     /// embedded image Content-IDs, which are filled in order of <see cref="EmbedImage(string)"/> calls.
     /// </summary>
+    /// <remarks>
+    /// The template is a composite format string (<see cref="string.Format(IFormatProvider, string, object[])"/>),
+    /// so a literal brace must be doubled: write <c>{{</c> and <c>}}</c> for <c>{</c> and <c>}</c>, for example
+    /// in an inline <c>&lt;style&gt;</c> block, a <c>&lt;script&gt;</c> or JSON-LD. An undoubled brace makes
+    /// <see cref="Build"/> throw <see cref="FormatException"/>.
+    /// </remarks>
     /// <param name="htmlTemplate">The HTML template string with <c>{n}</c> placeholders for inline images.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="htmlTemplate"/> is null.</exception>
@@ -206,6 +212,10 @@ public sealed class InlineHtmlBuilder
     /// </summary>
     /// <returns>An <see cref="AlternateView"/> containing the HTML and all linked resources.</returns>
     /// <exception cref="InvalidOperationException">No HTML template has been set via <see cref="Html"/>.</exception>
+    /// <exception cref="FormatException">
+    /// The template contains a literal <c>{</c> or <c>}</c> that is not doubled, or a placeholder
+    /// index with no matching <see cref="EmbedImage(string)"/> call.
+    /// </exception>
     // ReSharper disable once UnusedMember.Global
     public AlternateView Build()
     {

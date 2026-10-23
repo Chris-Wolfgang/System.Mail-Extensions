@@ -20,8 +20,9 @@ public static class MailAddressCollectionExtensions
     /// <param name="addresses">
     /// The list of email addresses to convert to <see cref="MailAddress"/>
     /// and add to the source</param>
-    /// <exception cref="ArgumentNullException">source is null</exception>
-    /// <exception cref="ArgumentNullException">addresses is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
+    /// <exception cref="FormatException">An entry in <paramref name="addresses"/> is not a valid email address.</exception>
     // ReSharper disable once MemberCanBePrivate.Global
     public static void AddRange
     (
@@ -54,8 +55,9 @@ public static class MailAddressCollectionExtensions
     /// <param name="addresses">
     /// The list of email addresses to convert to <see cref="MailAddress"/>
     /// and add to the source</param>
-    /// <exception cref="ArgumentNullException">source is null</exception>
-    /// <exception cref="ArgumentNullException">addresses is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
+    /// <exception cref="FormatException">An entry in <paramref name="addresses"/> is not a valid email address.</exception>
     // ReSharper disable once UnusedMember.Global
     public static void AddRange
     (
@@ -72,8 +74,8 @@ public static class MailAddressCollectionExtensions
     /// </summary>
     /// <param name="source">The <see cref="MailAddressCollection"/> to add to</param>
     /// <param name="addresses">The list of <see cref="MailAddress"/> to add to the source</param>
-    /// <exception cref="ArgumentNullException">source is null</exception>
-    /// <exception cref="ArgumentNullException">addresses is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
     // ReSharper disable once MemberCanBePrivate.Global
     public static void AddRange
     (
@@ -104,8 +106,8 @@ public static class MailAddressCollectionExtensions
     /// </summary>
     /// <param name="source">The <see cref="MailAddressCollection"/> to add to</param>
     /// <param name="addresses">The list of <see cref="MailAddress"/> to add to the source</param>
-    /// <exception cref="ArgumentNullException">source is null</exception>
-    /// <exception cref="ArgumentNullException">addresses is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
     // ReSharper disable once UnusedMember.Global
     public static void AddRange
     (

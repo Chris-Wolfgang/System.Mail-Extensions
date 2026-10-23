@@ -53,6 +53,7 @@ public sealed class MailMessageBuilder
     /// <param name="displayName">Optional display name.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="address"/> is null.</exception>
+    /// <exception cref="FormatException"><paramref name="address"/> is not a valid email address.</exception>
     // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder From
     (
@@ -80,6 +81,7 @@ public sealed class MailMessageBuilder
     /// <param name="displayName">Optional display name.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="address"/> is null.</exception>
+    /// <exception cref="FormatException"><paramref name="address"/> is not a valid email address.</exception>
     // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder SenderAddress
     (
@@ -106,6 +108,7 @@ public sealed class MailMessageBuilder
     /// <param name="addresses">The recipient email addresses.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
+    /// <exception cref="FormatException">An entry in <paramref name="addresses"/> is not a valid email address.</exception>
     // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder To
     (
@@ -141,6 +144,7 @@ public sealed class MailMessageBuilder
     /// <param name="displayName">The display name.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="address"/> is null.</exception>
+    /// <exception cref="FormatException"><paramref name="address"/> is not a valid email address.</exception>
     // ReSharper disable once UnusedMember.Global
     [Obsolete("A call with two strings binds here, not to To(params string[]), and adds one recipient with a display name. Use To(new MailAddress(address, displayName)) for a display name, or To(new[] { a, b }) / chained To calls for several addresses.")]
     public MailMessageBuilder To
@@ -189,6 +193,7 @@ public sealed class MailMessageBuilder
     /// <param name="addresses">The CC email addresses.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
+    /// <exception cref="FormatException">An entry in <paramref name="addresses"/> is not a valid email address.</exception>
     // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder Cc
     (
@@ -216,6 +221,7 @@ public sealed class MailMessageBuilder
     /// <param name="addresses">The BCC email addresses.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
+    /// <exception cref="FormatException">An entry in <paramref name="addresses"/> is not a valid email address.</exception>
     // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder Bcc
     (
@@ -243,6 +249,7 @@ public sealed class MailMessageBuilder
     /// <param name="addresses">The reply-to email addresses.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
+    /// <exception cref="FormatException">An entry in <paramref name="addresses"/> is not a valid email address.</exception>
     // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder ReplyTo
     (
@@ -414,6 +421,9 @@ public sealed class MailMessageBuilder
     /// <param name="filePath">The file path of the attachment.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
+    /// <exception cref="FileNotFoundException">The file does not exist. The file is opened when this method is called, not at <see cref="Build"/>.</exception>
+    /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
     // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder Attach
     (
@@ -512,6 +522,11 @@ public sealed class MailMessageBuilder
     /// <summary>
     /// Builds a new <see cref="MailMessage"/> from the configured values.
     /// </summary>
+    /// <remarks>
+    /// A builder is single-use. The <see cref="Attachment"/> instances it created are handed to the
+    /// message as they are, not copied, so a second <c>Build()</c> on the same builder returns a
+    /// message that shares them: disposing either message disposes the other's attachments.
+    /// </remarks>
     /// <returns>A fully constructed <see cref="MailMessage"/>.</returns>
     /// <exception cref="InvalidOperationException">
     /// The From address has not been set, or no recipient (To, Cc, or Bcc)
