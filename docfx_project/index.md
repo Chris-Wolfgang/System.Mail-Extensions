@@ -14,7 +14,7 @@ Welcome to the Wolfgang.Extensions.Mail documentation. This site contains compre
 
 ## About Wolfgang.Extensions.Mail
 
-A collection of extension methods for working with email and mail-related functionality in System.Net.Mail.
+Extension methods and helpers for `System.Net.Mail`: a fluent message builder, an EML parser and serializer, message validation and cloning, attachment factories with content-type inference, inline-HTML image embedding, and collection conveniences. See the [Introduction](docs/introduction.md) for the feature list.
 
 ## Installation
 
