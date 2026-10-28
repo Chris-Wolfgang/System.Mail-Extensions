@@ -2,7 +2,7 @@
 
 [![NuGet](https://img.shields.io/nuget/v/Wolfgang.Extensions.Mail.svg?logo=nuget&label=NuGet)](https://www.nuget.org/packages/Wolfgang.Extensions.Mail/)
 [![Downloads](https://img.shields.io/nuget/dt/Wolfgang.Extensions.Mail.svg?logo=nuget&label=downloads)](https://www.nuget.org/packages/Wolfgang.Extensions.Mail/)
-[![PR build](https://img.shields.io/github/actions/workflow/status/Chris-Wolfgang/System.Mail-Extensions/pr.yaml?event=pull_request_target&label=PR%20build&logo=github)](https://github.com/Chris-Wolfgang/System.Mail-Extensions/actions/workflows/pr.yaml)
+[![PR build](https://img.shields.io/github/actions/workflow/status/Chris-Wolfgang/System.Mail-Extensions/pr.yaml?branch=main&label=PR%20build&logo=github)](https://github.com/Chris-Wolfgang/System.Mail-Extensions/actions/workflows/pr.yaml)
 [![release](https://img.shields.io/github/actions/workflow/status/Chris-Wolfgang/System.Mail-Extensions/release.yaml?event=release&label=release&logo=github)](https://github.com/Chris-Wolfgang/System.Mail-Extensions/actions/workflows/release.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-Multi--Targeted-purple.svg)](https://dotnet.microsoft.com/)
