@@ -222,9 +222,9 @@ Key style rules enforced:
 - **Final newline:** Yes
 - **Braces:** New line style (Allman)
 - **Naming:** PascalCase for public members, camelCase for parameters/locals
-- **File-scoped namespaces:** Required in C# 10+
+- **File-scoped namespaces:** Preferred (`.editorconfig` sets `file_scoped:suggestion`; every file in `src/` uses them)
 - **`var` preferences:** Use for built-in types and when type is obvious
-- **Null checks:** Prefer pattern matching (`is null`, `is not null`)
+- **Null checks:** `is null` / `is not null` is the preferred style for new code; it is a convention, not enforced by `.editorconfig` (existing code uses `== null`)
 
 View the complete configuration in [.editorconfig](.editorconfig).
 
