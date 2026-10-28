@@ -3,18 +3,13 @@
 #
 # Each entry records a finding that is a deliberate, reviewed design choice
 # rather than a defect. Everything else is expected to pass; the CI gate
-# (workflow-security.yaml) fails on any high-severity finding.
+# (the zizmor job in actions-audit.yaml) fails on any high-severity finding.
+#
+# pr.yaml runs on `pull_request` (see docs/WORKFLOW_SECURITY.md), so it no
+# longer needs a dangerous-triggers entry. The one `pull_request_target`
+# workflow, protected-files.yaml, never checks out PR code and carries an
+# inline `# zizmor: ignore[dangerous-triggers]` on its trigger instead.
 rules:
-  dangerous-triggers:
-    ignore:
-      # pr.yaml uses `pull_request_target` on purpose so the staged CI pipeline
-      # runs from the trusted main branch rather than the untrusted PR branch
-      # (see docs/WORKFLOW_SECURITY.md). Jobs that build PR code check out the
-      # PR head explicitly and run with least-privilege `permissions:`. Moving
-      # off pull_request_target would break that trusted-config model, so this
-      # is an accepted, documented risk.
-      - pr.yaml
-
   superfluous-actions:
     ignore:
       # release.yaml uses softprops/action-gh-release to attach NuGet packages,
