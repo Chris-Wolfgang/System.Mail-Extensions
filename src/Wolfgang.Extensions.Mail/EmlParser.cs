@@ -394,7 +394,7 @@ public static class EmlParser
     {
         if (headers.TryGetValue("from", out var from) && !string.IsNullOrWhiteSpace(from))
         {
-            if (TryParseMailAddress(from, out var fromAddress))
+            if (TryParseMailAddress(from, context, out var fromAddress))
             {
                 message.From = fromAddress;
             }
@@ -1095,6 +1095,7 @@ public static class EmlParser
     private static bool TryParseMailAddress
     (
         string addressString,
+        ParseContext context,
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
         [NotNullWhen(true)]
 #endif
@@ -1103,7 +1104,7 @@ public static class EmlParser
     {
         try
         {
-            result = ParseMailAddress(addressString);
+            result = ParseMailAddress(addressString, context);
             return true;
         }
         catch (FormatException)
@@ -1117,7 +1118,8 @@ public static class EmlParser
 
     private static MailAddress ParseMailAddress
     (
-        string addressString
+        string addressString,
+        ParseContext context
     )
     {
         var trimmed = addressString.Trim();
@@ -1126,7 +1128,10 @@ public static class EmlParser
         var match = DisplayNameAddressRegex.Match(trimmed);
         if (match.Success)
         {
-            return new MailAddress(match.Groups["email"].Value.Trim(), match.Groups["name"].Value.Trim());
+            // MailMessage writes a non-ASCII display name as an RFC 2047 encoded word, and so
+            // do most mail clients; decode it the same way as the subject (#364).
+            var displayName = DecodeEncodedWords(match.Groups["name"].Value.Trim(), context);
+            return new MailAddress(match.Groups["email"].Value.Trim(), displayName);
         }
 
         // Handle bare <email@example.com>
@@ -1160,7 +1165,7 @@ public static class EmlParser
                 continue;
             }
 
-            if (TryParseMailAddress(trimmed, out var parsed))
+            if (TryParseMailAddress(trimmed, context, out var parsed))
             {
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
                 collection.Add(parsed);
