@@ -1,0 +1,81 @@
+name: Concurrency stress
+
+# Weekly high-iteration run of tests/Wolfgang.Extensions.Mail.Tests.Concurrency
+# (#135). The same suite runs on every PR at the default 50 rounds; this run
+# sets STRESS_ITERATIONS to 100,000 so the content-type registry races and the
+# concurrent parse/serialize paths are hit millions of times (100,000 rounds
+# of the five tests: about one minute locally). A scheduled failure is
+# invisible unless something reports it, so a failed scheduled run files an
+# issue.
+
+on:
+  schedule:
+    - cron: '0 5 * * 1'   # Mondays 05:00 UTC (fuzz.yaml runs at 04:17)
+  workflow_dispatch:
+    inputs:
+      stress_iterations:
+        description: 'Rounds per test'
+        required: false
+        default: '100000'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: concurrency-stress
+  cancel-in-progress: false
+
+jobs:
+  stress:
+    name: Concurrency stress (STRESS_ITERATIONS rounds)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      issues: write   # File an issue when the scheduled run fails.
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Run concurrency stress tests
+        id: stress
+        env:
+          STRESS_INPUT: ${{ inputs.stress_iterations }}
+        run: |
+          set -euo pipefail
+          # Accept only a positive integer from the dispatch input; anything
+          # else (or a scheduled run, where inputs are empty) uses the default.
+          if [[ "${STRESS_INPUT:-}" =~ ^[1-9][0-9]{0,8}$ ]]; then
+            STRESS_ITERATIONS="$STRESS_INPUT"
+          else
+            STRESS_ITERATIONS=100000
+          fi
+          export STRESS_ITERATIONS
+          echo "STRESS_ITERATIONS=$STRESS_ITERATIONS"
+          dotnet test tests/Wolfgang.Extensions.Mail.Tests.Concurrency \
+            --configuration Release \
+            --logger "console;verbosity=detailed"
+
+      - name: File an issue on failure
+        if: failure() && steps.stress.outcome == 'failure' && github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          gh issue create \
+            --repo "$REPO" \
+            --title "Concurrency stress failure on $(date -u +%Y-%m-%d)" \
+            --body "The weekly concurrency stress run failed: $RUN_URL
+
+          Each assertion message names the round and the observed outcome. Re-run with the \`stress_iterations\` dispatch input to reproduce at a different scale.
+
+          _Filed automatically by \`.github/workflows/concurrency.yaml\`._"
