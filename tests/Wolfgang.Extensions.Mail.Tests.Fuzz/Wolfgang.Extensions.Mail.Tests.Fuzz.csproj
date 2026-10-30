@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Property-based fuzz harness (the fleet's Tests.Fuzz kind, CsCheck). net10.0 only:
+         Tests.Unit already runs the library on every target framework; running the same
+         generated cases on twelve TFMs would buy nothing but CI minutes. The case count and
+         time budget come from FUZZ_ITERATIONS / FUZZ_TIME_SECONDS, so the same properties are
+         the quick per-PR pass and the long scheduled run (fuzz.yaml). -->
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <Copyright>Copyright 2026 Chris Wolfgang</Copyright>
+  </PropertyGroup>
+
+
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="10.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="CsCheck" Version="4.9.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.assert" Version="2.9.3" />
+    <PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Wolfgang.Extensions.Mail\Wolfgang.Extensions.Mail.csproj" />
+  </ItemGroup>
+
+
+
+  <!-- Analyzer PackageReferences are centralized in Directory.Build.props -->
+
+</Project>
