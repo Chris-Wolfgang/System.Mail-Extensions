@@ -84,6 +84,24 @@ public static class EmlParser
         RegexTimeout
     );
 
+    // RFC 2047 section 6.2: whitespace between two adjacent encoded words is not part of the
+    // text. MailMessage folds a long non-ASCII header into several encoded words separated by
+    // whitespace, so it is removed before decoding.
+    // One or more encoded words with nothing between them (after the whitespace removal above).
+    private static readonly Regex EncodedWordRunRegex = new Regex
+    (
+        @"(?:=\?[^?]+\?[BbQq]\?[^?]+\?=)+",
+        DefaultRegexOptionsNoCase | RegexOptions.Compiled,
+        RegexTimeout
+    );
+
+    private static readonly Regex WhitespaceBetweenEncodedWordsRegex = new Regex
+    (
+        @"(?<=\?=)\s+(?==\?[^?]+\?[BbQq]\?[^?]+\?=)",
+        DefaultRegexOptionsNoCase | RegexOptions.Compiled,
+        RegexTimeout
+    );
+
     // A quoted display name may contain '<', '>' and ',' (RFC 5322 3.2.4), which the
     // unquoted pattern below would take for the start of the address. Tried first.
     private static readonly Regex QuotedDisplayNameAddressRegex = new Regex
@@ -1016,48 +1034,98 @@ public static class EmlParser
     )
     {
         // RFC 2047: =?charset?encoding?encoded-text?=
-        return EncodedWordRegex.Replace(input, m => DecodeEncodedWordMatch(m, context));
+        var joined = WhitespaceBetweenEncodedWordsRegex.Replace(input, string.Empty);
+        return EncodedWordRunRegex.Replace(joined, m => DecodeEncodedWordRun(m.Value, context));
     }
 
 
 
-    private static string DecodeEncodedWordMatch
+    /// <summary>
+    /// Decodes a run of directly adjacent encoded words. The bytes of consecutive words in the same
+    /// charset are decoded together: RFC 2047 says each word must stand alone, but .NET Framework's
+    /// MailWriter splits a multi-byte UTF-8 character across two words when it folds a long header,
+    /// and decoding the halves separately would yield two replacement characters.
+    /// </summary>
+    private static string DecodeEncodedWordRun
     (
-        Match m,
+        string run,
         ParseContext context
     )
     {
-        var charset = m.Groups["charset"].Value;
-        var encoding = m.Groups["encoding"].Value.ToUpperInvariant();
-        var encodedText = m.Groups["text"].Value;
+        var result = new StringBuilder(run.Length);
+        var pending = new List<byte>();
+        Encoding? pendingEncoding = null;
 
-        try
+        foreach (Match word in EncodedWordRegex.Matches(run))
         {
-            var enc = Encoding.GetEncoding(charset);
-
-            if (string.Equals(encoding, "B", StringComparison.Ordinal))
+            if (!TryDecodeEncodedWordBytes(word, out var encoding, out var bytes))
             {
-                var bytes = Convert.FromBase64String(encodedText);
-                return enc.GetString(bytes);
+                FlushPending();
+                context.Report($"Malformed RFC 2047 encoded word: '{word.Value}'; kept verbatim.", propertyName: null);
+                result.Append(word.Value);
+                continue;
             }
 
-            return DecodeQEncoding(encodedText, enc);
+            if (pendingEncoding != null && !pendingEncoding.Equals(encoding))
+            {
+                FlushPending();
+            }
+
+            pendingEncoding = encoding;
+            pending.AddRange(bytes);
         }
-        catch (FormatException)
+
+        FlushPending();
+        return result.ToString();
+
+        void FlushPending()
         {
-            context.Report($"Malformed RFC 2047 encoded word: '{m.Value}'; kept verbatim.", propertyName: null);
-            return m.Value;
-        }
-        catch (ArgumentException)
-        {
-            context.Report($"Malformed RFC 2047 encoded word: '{m.Value}'; kept verbatim.", propertyName: null);
-            return m.Value;
+            if (pendingEncoding != null)
+            {
+                result.Append(pendingEncoding.GetString(pending.ToArray()));
+                pending.Clear();
+                pendingEncoding = null;
+            }
         }
     }
 
 
 
-    private static string DecodeQEncoding
+    private static bool TryDecodeEncodedWordBytes
+    (
+        Match word,
+        out Encoding encoding,
+        out byte[] bytes
+    )
+    {
+        var transferEncoding = word.Groups["encoding"].Value;
+        var encodedText = word.Groups["text"].Value;
+
+        try
+        {
+            encoding = Encoding.GetEncoding(word.Groups["charset"].Value);
+            bytes = string.Equals(transferEncoding, "B", StringComparison.OrdinalIgnoreCase)
+                ? Convert.FromBase64String(encodedText)
+                : DecodeQEncoding(encodedText, encoding);
+            return true;
+        }
+        catch (FormatException)
+        {
+            encoding = Encoding.UTF8;
+            bytes = Array.Empty<byte>();
+            return false;
+        }
+        catch (ArgumentException)
+        {
+            encoding = Encoding.UTF8;
+            bytes = Array.Empty<byte>();
+            return false;
+        }
+    }
+
+
+
+    private static byte[] DecodeQEncoding
     (
         string encodedText,
         Encoding enc
@@ -1090,7 +1158,8 @@ public static class EmlParser
             }
         }
 
-        return enc.GetString(buffer, 0, byteCount);
+        Array.Resize(ref buffer, byteCount);
+        return buffer;
     }
 
 
