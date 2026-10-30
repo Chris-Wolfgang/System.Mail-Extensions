@@ -39,6 +39,9 @@
     <Project Path="benchmarks/Wolfgang.Extensions.Mail.Benchmarks/Wolfgang.Extensions.Mail.Benchmarks.csproj" />
   </Folder>
   <Folder Name="/examples/" />
+  <Folder Name="/samples/">
+    <Project Path="samples/ShadowWorkloads/ShadowWorkloads.csproj" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Wolfgang.Extensions.Mail/Wolfgang.Extensions.Mail.csproj" />
   </Folder>
