@@ -1,0 +1,158 @@
+name: Shadow testing
+
+# Nightly shadow test (#125): samples/ShadowWorkloads replays realistic consumer workloads
+# (inbox ingestion, an outbound campaign, archiving, an address-book import, concurrent mailboxes)
+# against this commit AND against the last published release, on the same runner in the same job,
+# and samples/ShadowWorkloads/compare.py fails the run when a scenario regresses beyond its
+# tolerance (median time, allocated bytes per operation, gen-2 collections).
+#
+# Both versions run here rather than comparing against committed numbers: a shared runner's
+# absolute timings drift from machine to machine, but two runs on one machine minutes apart are
+# comparable.
+#
+# The baseline is the version in <PackageValidationBaselineVersion> (the last release; it is bumped
+# after each release) unless the dispatch input names another. Tolerances come from the repository
+# variables SHADOW_LATENCY_TOLERANCE / SHADOW_ALLOCATION_TOLERANCE / SHADOW_GEN2_TOLERANCE when set
+# (fractions, e.g. 0.25), else compare.py's defaults (0.20 / 0.50 / 0.50).
+#
+# A regression files ONE "Shadow test regression" issue and comments on it on later failures,
+# like fuzz.yaml. A run that could not measure (build failure, missing results) fails without
+# filing anything.
+
+on:
+  schedule:
+    - cron: '23 3 * * *'   # nightly, 03:23 UTC
+  workflow_dispatch:
+    inputs:
+      baseline_version:
+        description: Published version to compare against (default - PackageValidationBaselineVersion)
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: shadow-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  shadow:
+    name: Shadow workloads vs the baseline release
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      issues: write   # only to report a regression
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68  # v6.0.0
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Resolve the baseline version
+        id: baseline
+        env:
+          REQUESTED: ${{ inputs.baseline_version }}
+        run: |
+          set -euo pipefail
+          if [ -n "${REQUESTED:-}" ]; then
+            version="$REQUESTED"
+          else
+            version=$(sed -n 's:.*<PackageValidationBaselineVersion>\(.*\)</PackageValidationBaselineVersion>.*:\1:p' src/Wolfgang.Extensions.Mail/Wolfgang.Extensions.Mail.csproj | head -n 1)
+          fi
+          if ! printf '%s' "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$'; then
+            echo "::error::Baseline version '$version' is not a version number."
+            exit 1
+          fi
+          echo "Baseline release: $version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Run the workloads against this commit
+        working-directory: samples/ShadowWorkloads
+        run: |
+          set -euo pipefail
+          dotnet run --configuration Release -- --filter '*' --exporters json --artifacts "$RUNNER_TEMP/shadow/current"
+
+      - name: Run the workloads against the baseline release
+        working-directory: samples/ShadowWorkloads
+        env:
+          # An environment variable, not -p: BenchmarkDotNet rebuilds the project in a child
+          # process that inherits the environment but not MSBuild arguments.
+          MailPackageVersion: ${{ steps.baseline.outputs.version }}
+        run: |
+          set -euo pipefail
+          dotnet run --configuration Release -- --filter '*' --exporters json --artifacts "$RUNNER_TEMP/shadow/baseline"
+
+      - name: Compare
+        id: compare
+        working-directory: samples/ShadowWorkloads
+        env:
+          SHADOW_LATENCY_TOLERANCE: ${{ vars.SHADOW_LATENCY_TOLERANCE }}
+          SHADOW_ALLOCATION_TOLERANCE: ${{ vars.SHADOW_ALLOCATION_TOLERANCE }}
+          SHADOW_GEN2_TOLERANCE: ${{ vars.SHADOW_GEN2_TOLERANCE }}
+        # Exit 1 is a regression (reported below); 2 means the inputs were unusable, which fails
+        # the run without filing an issue.
+        run: |
+          set -uo pipefail
+          status=0
+          python3 compare.py "$RUNNER_TEMP/shadow/current/results" "$RUNNER_TEMP/shadow/baseline/results" \
+              --report "$RUNNER_TEMP/shadow/report.md" || status=$?
+          case "$status" in
+            0) echo "regressed=false" >> "$GITHUB_OUTPUT" ;;
+            1) echo "regressed=true" >> "$GITHUB_OUTPUT" ;;
+            *) echo "::error::compare.py exited $status - the runs could not be compared."; exit "$status" ;;
+          esac
+
+      - name: Upload the results
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+        with:
+          name: shadow-results
+          path: ${{ runner.temp }}/shadow/
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Report a regression
+        if: always() && steps.compare.outputs.regressed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          BASELINE: ${{ steps.baseline.outputs.version }}
+          COMMIT: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          {
+            echo "The nightly shadow test found a scenario that regressed beyond its tolerance against release $BASELINE."
+            echo
+            echo "- Run: $RUN_URL"
+            echo "- Commit: $COMMIT"
+            echo "- Full BenchmarkDotNet output: the \`shadow-results\` artifact on that run."
+            echo "- Tolerances: repository variables SHADOW_LATENCY_TOLERANCE / SHADOW_ALLOCATION_TOLERANCE / SHADOW_GEN2_TOLERANCE, or compare.py's defaults."
+            echo
+            cat "$RUNNER_TEMP/shadow/report.md"
+          } > body.md
+
+          existing=$(gh issue list --state open --search 'in:title "Shadow test regression"' --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            echo "Commenting on the open regression issue #$existing rather than filing a duplicate."
+            gh issue comment "$existing" --body-file body.md
+          else
+            gh label create "kind:shadow-regression" --color D93F0B --description "The nightly shadow test found a performance regression" --force
+            gh issue create \
+              --title "Shadow test regression against the baseline release" \
+              --label "kind:shadow-regression" \
+              --body-file body.md
+          fi
+
+      - name: Fail the run on a regression
+        if: always() && steps.compare.outputs.regressed == 'true'
+        run: |
+          echo "::error::A shadow workload regressed beyond its tolerance. See the report above and the filed issue."
+          exit 1
