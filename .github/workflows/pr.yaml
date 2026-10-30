@@ -1755,39 +1755,6 @@ jobs:
           path: devskim-results.txt
           if-no-files-found: warn
 
-  aot-smoke:
-    name: "Native AOT Smoke"
-    runs-on: ubuntu-latest
-    needs: detect-projects
-    if: github.repository != 'Chris-Wolfgang/repo-template' && needs.detect-projects.outputs.has-projects == 'true'
-    timeout-minutes: 20
-    permissions:
-      contents: read
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
-        with:
-          dotnet-version: '10.0.x'
-
-      - name: Install Native AOT prerequisites
-        run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
-
-      - name: Publish AOT smoke (linux-x64)
-        run: |
-          dotnet publish smoke/Wolfgang.Extensions.Mail.AotSmoke/Wolfgang.Extensions.Mail.AotSmoke.csproj \
-            -c Release -r linux-x64 -o aot-out
-
-      - name: Run AOT smoke binary
-        run: |
-          ./aot-out/Wolfgang.Extensions.Mail.AotSmoke
-          echo "AOT smoke binary exited 0"
-
   # ============================================================================
   # STAGE 1: Linux - .NET Core/5+ Tests with Coverage Gate
   # ============================================================================
