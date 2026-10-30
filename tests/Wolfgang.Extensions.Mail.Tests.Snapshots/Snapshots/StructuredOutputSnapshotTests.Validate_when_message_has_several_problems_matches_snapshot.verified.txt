@@ -1,0 +1,12 @@
+{
+  IsValid: false,
+  Errors: [
+    Error: [From] From address is required.,
+    Error: [To] At least one recipient (To, CC, or BCC) is required.,
+    Error: [Subject] Subject is empty or missing.,
+    Error: [Body] Body is empty and no alternate views are defined.
+  ],
+  Warnings: [
+    Warning: [Attachments] Attachment 'big.bin' (2,048 bytes) exceeds the maximum allowed size of 1,024 bytes.
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  Default: plain@example.com; "Named Person" <named@example.com>; "Last, First" <comma@example.com>; "Say \"hi\"" <quote@example.com>; "Back\\slash" <slash@example.com>,
+  CommaSeparated: plain@example.com, "Named Person" <named@example.com>, "Last, First" <comma@example.com>, "Say \"hi\"" <quote@example.com>, "Back\\slash" <slash@example.com>,
+  Each: [
+    plain@example.com,
+    "Named Person" <named@example.com>,
+    "Last, First" <comma@example.com>,
+    "Say \"hi\"" <quote@example.com>,
+    "Back\\slash" <slash@example.com>
+  ]
+}

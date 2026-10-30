@@ -1,0 +1,9 @@
+MIME-Version: 1.0
+From: =?utf-8?Q?J=C3=BCrgen_M=C3=BCller?= <sender@example.com>
+To: recipient@example.com
+Date: {scrubbed}
+Subject: =?utf-8?B?R3LDvMOfZSBhdXMgS8O2bG4=?=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
+
+U2Now7ZuZSBHcsO8w59l

@@ -1,0 +1,18 @@
+{
+  anim.gif: image/gif,
+  archive.zip: application/zip,
+  data.csv: text/csv,
+  data.json: application/json,
+  data.xml: application/xml,
+  doc.docx: application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+  image.png: image/png,
+  mail.eml: message/rfc822,
+  noextension: application/octet-stream,
+  notes.txt: text/plain,
+  page.html: text/html,
+  photo.JPEG: image/jpeg,
+  photo.jpg: image/jpeg,
+  report.pdf: application/pdf,
+  sheet.xlsx: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+  unknown.xyz: application/octet-stream
+}
