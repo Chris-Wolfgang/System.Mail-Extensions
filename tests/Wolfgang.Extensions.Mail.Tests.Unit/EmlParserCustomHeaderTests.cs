@@ -64,4 +64,51 @@ public class EmlParserCustomHeaderTests
 
         Assert.Equal("Malformed header name 'X-Ü'; header skipped.", ex.Message);
     }
+
+
+
+    /// <summary>
+    /// A header line that starts with a whitespace character other than space or tab (which would
+    /// make it a folded continuation), such as a bare carriage return or a form feed, has a field
+    /// name that trims to nothing. Found by the fuzz suite.
+    /// </summary>
+    [Theory]
+    [InlineData("\r: value")]
+    [InlineData("\f: value")]
+    [InlineData("\v\r: value")]
+    public void Parse_when_a_header_name_is_only_whitespace_skips_it(string headerLine)
+    {
+        using var msg = EmlParser.Parse("From: a@example.com\n" + headerLine + "\nX-Kept: yes\n\nBody");
+
+        Assert.Equal("Body", msg.Body);
+        Assert.Equal("yes", msg.Headers["X-Kept"]);
+        Assert.Equal("a@example.com", msg.From!.Address);
+    }
+
+
+
+    [Fact]
+    public void ParseWithDiagnostics_when_a_header_name_is_only_whitespace_reports_it()
+    {
+        var result = EmlParser.ParseWithDiagnostics("From: a@example.com\n\r: value\n\nBody");
+
+        using var msg = result.Message;
+        Assert.Equal("Body", msg.Body);
+        var issue = Assert.Single(result.Issues);
+        Assert.Equal("Header with an empty field name; header skipped.", issue.Message);
+        Assert.Equal("Headers", issue.PropertyName);
+    }
+
+
+
+    [Fact]
+    public void Parse_strict_when_a_header_name_is_only_whitespace_throws_EmlParseException()
+    {
+        var ex = Assert.Throws<EmlParseException>
+        (
+            () => EmlParser.Parse("From: a@example.com\n\f: value\n\nBody", new EmlParserOptions { Strict = true })
+        );
+
+        Assert.Equal("Header with an empty field name; header skipped.", ex.Message);
+    }
 }
