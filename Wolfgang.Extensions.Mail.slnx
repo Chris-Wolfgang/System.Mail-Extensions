@@ -43,6 +43,7 @@
     <Project Path="src/Wolfgang.Extensions.Mail/Wolfgang.Extensions.Mail.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Wolfgang.Extensions.Mail.Tests.Concurrency/Wolfgang.Extensions.Mail.Tests.Concurrency.csproj" />
     <Project Path="tests/Wolfgang.Extensions.Mail.Tests.Fuzz/Wolfgang.Extensions.Mail.Tests.Fuzz.csproj" />
     <Project Path="tests/Wolfgang.Extensions.Mail.Tests.Integration/Wolfgang.Extensions.Mail.Tests.Integration.csproj" />
     <Project Path="tests/Wolfgang.Extensions.Mail.Tests.Snapshots/Wolfgang.Extensions.Mail.Tests.Snapshots.csproj" />
