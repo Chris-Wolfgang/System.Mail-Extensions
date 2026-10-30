@@ -224,6 +224,14 @@ pwsh ./scripts/format.ps1
 pwsh ./scripts/build-pr.ps1
 ```
 
+### Verify the build
+
+Releases are reproducible: rebuilding a release tag on Windows with the same .NET SDK feature band
+produces byte-identical DLLs and PDBs, and every GitHub Release carries a
+`reproducible-build-manifest.json` with their expected SHA-256 hashes. The procedure (tooling,
+build command, comparison script, how to report a mismatch or publish a verification attestation)
+is in [docs/REPRODUCIBLE-BUILD.md](docs/REPRODUCIBLE-BUILD.md).
+
 
 
 ## License
