@@ -495,17 +495,24 @@ public static class EmlParser
         {
             var isHtml = contentType.IndexOf("text/html", StringComparison.OrdinalIgnoreCase) >= 0;
             message.IsBodyHtml = isHtml;
-            message.Body = TrimFinalLineBreak(DecodeBody(bodySection, transferEncoding, context));
+            var decoded = DecodeBody(bodySection, transferEncoding, context);
+
+            // The writer's final line break is outside base64's encoded bytes, so every byte of a
+            // decoded base64 body is content and a trailing line break there is the sender's.
+            message.Body = string.Equals(transferEncoding, "base64", StringComparison.Ordinal)
+                ? decoded
+                : TrimFinalLineBreak(decoded);
         }
     }
 
 
 
     /// <summary>
-    /// Removes exactly one trailing CRLF (or bare LF) from a decoded body.
-    /// MIME writers terminate the final body line with a line break that is
-    /// part of the wire format, not the content; keeping it made every
-    /// serialize→parse round trip grow the body by one blank line.
+    /// Removes exactly one trailing CRLF (or bare LF) from a decoded quoted-printable
+    /// or 7bit/8bit body. MIME writers terminate the final body line with a line
+    /// break that is part of the wire format, not the content; keeping it made every
+    /// serialize→parse round trip grow the body by one blank line. Not applied to
+    /// base64, whose decoded bytes are all content.
     /// </summary>
     private static string TrimFinalLineBreak
     (
