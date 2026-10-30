@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Shadow workloads: realistic consumer scenarios, measured with BenchmarkDotNet, run nightly
+       by .github/workflows/shadow.yaml against this commit AND the last published release.
+
+       - Default build: references the library source (this commit).
+       - With the MailPackageVersion environment variable set (for example 0.3.1): references that
+         published NuGet package instead, so the same scenarios measure the baseline release on
+         the same machine. It must be an environment variable, not -p: BenchmarkDotNet rebuilds
+         this project in a child process, which inherits the environment but not -p arguments.
+
+       compare.py diffs the two runs. Only APIs present in the baseline release may be used here. -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>Wolfgang.Extensions.Mail.ShadowWorkloads</RootNamespace>
+  </PropertyGroup>
+
+
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
+  </ItemGroup>
+
+
+
+  <ItemGroup Condition="'$(MailPackageVersion)' == ''">
+    <ProjectReference Include="..\..\src\Wolfgang.Extensions.Mail\Wolfgang.Extensions.Mail.csproj" />
+  </ItemGroup>
+
+
+
+  <ItemGroup Condition="'$(MailPackageVersion)' != ''">
+    <PackageReference Include="Wolfgang.Extensions.Mail" Version="[$(MailPackageVersion)]" />
+  </ItemGroup>
+
+
+
+  <!-- Analyzer PackageReferences are centralized in Directory.Build.props -->
+
+</Project>
