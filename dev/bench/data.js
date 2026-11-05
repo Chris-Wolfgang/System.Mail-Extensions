@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1793898115261,
+  "lastUpdate": 1793904683071,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "BenchmarkDotNet": [
@@ -600,6 +600,126 @@ window.BENCHMARK_DATA = {
             "value": 12933.690633138021,
             "unit": "ns",
             "range": "± 199.96648276339806"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "30a0198eb5dbedef248cccdfaa7c8cd2de07d8d3",
+          "message": "ci: raise the coverage gates to src 95 % / tests 100 % (protected-only) (#337)\n\n* ci: raise the coverage gates to src 95 % / tests 100 % (pr.yaml, release.yaml, build-pr.ps1)\n\npr.yaml: CODECOV_MINIMUM 90 -> 95, CODECOV_TEST_MINIMUM 94 -> 100 (the\nrepository floor comment goes with it); the 90 % step names and fallbacks\nfollow. release.yaml and build-pr.ps1 defaults: 90 -> 95 (both already\nheld tests at 100). Possible now that Tests.Unit is at 100 % (the PR\nbelow) and src is at 97.7 %.\n\nRefs #284\n\nCo-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>\n\n* ci(pr): coverage step names carry no percentage\n\nThe coverage steps are now just 'Enforce coverage thresholds' and the\nStage 1 summary line says 'coverage gate'; the values live only in the\nenv block (CODECOV_MINIMUM / CODECOV_TEST_MINIMUM), so changing a\nthreshold never means renaming a step. Step names are not required-check\ncontexts (job names are), so the ruleset is unaffected. Same change as\nChris-Wolfgang/repo-template#795.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>",
+          "timestamp": "2026-11-05T13:48:53-05:00",
+          "tree_id": "c0760e91725671631e6f75de082eaf7174b8cb84",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/30a0198eb5dbedef248cccdfaa7c8cd2de07d8d3"
+        },
+        "date": 1793904681631,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1024)",
+            "value": 909.5083325703939,
+            "unit": "ns",
+            "range": "± 6.837943571124572"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1024)",
+            "value": 2579.0172589619956,
+            "unit": "ns",
+            "range": "± 68.46531860366599"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1048576)",
+            "value": 902.2922919591268,
+            "unit": "ns",
+            "range": "± 11.049610364867304"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1048576)",
+            "value": 1605377.4921875,
+            "unit": "ns",
+            "range": "± 8406.43488178048"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 1000)",
+            "value": 2888.0799992879233,
+            "unit": "ns",
+            "range": "± 65.41665827905074"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 1000)",
+            "value": 7110.499542236328,
+            "unit": "ns",
+            "range": "± 65.55219362886211"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 1000)",
+            "value": 11569.16431681315,
+            "unit": "ns",
+            "range": "± 242.71735783837082"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 1000)",
+            "value": 5437.491947174072,
+            "unit": "ns",
+            "range": "± 105.60039689491724"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 100000)",
+            "value": 49245.29890950521,
+            "unit": "ns",
+            "range": "± 952.2698728906453"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 100000)",
+            "value": 229705.90966796875,
+            "unit": "ns",
+            "range": "± 3526.2803297694863"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 100000)",
+            "value": 558224.234375,
+            "unit": "ns",
+            "range": "± 11063.188057957374"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 100000)",
+            "value": 322470.65218098956,
+            "unit": "ns",
+            "range": "± 14251.936612761274"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 0)",
+            "value": 10936.326436360678,
+            "unit": "ns",
+            "range": "± 605.4921149348382"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 0)",
+            "value": 1628.6477495829265,
+            "unit": "ns",
+            "range": "± 24.926119489785513"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 64)",
+            "value": 713540.185546875,
+            "unit": "ns",
+            "range": "± 21482.75081301931"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 64)",
+            "value": 6620.791585286458,
+            "unit": "ns",
+            "range": "± 56.979356217388684"
           }
         ]
       }
