@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1793904683071,
+  "lastUpdate": 1793915100841,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "BenchmarkDotNet": [
@@ -720,6 +720,126 @@ window.BENCHMARK_DATA = {
             "value": 6620.791585286458,
             "unit": "ns",
             "range": "± 56.979356217388684"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "1389851701a52b62e06ba683fd5da13aa7d517a9",
+          "message": "fix(parser): skip empty custom headers; report a non-ASCII header name (#339)\n\nApplyCustomHeaders copied every non-standard header into\nMailMessage.Headers, which throws ArgumentException for an empty value\n(X-Foo:) and FormatException for a non-ASCII name, so the lenient Parse\nthrew on both (net462, net6.0 and net10.0 alike). Empty custom headers\nare now skipped; a malformed name is skipped and reported through the\nparse context (diagnostic, or EmlParseException in Strict mode).\n\nRefs #338\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>",
+          "timestamp": "2026-11-05T16:42:27-05:00",
+          "tree_id": "93ce03cf7a20c0dea2adcb4dbe2658471d2d8f3e",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/1389851701a52b62e06ba683fd5da13aa7d517a9"
+        },
+        "date": 1793915099171,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1024)",
+            "value": 1206.6930885314941,
+            "unit": "ns",
+            "range": "± 5.227717713185458"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1024)",
+            "value": 3135.4012616475425,
+            "unit": "ns",
+            "range": "± 23.10405667425858"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1048576)",
+            "value": 1232.81742477417,
+            "unit": "ns",
+            "range": "± 12.937757458345446"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1048576)",
+            "value": 1945550.2682291667,
+            "unit": "ns",
+            "range": "± 7755.764732916495"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 1000)",
+            "value": 3832.697504679362,
+            "unit": "ns",
+            "range": "± 52.510745058577065"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 1000)",
+            "value": 8934.513580322266,
+            "unit": "ns",
+            "range": "± 64.04866186389742"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 1000)",
+            "value": 14369.565673828125,
+            "unit": "ns",
+            "range": "± 246.70688230364706"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 1000)",
+            "value": 7061.132146199544,
+            "unit": "ns",
+            "range": "± 16.126393430014552"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 100000)",
+            "value": 64210.5752360026,
+            "unit": "ns",
+            "range": "± 1762.3186965633543"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 100000)",
+            "value": 274639.6077473958,
+            "unit": "ns",
+            "range": "± 15746.786415895649"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 100000)",
+            "value": 663963.1217447916,
+            "unit": "ns",
+            "range": "± 8674.568872223632"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 100000)",
+            "value": 380057.14892578125,
+            "unit": "ns",
+            "range": "± 3132.40699665563"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 0)",
+            "value": 17936.111938476562,
+            "unit": "ns",
+            "range": "± 1095.3550011596121"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 0)",
+            "value": 2364.723066965739,
+            "unit": "ns",
+            "range": "± 19.51043078120395"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 64)",
+            "value": 911841.4622395834,
+            "unit": "ns",
+            "range": "± 15816.345957212669"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 64)",
+            "value": 9844.643005371094,
+            "unit": "ns",
+            "range": "± 111.0162385576623"
           }
         ]
       }
