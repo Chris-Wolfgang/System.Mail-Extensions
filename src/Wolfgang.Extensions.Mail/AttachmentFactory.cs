@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;       // [NotNullWhen(true)] on TFMs that ship it
+#endif
 using System.IO;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -122,6 +125,9 @@ public static class AttachmentFactory
     public static bool TryGetRegisteredContentType
     (
         string extension,
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+        [NotNullWhen(true)]
+#endif
         out string? contentType
     )
     {
@@ -245,23 +251,7 @@ public static class AttachmentFactory
             throw new ArgumentNullException(nameof(fileName));
         }
 
-        var destination = new MemoryStream();
-
-#pragma warning disable RS0030 // In-memory stream copy; sync is appropriate
-        if (content.CanSeek)
-        {
-            var originalPosition = content.Position;
-            content.Position = 0;
-            content.CopyTo(destination);
-            content.Position = originalPosition;
-        }
-        else
-        {
-            content.CopyTo(destination);
-        }
-#pragma warning restore RS0030
-
-        destination.Position = 0;
+        var destination = StreamCopy.ToMemoryStream(content);
         var resolvedContentType = ResolveContentType(fileName, contentType);
 
         return new Attachment(destination, fileName, resolvedContentType);
