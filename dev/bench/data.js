@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1791674407375,
+  "lastUpdate": 1793898115261,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "BenchmarkDotNet": [
@@ -480,6 +480,126 @@ window.BENCHMARK_DATA = {
             "value": 13294.770161946615,
             "unit": "ns",
             "range": "± 591.5247342155433"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "df7cf87080fe0e08db3ab23e6f5962e8b685ab9f",
+          "message": "test: tighter assertions and the missing cases from the review (#332)\n\n- EmlParserTests: malformed From asserts From is null; malformed base64\n  asserts the raw body; three Contains -> Equal (HTML body, QP body,\n  folded subject); #if NETFRAMEWORK instead of NETSTANDARD2_0||NETFRAMEWORK.\n- Validate: exactly two errors. ToMimeString: assert the header lines.\n- New: FormatMailAddress quote and backslash escaping, ExceedsLimit at the\n  exact boundary, InlineHtmlBuilder undoubled brace -> FormatException and\n  doubled braces -> single braces.\n- S8969 pragma comments name the .NET Framework TFMs (no netstandard2.0\n  test target).\n- Benchmarks dispose the parsed/cloned message per iteration.\n\nRefs #308\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>",
+          "timestamp": "2026-11-05T11:59:30-05:00",
+          "tree_id": "bdbcdfd7d5a2a7f2ec8a8854fc4e2c8b01406e0a",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/df7cf87080fe0e08db3ab23e6f5962e8b685ab9f"
+        },
+        "date": 1793898113915,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1024)",
+            "value": 1260.3812478383381,
+            "unit": "ns",
+            "range": "± 27.213205197128833"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1024)",
+            "value": 2940.491288503011,
+            "unit": "ns",
+            "range": "± 83.90581009166168"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1048576)",
+            "value": 1240.9169457753499,
+            "unit": "ns",
+            "range": "± 2.5195872181898684"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1048576)",
+            "value": 1638632.8671875,
+            "unit": "ns",
+            "range": "± 22677.13247110905"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 1000)",
+            "value": 4043.7409439086914,
+            "unit": "ns",
+            "range": "± 54.95674290167176"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 1000)",
+            "value": 9462.330301920572,
+            "unit": "ns",
+            "range": "± 59.44587376665642"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 1000)",
+            "value": 15648.731852213541,
+            "unit": "ns",
+            "range": "± 227.00907735097996"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 1000)",
+            "value": 7563.2187093098955,
+            "unit": "ns",
+            "range": "± 77.10590797847497"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 100000)",
+            "value": 60816.8857828776,
+            "unit": "ns",
+            "range": "± 545.3969537608165"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 100000)",
+            "value": 268301.3766276042,
+            "unit": "ns",
+            "range": "± 2733.2790442886544"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 100000)",
+            "value": 687031.6705729166,
+            "unit": "ns",
+            "range": "± 9658.617530499328"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 100000)",
+            "value": 406083.5895182292,
+            "unit": "ns",
+            "range": "± 5267.777118497223"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 0)",
+            "value": 17428.36181640625,
+            "unit": "ns",
+            "range": "± 1312.2448912364675"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 0)",
+            "value": 2203.6873054504395,
+            "unit": "ns",
+            "range": "± 24.05863044111647"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 64)",
+            "value": 944432.673828125,
+            "unit": "ns",
+            "range": "± 17472.12559400253"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 64)",
+            "value": 12933.690633138021,
+            "unit": "ns",
+            "range": "± 199.96648276339806"
           }
         ]
       }
