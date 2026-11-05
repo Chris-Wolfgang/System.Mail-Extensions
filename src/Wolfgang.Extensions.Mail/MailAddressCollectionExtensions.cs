@@ -9,7 +9,6 @@ namespace Wolfgang.Extensions.Mail;
 /// <summary>
 /// A collection of extension methods for the <see cref="MailAddressCollection"/> class.
 /// </summary>
-// ReSharper disable once UnusedType.Global
 public static class MailAddressCollectionExtensions
 {
 
@@ -23,7 +22,6 @@ public static class MailAddressCollectionExtensions
     /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
     /// <exception cref="FormatException">An entry in <paramref name="addresses"/> is not a valid email address.</exception>
-    // ReSharper disable once MemberCanBePrivate.Global
     public static void AddRange
     (
         this MailAddressCollection source,
@@ -58,14 +56,12 @@ public static class MailAddressCollectionExtensions
     /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
     /// <exception cref="FormatException">An entry in <paramref name="addresses"/> is not a valid email address.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static void AddRange
     (
         this MailAddressCollection source,
         params string[] addresses
     )
-    // ReSharper disable once InvokeAsExtensionMember
-        => AddRange(source, (IEnumerable<string>)addresses);
+        => source.AddRange((IEnumerable<string>)addresses);
 
 
 
@@ -76,7 +72,6 @@ public static class MailAddressCollectionExtensions
     /// <param name="addresses">The list of <see cref="MailAddress"/> to add to the source</param>
     /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
-    // ReSharper disable once MemberCanBePrivate.Global
     public static void AddRange
     (
         this MailAddressCollection source,
@@ -108,14 +103,12 @@ public static class MailAddressCollectionExtensions
     /// <param name="addresses">The list of <see cref="MailAddress"/> to add to the source</param>
     /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static void AddRange
     (
         this MailAddressCollection source,
         params MailAddress[] addresses
     )
-    // ReSharper disable once InvokeAsExtensionMember
-        => AddRange(source, (IEnumerable<MailAddress>)addresses);
+        => source.AddRange((IEnumerable<MailAddress>)addresses);
 
 
 
@@ -136,7 +129,6 @@ public static class MailAddressCollectionExtensions
     /// // "Alice Smith" &lt;alice@example.com&gt;; bob@example.com
     /// </code>
     /// </example>
-    // ReSharper disable once UnusedMember.Global
     public static string ToFormattedString
     (
         this MailAddressCollection source,
@@ -163,7 +155,6 @@ public static class MailAddressCollectionExtensions
     /// <param name="address">The <see cref="MailAddress"/> to format.</param>
     /// <returns>A formatted string such as <c>"Display Name" &lt;email@example.com&gt;</c>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="address"/> is null.</exception>
-    // ReSharper disable once MemberCanBePrivate.Global
     public static string FormatMailAddress
     (
         this MailAddress address
@@ -184,5 +175,4 @@ public static class MailAddressCollectionExtensions
             .Replace("\"", "\\\"");
         return $"\"{escapedName}\" <{address.Address}>";
     }
-
 }
