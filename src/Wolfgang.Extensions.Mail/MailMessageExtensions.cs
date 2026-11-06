@@ -16,7 +16,6 @@ namespace Wolfgang.Extensions.Mail;
 /// <summary>
 /// A collection of extension methods for the <see cref="MailMessage"/> class.
 /// </summary>
-// ReSharper disable once UnusedType.Global
 public static class MailMessageExtensions
 {
 
@@ -42,7 +41,6 @@ public static class MailMessageExtensions
     /// }
     /// </code>
     /// </example>
-    // ReSharper disable once UnusedMember.Global
     public static ValidationResult Validate
     (
         this MailMessage source
@@ -62,7 +60,6 @@ public static class MailMessageExtensions
     /// <param name="options">Optional validation configuration. Pass <c>null</c> for default behavior.</param>
     /// <returns>A <see cref="ValidationResult"/> indicating whether the message is valid.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-    // ReSharper disable once MemberCanBePrivate.Global
     public static ValidationResult Validate
     (
         this MailMessage source,
@@ -101,6 +98,13 @@ public static class MailMessageExtensions
     /// attachments, alternate views, and linked resources are independently copied.
     /// The returned message can be modified and disposed independently of the original.
     /// </summary>
+    /// <remarks>
+    /// Attachment, alternate-view and linked-resource streams are copied into new
+    /// <see cref="System.IO.MemoryStream"/>s. A seekable source stream is read from position 0 and
+    /// its position is restored. A <b>non-seekable</b> source stream is read to its end and cannot
+    /// be rewound, so after <c>Clone()</c> the original attachment has no content left to send or
+    /// serialize; clone before the original is used, or use seekable streams.
+    /// </remarks>
     /// <param name="source">The <see cref="MailMessage"/> to clone.</param>
     /// <returns>A new <see cref="MailMessage"/> that is an independent deep copy of <paramref name="source"/>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
@@ -113,7 +117,6 @@ public static class MailMessageExtensions
     /// // original.To is unchanged
     /// </code>
     /// </example>
-    // ReSharper disable once UnusedMember.Global
     public static MailMessage Clone
     (
         this MailMessage source
@@ -145,6 +148,11 @@ public static class MailMessageExtensions
     /// Serializes the <see cref="MailMessage"/> to a raw MIME/EML format string.
     /// The output conforms to RFC 2822 and can be saved as a <c>.eml</c> file.
     /// </summary>
+    /// <remarks>
+    /// The output is the message only: Bcc recipients are not written, and neither is the SMTP
+    /// pickup-directory envelope (<c>X-Sender</c> / <c>X-Receiver</c>). Non-ASCII header values are
+    /// RFC 2047-encoded.
+    /// </remarks>
     /// <param name="source">The <see cref="MailMessage"/> to serialize.</param>
     /// <returns>A string containing the complete MIME representation of the message.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
@@ -160,7 +168,6 @@ public static class MailMessageExtensions
     /// string eml = message.ToMimeString();
     /// </code>
     /// </example>
-    // ReSharper disable once UnusedMember.Global
 #if NET5_0_OR_GREATER
     [RequiresUnreferencedCode("ToMimeString uses reflection to reach the internal System.Net.Mail.MailWriter type and MailMessage.Send; the trimmer may remove those members.")]
 #endif
@@ -431,7 +438,6 @@ public static class MailMessageExtensions
     // ==========================================================================
 
 #pragma warning disable S3011 // Reflection on non-public members is intentional for MIME serialization
-    [ExcludeFromCodeCoverage] // Defensive null checks for runtime-specific reflection targets are unreachable on any single TFM
 #if NET5_0_OR_GREATER
     [RequiresUnreferencedCode("Uses reflection to reach the internal MailWriter type.")]
 #endif
@@ -444,15 +450,12 @@ public static class MailMessageExtensions
         Stream stream
     )
     {
-        var mailWriterType = typeof(SmtpClient).Assembly.GetType("System.Net.Mail.MailWriter");
-        if (mailWriterType == null)
-        {
-            throw new InvalidOperationException
-            (
-                "Unable to locate the internal MailWriter type. " +
-                "This runtime version may not support MIME serialization via reflection."
-            );
-        }
+        var mailWriterType = RequireReflectionTarget
+        (
+            typeof(SmtpClient).Assembly.GetType("System.Net.Mail.MailWriter"),
+            "Unable to locate the internal MailWriter type. " +
+            "This runtime version may not support MIME serialization via reflection."
+        );
 
         var mailWriter = CreateMailWriter(mailWriterType, stream);
 
@@ -478,7 +481,6 @@ public static class MailMessageExtensions
 #pragma warning disable S3011  // Reflection on non-public members is intentional for MIME serialization
 #pragma warning disable VSTHRD002 // Synchronous wait is intentional — SendAsync with SyncReadWriteAdapter completes synchronously
 #pragma warning disable RS0030  // GetAwaiter().GetResult() is intentional — SyncReadWriteAdapter completes synchronously
-    [ExcludeFromCodeCoverage] // Branches depend on runtime version; each TFM only exercises one path
 #if NET5_0_OR_GREATER
     [RequiresUnreferencedCode("Uses reflection to invoke the non-public MailMessage.Send.")]
 #endif
@@ -491,6 +493,14 @@ public static class MailMessageExtensions
         object mailWriter
     )
     {
+        // The internal Send/SendAsync take (writer, sendEnvelope, allowUnicode[, token]).
+        // sendEnvelope is false: with true, MailMessage writes the SMTP pickup-directory
+        // envelope (X-Sender, plus one X-Receiver per To, Cc AND Bcc recipient), which would
+        // disclose Bcc recipients in the EML text. allowUnicode is false so non-ASCII header
+        // values are RFC 2047-encoded, as on the wire to a server without SMTPUTF8.
+        const bool sendEnvelope = false;
+        const bool allowUnicode = false;
+
         // Try synchronous Send first (.NET Framework / .NET Core / .NET 5-9)
         var sendMethod = typeof(MailMessage).GetMethod
         (
@@ -500,45 +510,34 @@ public static class MailMessageExtensions
 
         if (sendMethod != null)
         {
-            sendMethod.Invoke(source, new[] { mailWriter, true, false });
+            sendMethod.Invoke(source, new[] { mailWriter, sendEnvelope, allowUnicode });
             return;
         }
 
         // Fall back to SendAsync<TIOAdapter> (.NET 10+)
-        var sendAsyncMethod = typeof(MailMessage).GetMethod
+        var sendAsyncMethod = RequireReflectionTarget
         (
-            "SendAsync",
-            BindingFlags.Instance | BindingFlags.NonPublic
+            typeof(MailMessage).GetMethod
+            (
+                "SendAsync",
+                BindingFlags.Instance | BindingFlags.NonPublic
+            ),
+            "Unable to locate the internal MailMessage.Send or SendAsync method. " +
+            "This runtime version may not support MIME serialization via reflection."
         );
 
-        if (sendAsyncMethod == null)
-        {
-            throw new InvalidOperationException
-            (
-                "Unable to locate the internal MailMessage.Send or SendAsync method. " +
-                "This runtime version may not support MIME serialization via reflection."
-            );
-        }
-
-        var syncAdapterType = typeof(SmtpClient).Assembly.GetType
+        var syncAdapterType = RequireReflectionTarget
         (
-            "System.Net.SyncReadWriteAdapter"
+            typeof(SmtpClient).Assembly.GetType("System.Net.SyncReadWriteAdapter"),
+            "Unable to locate the internal SyncReadWriteAdapter type. " +
+            "This runtime version may not support MIME serialization via reflection."
         );
-
-        if (syncAdapterType == null)
-        {
-            throw new InvalidOperationException
-            (
-                "Unable to locate the internal SyncReadWriteAdapter type. " +
-                "This runtime version may not support MIME serialization via reflection."
-            );
-        }
 
         var closedMethod = sendAsyncMethod.MakeGenericMethod(syncAdapterType);
         var result = closedMethod.Invoke
         (
             source,
-            new[] { mailWriter, true, false, CancellationToken.None }
+            new[] { mailWriter, sendEnvelope, allowUnicode, CancellationToken.None }
         );
 
         if (result is Task task)
@@ -706,36 +705,17 @@ public static class MailMessageExtensions
 
 
 
-#pragma warning disable RS0030 // BannedSymbols: Stream.CopyTo is banned for async-first,
-                               // but these are in-memory streams where sync copy is appropriate.
     private static MemoryStream CloneStream
     (
         Stream source
     )
     {
-        var destination = new MemoryStream();
-
-        if (source.CanSeek)
-        {
-            var originalPosition = source.Position;
-            source.Position = 0;
-            source.CopyTo(destination);
-            source.Position = originalPosition;
-        }
-        else
-        {
-            source.CopyTo(destination);
-        }
-
-        destination.Position = 0;
-        return destination;
+        return StreamCopy.ToMemoryStream(source);
     }
-#pragma warning restore RS0030
 
 
 
 #pragma warning disable S3011 // Reflection on non-public members is intentional for MIME serialization
-    [ExcludeFromCodeCoverage] // Constructor signature varies by runtime; only one path hit per TFM
 #if NET5_0_OR_GREATER
     [RequiresUnreferencedCode("Uses reflection to construct the internal MailWriter type.")]
 #endif
@@ -757,32 +737,73 @@ public static class MailMessageExtensions
             modifiers: null
         );
 
-        if (ctor != null)
-        {
-            return ctor.Invoke(new object[] { stream, false });
-        }
+        // net462 has only MailWriter(Stream); see CreateLegacyMailWriter.
+        return ctor != null
+            ? ctor.Invoke(new object[] { stream, false })
+            : CreateLegacyMailWriter(mailWriterType, stream);
+    }
 
-        // Fall back to 1-parameter constructor (net462): MailWriter(Stream)
-        ctor = mailWriterType.GetConstructor
+
+
+    // .NET Framework only: MailWriter(Stream). The net4x test runs execute this path (it is what
+    // makes ToMimeString work there), but they run without the XPlat coverage collector, so no
+    // coverage report can ever see it. Excluded as a single method for that reason.
+    [ExcludeFromCodeCoverage]
+#if NET5_0_OR_GREATER
+    [RequiresUnreferencedCode("Uses reflection to construct the internal MailWriter type.")]
+#endif
+#if NET7_0_OR_GREATER
+    [RequiresDynamicCode("Uses reflection-based construction incompatible with Native AOT.")]
+#endif
+    private static object CreateLegacyMailWriter
+    (
+        Type mailWriterType,
+        Stream stream
+    )
+    {
+        var legacyCtor = RequireReflectionTarget
         (
-            bindingAttr: BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
-            binder: null,
-            types: new[] { typeof(Stream) },
-            modifiers: null
-        );
-
-        if (ctor != null)
-        {
-            return ctor.Invoke(new object[] { stream });
-        }
-
-        throw new InvalidOperationException
-        (
+            mailWriterType.GetConstructor
+            (
+                bindingAttr: BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
+                binder: null,
+                types: new[] { typeof(Stream) },
+                modifiers: null
+            ),
             "Unable to create MailWriter instance. " +
             "No supported constructor found for this runtime version."
         );
+
+        return legacyCtor.Invoke(new object[] { stream });
     }
 #pragma warning restore S3011
+
+
+
+    /// <summary>
+    /// Returns <paramref name="target"/>, or throws when a reflection lookup into the
+    /// System.Net.Mail internals found nothing.
+    /// </summary>
+    /// <returns><paramref name="target"/>, which is not null.</returns>
+    /// <exception cref="InvalidOperationException"><paramref name="target"/> is null.</exception>
+    // The only coverage exclusion on the MIME path. It throws only on a runtime whose internals
+    // differ from every supported target framework, which no test run can produce; every real
+    // serialization step around it is measured.
+    [ExcludeFromCodeCoverage]
+    private static T RequireReflectionTarget<T>
+    (
+        T? target,
+        string message
+    )
+        where T : class
+    {
+        if (target == null)
+        {
+            throw new InvalidOperationException(message);
+        }
+
+        return target;
+    }
 
 
 
@@ -796,8 +817,8 @@ public static class MailMessageExtensions
     /// </summary>
     // The read/seek/length members are Stream-contract plumbing the MailWriter
     // serialization path never calls (it only writes, flushes, and closes), so
-    // they are excluded from coverage rather than exercised by an artificial test.
-    [ExcludeFromCodeCoverage]
+    // those members alone are excluded from coverage rather than exercised by an
+    // artificial test. Write, Flush, Dispose and CanWrite are measured.
     private sealed class NonClosingStreamWrapper : Stream
     {
         private readonly Stream _inner;
@@ -811,14 +832,18 @@ public static class MailMessageExtensions
 
 
 
+        [ExcludeFromCodeCoverage]
         public override bool CanRead => _inner.CanRead;
 
+        [ExcludeFromCodeCoverage]
         public override bool CanSeek => _inner.CanSeek;
 
         public override bool CanWrite => _inner.CanWrite;
 
+        [ExcludeFromCodeCoverage]
         public override long Length => _inner.Length;
 
+        [ExcludeFromCodeCoverage]
         public override long Position
         {
             get => _inner.Position;
@@ -834,6 +859,7 @@ public static class MailMessageExtensions
 
 
 
+        [ExcludeFromCodeCoverage]
         public override int Read(byte[] buffer, int offset, int count)
         {
             return _inner.Read(buffer, offset, count);
@@ -841,6 +867,7 @@ public static class MailMessageExtensions
 
 
 
+        [ExcludeFromCodeCoverage]
         public override long Seek(long offset, SeekOrigin origin)
         {
             return _inner.Seek(offset, origin);
@@ -848,6 +875,7 @@ public static class MailMessageExtensions
 
 
 
+        [ExcludeFromCodeCoverage]
         public override void SetLength(long value)
         {
             _inner.SetLength(value);
