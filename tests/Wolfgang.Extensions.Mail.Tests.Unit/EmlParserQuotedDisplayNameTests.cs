@@ -24,9 +24,10 @@ public class EmlParserQuotedDisplayNameTests
     {
         using var msg = EmlParser.Parse(fromHeader + "\r\nTo: t@example.com\r\n\r\nBody");
 
-        Assert.NotNull(msg.From);
-        Assert.Equal("z@example.com", msg.From!.Address);
-        Assert.Equal(expected, msg.From.DisplayName);
+        var from = msg.From;
+        Assert.NotNull(from);
+        Assert.Equal("z@example.com", from.Address);
+        Assert.Equal(expected, from.DisplayName);
     }
 
 
