@@ -1,0 +1,28 @@
+{
+  From: "Sender Name" <sender@example.com>,
+  To: [
+    first@example.com,
+    "Second, Person" <second@example.com>
+  ],
+  Cc: [
+    copy@example.com
+  ],
+  Subject: Grüße,
+  Priority: High,
+  IsBodyHtml: false,
+  Body: Plain ü text,
+  CustomHeaders: [
+    X-Custom: custom value,
+    X-Priority: 1
+  ],
+  AlternateViews: [
+    text/html
+  ],
+  Attachments: [
+    {
+      Name: data.csv,
+      MediaType: text/csv,
+      Length: 8
+    }
+  ]
+}
