@@ -84,6 +84,15 @@ public static class EmlParser
         RegexTimeout
     );
 
+    // A quoted display name may contain '<', '>' and ',' (RFC 5322 3.2.4), which the
+    // unquoted pattern below would take for the start of the address. Tried first.
+    private static readonly Regex QuotedDisplayNameAddressRegex = new Regex
+    (
+        @"^""(?<name>[^""]*)""\s*<(?<email>[^>]+)>$",
+        DefaultRegexOptionsNoCase | RegexOptions.Compiled,
+        RegexTimeout
+    );
+
     private static readonly Regex DisplayNameAddressRegex = new Regex
     (
         @"^""?(?<name>[^""<]+?)""?\s*<(?<email>[^>]+)>$",
@@ -1124,8 +1133,13 @@ public static class EmlParser
     {
         var trimmed = addressString.Trim();
 
-        // Handle "Display Name" <email@example.com> format
-        var match = DisplayNameAddressRegex.Match(trimmed);
+        // Handle "Display Name" <email@example.com> and Display Name <email@example.com>
+        var match = QuotedDisplayNameAddressRegex.Match(trimmed);
+        if (!match.Success)
+        {
+            match = DisplayNameAddressRegex.Match(trimmed);
+        }
+
         if (match.Success)
         {
             // MailMessage writes a non-ASCII display name as an RFC 2047 encoded word, and so
