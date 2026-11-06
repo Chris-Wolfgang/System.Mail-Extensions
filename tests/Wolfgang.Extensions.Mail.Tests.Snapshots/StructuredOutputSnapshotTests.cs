@@ -63,14 +63,14 @@ public class StructuredOutputSnapshotTests
             message.Body,
             CustomHeaders = message.Headers.AllKeys.OrderBy(k => k, System.StringComparer.Ordinal).Select(k => $"{k}: {message.Headers[k]}").ToArray(),
             AlternateViews = message.AlternateViews.Select(v => v.ContentType.MediaType).ToArray(),
-            Attachments = message.Attachments.Select(a => new { a.Name, a.ContentType.MediaType, Length = a.ContentStream.Length }).ToArray(),
+            Attachments = message.Attachments.Select(a => new { a.Name, a.ContentType.MediaType, a.ContentStream.Length }).ToArray(),
         };
     }
 
 
 
     [Fact]
-    public Task ToFormattedString_when_display_names_need_escaping_matches_snapshot()
+    public async Task ToFormattedString_when_display_names_need_escaping_matches_snapshot()
     {
         using var message = new MailMessage();
         message.To.Add(new MailAddress("plain@example.com"));
@@ -79,7 +79,7 @@ public class StructuredOutputSnapshotTests
         message.To.Add(new MailAddress("quote@example.com", "Say \"hi\""));
         message.To.Add(new MailAddress("slash@example.com", "Back\\slash"));
 
-        return Verifier.Verify
+        await Verifier.Verify
         (
             new
             {
@@ -93,17 +93,17 @@ public class StructuredOutputSnapshotTests
 
 
     [Fact]
-    public Task Parse_when_message_is_multipart_matches_snapshot()
+    public async Task Parse_when_message_is_multipart_matches_snapshot()
     {
         using var message = EmlParser.Parse(MultipartEml);
 
-        return Verifier.Verify(Describe(message));
+        await Verifier.Verify(Describe(message));
     }
 
 
 
     [Fact]
-    public Task ParseWithDiagnostics_when_headers_are_malformed_matches_snapshot()
+    public async Task ParseWithDiagnostics_when_headers_are_malformed_matches_snapshot()
     {
         const string eml =
             "From: not an address\r\n" +
@@ -115,7 +115,7 @@ public class StructuredOutputSnapshotTests
         var result = EmlParser.ParseWithDiagnostics(eml);
         using var message = result.Message;
 
-        return Verifier.Verify
+        await Verifier.Verify
         (
             new
             {

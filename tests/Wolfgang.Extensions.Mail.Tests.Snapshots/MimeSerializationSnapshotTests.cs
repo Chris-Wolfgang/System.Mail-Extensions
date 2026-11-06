@@ -28,7 +28,7 @@ public class MimeSerializationSnapshotTests
 
 
     [Fact]
-    public Task ToMimeString_when_plain_text_message_matches_snapshot()
+    public async Task ToMimeString_when_plain_text_message_matches_snapshot()
     {
         using var message = new MailMessageBuilder()
             .From("sender@example.com", "Sender Name")
@@ -39,13 +39,13 @@ public class MimeSerializationSnapshotTests
             .PlainTextBody("Hello,\r\n\r\nThe report is attached.\r\n")
             .Build();
 
-        return VerifyMime(message.ToMimeString());
+        await VerifyMime(message.ToMimeString());
     }
 
 
 
     [Fact]
-    public Task ToMimeString_when_html_body_has_attachment_matches_snapshot()
+    public async Task ToMimeString_when_html_body_has_attachment_matches_snapshot()
     {
         using var message = new MailMessageBuilder()
             .From("sender@example.com")
@@ -57,13 +57,13 @@ public class MimeSerializationSnapshotTests
             .Priority(MailPriority.High)
             .Build();
 
-        return VerifyMime(message.ToMimeString());
+        await VerifyMime(message.ToMimeString());
     }
 
 
 
     [Fact]
-    public Task ToMimeString_when_subject_and_display_name_are_not_ascii_matches_snapshot()
+    public async Task ToMimeString_when_subject_and_display_name_are_not_ascii_matches_snapshot()
     {
         using var message = new MailMessageBuilder()
             .From("sender@example.com", "Jürgen Müller")
@@ -74,24 +74,22 @@ public class MimeSerializationSnapshotTests
             .PlainTextBody("Schöne Grüße")
             .Build();
 
-        return VerifyMime(message.ToMimeString());
+        await VerifyMime(message.ToMimeString());
     }
 
 
 
     [Fact]
-    public Task ToMimeString_when_message_has_alternate_views_matches_snapshot()
+    public async Task ToMimeString_when_message_has_alternate_views_matches_snapshot()
     {
-        using var message = new MailMessage("sender@example.com", "recipient@example.com")
-        {
-            Subject = "Alternatives",
-            Body = "Plain text version",
-        };
+        using var message = new MailMessage("sender@example.com", "recipient@example.com");
+        message.Subject = "Alternatives";
+        message.Body = "Plain text version";
         message.AlternateViews.Add
         (
             AlternateView.CreateAlternateViewFromString("<b>HTML version</b>", Encoding.UTF8, MediaTypeNames.Text.Html)
         );
 
-        return VerifyMime(message.ToMimeString());
+        await VerifyMime(message.ToMimeString());
     }
 }
