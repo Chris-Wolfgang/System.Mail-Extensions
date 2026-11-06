@@ -41,9 +41,11 @@ public class EmlParserAdjacentEncodedWordTests
     [InlineData("=?utf-8?Q?a?= =?iso-8859-1?Q?=E9?=", "aé")]
     public void Parse_when_a_character_is_split_across_encoded_words_decodes_it_whole(string subject, string expected)
     {
-        using var msg = EmlParser.Parse("From: f@example.com\r\nSubject: " + subject + "\r\n\r\nBody");
+        var result = EmlParser.ParseWithDiagnostics("From: f@example.com\r\nSubject: " + subject + "\r\n\r\nBody");
+        using var msg = result.Message;
 
         Assert.Equal(expected, msg.Subject);
+        Assert.Empty(result.Issues);
     }
 
 
@@ -83,10 +85,8 @@ public class EmlParserAdjacentEncodedWordTests
     {
         const string name = "<Y漢Xcß>ñ,>X漢:ä. Zoë Ørsted-Müller";
         const string subject = "Grüße aus Köln, Zürich und Malmö - 漢字 Überprüfung der Änderungen";
-        using var original = new MailMessage(new MailAddress("x@example.com", name), new MailAddress("t@example.com"))
-        {
-            Subject = subject,
-        };
+        using var original = new MailMessage(new MailAddress("x@example.com", name), new MailAddress("t@example.com"));
+        original.Subject = subject;
 
         using var parsed = EmlParser.Parse(original.ToMimeString());
 
