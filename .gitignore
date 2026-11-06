@@ -444,3 +444,6 @@ docfx_project/api/*.yml
 # scripts/upgrade.ps1 writes <file>.template sidecars for files that need a manual
 # merge; resolve them into the real file and delete them, never commit them.
 *.template
+
+# Stryker.NET mutation-testing reports (dotnet stryker)
+StrykerOutput/

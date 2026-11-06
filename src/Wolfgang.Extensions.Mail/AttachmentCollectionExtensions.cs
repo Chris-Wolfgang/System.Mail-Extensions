@@ -8,7 +8,6 @@ namespace Wolfgang.Extensions.Mail;
 /// <summary>
 /// A collection of extension methods for the <see cref="AttachmentCollection"/> class.
 /// </summary>
-// ReSharper disable once UnusedType.Global
 public static class AttachmentCollectionExtensions
 {
 
@@ -17,16 +16,14 @@ public static class AttachmentCollectionExtensions
     /// </summary>
     /// <param name="source">The collection to add to</param>
     /// <param name="attachments">The list of <see cref="Attachment"/> to add</param>
-    /// <exception cref="ArgumentNullException">source is null</exception>
-    /// <exception cref="ArgumentNullException">attachments is null</exception>
-    // ReSharper disable once UnusedMember.Global
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="attachments"/> is null.</exception>
     public static void AddRange
     (
         this AttachmentCollection source,
         params Attachment[] attachments
     )
-    // ReSharper disable once InvokeAsExtensionMember
-        => AddRange(source, (IEnumerable<Attachment>)attachments);
+        => source.AddRange((IEnumerable<Attachment>)attachments);
 
 
 
@@ -35,9 +32,8 @@ public static class AttachmentCollectionExtensions
     /// </summary>
     /// <param name="source">The collection to add to</param>
     /// <param name="attachments">The list of <see cref="Attachment"/> to add</param>
-    /// <exception cref="ArgumentNullException">source is null</exception>
-    /// <exception cref="ArgumentNullException">attachments is null</exception>
-    // ReSharper disable once MemberCanBePrivate.Global
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="attachments"/> is null.</exception>
     // ReSharper disable once ConvertToExtensionBlock
     public static void AddRange
     (
@@ -68,9 +64,11 @@ public static class AttachmentCollectionExtensions
     /// </summary>
     /// <param name="source">The collection to add to</param>
     /// <param name="fileNames">The list of <see cref="string"/> containing file names to add</param>
-    /// <exception cref="ArgumentNullException">source is null</exception>
-    /// <exception cref="ArgumentNullException">fileNames is null</exception>
-    // ReSharper disable once MemberCanBePrivate.Global
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="fileNames"/> is null.</exception>
+    /// <exception cref="System.IO.FileNotFoundException">A file in <paramref name="fileNames"/> does not exist.</exception>
+    /// <exception cref="System.IO.DirectoryNotFoundException">The directory of a file in <paramref name="fileNames"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read a file in <paramref name="fileNames"/>.</exception>
     public static void AddRange
     (
         this AttachmentCollection source,
@@ -100,16 +98,17 @@ public static class AttachmentCollectionExtensions
     /// </summary>
     /// <param name="source">The collection to add to</param>
     /// <param name="fileNames">The list of <see cref="string"/> containing file names to add</param>
-    /// <exception cref="ArgumentNullException">source is null</exception>
-    /// <exception cref="ArgumentNullException">fileNames is null</exception>
-    // ReSharper disable once UnusedMember.Global
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="fileNames"/> is null.</exception>
+    /// <exception cref="System.IO.FileNotFoundException">A file in <paramref name="fileNames"/> does not exist.</exception>
+    /// <exception cref="System.IO.DirectoryNotFoundException">The directory of a file in <paramref name="fileNames"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read a file in <paramref name="fileNames"/>.</exception>
     public static void AddRange
     (
         this AttachmentCollection source,
         params string[] fileNames
     )
-    // ReSharper disable once InvokeAsExtensionMember
-        => AddRange(source, (IEnumerable<string>)fileNames);
+        => source.AddRange((IEnumerable<string>)fileNames);
 
 
 
@@ -127,7 +126,6 @@ public static class AttachmentCollectionExtensions
     /// long totalBytes = message.Attachments.TotalSize();
     /// </code>
     /// </example>
-    // ReSharper disable once UnusedMember.Global
     public static long TotalSize
     (
         this AttachmentCollection source
@@ -166,7 +164,6 @@ public static class AttachmentCollectionExtensions
     /// <param name="maxBytes">The maximum allowed total size in bytes.</param>
     /// <returns><c>true</c> if the total attachment size exceeds <paramref name="maxBytes"/>; otherwise, <c>false</c>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static bool ExceedsLimit
     (
         this AttachmentCollection source,
@@ -175,5 +172,4 @@ public static class AttachmentCollectionExtensions
     {
         return source.TotalSize() > maxBytes;
     }
-
 }

@@ -94,7 +94,7 @@ public class EmlParserTests
         using var msg = EmlParser.Parse(eml);
 
         Assert.True(msg.IsBodyHtml);
-        Assert.Contains("<h1>Hello</h1>", msg.Body);
+        Assert.Equal("<h1>Hello</h1>", msg.Body);
     }
 
 
@@ -241,7 +241,7 @@ public class EmlParserTests
 
         using var msg = EmlParser.Parse(eml);
 
-        Assert.Contains("é", msg.Body);
+        Assert.Equal("Hello é World", msg.Body);
     }
 
 
@@ -390,7 +390,7 @@ public class EmlParserTests
 
         try
         {
-#if NETSTANDARD2_0 || NETFRAMEWORK
+#if NETFRAMEWORK
             File.WriteAllText(filePath, eml);
             await Task.CompletedTask;
 #else
@@ -431,7 +431,7 @@ public class EmlParserTests
 
         using var msg = EmlParser.Parse(eml);
 
-        Assert.Contains("folded", msg.Subject);
+        Assert.Equal("This is a folded subject", msg.Subject);
     }
 
 
@@ -529,7 +529,7 @@ public class EmlParserTests
         using var msg = EmlParser.Parse(eml);
 
         // Should not throw; body preserved as-is on decode failure
-        Assert.False(string.IsNullOrEmpty(msg.Body));
+        Assert.Equal("this is not valid base64 !!!", msg.Body);
     }
 
 
@@ -548,7 +548,8 @@ public class EmlParserTests
 
         using var msg = EmlParser.Parse(eml);
 
-        // From should be null or unset, but parsing should not throw
+        // The malformed From is skipped (lenient parser), and parsing carries on
+        Assert.Null(msg.From);
         Assert.Equal("Bad From", msg.Subject);
     }
 
