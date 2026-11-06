@@ -113,7 +113,7 @@ public sealed class MailProperties
 
                     // Assertions rather than a bool, so a failure names the field that differs.
                     Assert.NotNull(parsed.From);
-                    Assert.Equal(from, parsed.From!.Address);
+                    Assert.Equal(from, parsed.From.Address);
                     Assert.Equal(fromName, parsed.From.DisplayName);
                     Assert.Equal(to, parsed.To.Select(a => a.Address));
                     Assert.Equal(subject, parsed.Subject);
@@ -186,10 +186,17 @@ public sealed class MailProperties
 
                     var quoted = formatted.Substring(1, formatted.Length - 1 - suffix.Length);
                     var unescaped = new System.Text.StringBuilder();
-                    for (var i = 0; i < quoted.Length; i++)
+                    var index = 0;
+                    while (index < quoted.Length)
                     {
-                        Assert.NotEqual('"', quoted[i]);
-                        unescaped.Append(quoted[i] == '\\' ? quoted[++i] : quoted[i]);
+                        Assert.NotEqual('"', quoted[index]);
+                        if (quoted[index] == '\\')
+                        {
+                            index++;
+                        }
+
+                        unescaped.Append(quoted[index]);
+                        index++;
                     }
 
                     Assert.Equal(source.DisplayName, unescaped.ToString());
@@ -306,7 +313,7 @@ public sealed class MailProperties
 
                     return contentMatches
                         && message.Attachments.TotalSize() == expectedTotal
-                        && message.Attachments.ExceedsLimit(expectedTotal) == false
+                        && !message.Attachments.ExceedsLimit(expectedTotal)
                         && message.Attachments.ExceedsLimit(expectedTotal - 1);
                 },
                 seed: FuzzSettings.Seed,
