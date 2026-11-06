@@ -259,7 +259,7 @@ public class BuilderAndFactoryContractTests
     {
         var builder = new InlineHtmlBuilder();
 
-        Assert.Equal("filePath", Assert.Throws<ArgumentNullException>(() => builder.EmbedImage((string)null!)).ParamName);
+        Assert.Equal("filePath", Assert.Throws<ArgumentNullException>(() => builder.EmbedImage(null!)).ParamName);
         Assert.Equal("fileName", Assert.Throws<ArgumentNullException>(() => builder.EmbedImage(new MemoryStream(new byte[] { 1 }), null!, "image/png")).ParamName);
         Assert.Equal("imageBytes", Assert.Throws<ArgumentNullException>(() => builder.EmbedImage((byte[])null!, "a.png")).ParamName);
         Assert.Equal("fileName", Assert.Throws<ArgumentNullException>(() => builder.EmbedImage(new byte[] { 1 }, null!, "image/png")).ParamName);

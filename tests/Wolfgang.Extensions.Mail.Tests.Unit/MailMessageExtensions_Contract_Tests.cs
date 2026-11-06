@@ -37,11 +37,9 @@ public class MailMessageExtensions_Contract_Tests
     [Fact]
     public void ToMimeString_encodes_a_non_ascii_subject_as_an_encoded_word()
     {
-        using var msg = new MailMessage("from@example.com", "to@example.com")
-        {
-            Subject = "Café",
-            Body = "Body"
-        };
+        using var msg = new MailMessage("from@example.com", "to@example.com");
+        msg.Subject = "Café";
+        msg.Body = "Body";
 
         var mime = msg.ToMimeString();
 
@@ -128,9 +126,11 @@ public class MailMessageExtensions_Contract_Tests
             TransferEncoding = TransferEncoding.QuotedPrintable,
             ContentId = "cid-1"
         };
-        attachment.ContentDisposition!.Inline = true;
-        attachment.ContentDisposition.FileName = "notes.txt";
-        attachment.ContentDisposition.Size = 3;
+        var disposition = attachment.ContentDisposition;
+        Assert.NotNull(disposition);
+        disposition.Inline = true;
+        disposition.FileName = "notes.txt";
+        disposition.Size = 3;
         msg.Attachments.Add(attachment);
 
         using var clone = msg.Clone();
@@ -140,9 +140,11 @@ public class MailMessageExtensions_Contract_Tests
         Assert.Equal(TransferEncoding.QuotedPrintable, copied.TransferEncoding);
         Assert.Equal("cid-1", copied.ContentId);
         Assert.Equal("utf-8", copied.ContentType.CharSet);
-        Assert.True(copied.ContentDisposition!.Inline);
-        Assert.Equal("notes.txt", copied.ContentDisposition.FileName);
-        Assert.Equal(3, copied.ContentDisposition.Size);
+        var copiedDisposition = copied.ContentDisposition;
+        Assert.NotNull(copiedDisposition);
+        Assert.True(copiedDisposition.Inline);
+        Assert.Equal("notes.txt", copiedDisposition.FileName);
+        Assert.Equal(3, copiedDisposition.Size);
     }
 
 
