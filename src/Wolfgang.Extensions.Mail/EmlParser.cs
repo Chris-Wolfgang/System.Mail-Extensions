@@ -521,6 +521,15 @@ public static class EmlParser
                 continue;
             }
 
+            // A line that starts with whitespace other than space or tab (so it is not a folded
+            // continuation), such as a bare CR or a form feed, yields a name that trims to
+            // nothing. MailMessage.Headers rejects an empty name with ArgumentException.
+            if (kvp.Key.Length == 0)
+            {
+                context.Report("Header with an empty field name; header skipped.", "Headers");
+                continue;
+            }
+
             try
             {
                 message.Headers[kvp.Key] = kvp.Value;
