@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1793915100841,
+  "lastUpdate": 1793991817879,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "BenchmarkDotNet": [
@@ -840,6 +840,126 @@ window.BENCHMARK_DATA = {
             "value": 9844.643005371094,
             "unit": "ns",
             "range": "± 111.0162385576623"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "8c9135ebc96efb34e4b5774af04b52fcd63db81c",
+          "message": "ci: weekly fuzz workflow for the Tests.Fuzz properties (fuzz.yaml) (#374)\n\nRuns tests/Wolfgang.Extensions.Mail.Tests.Fuzz weekly (Monday 04:17 UTC) and\non demand with 100,000 cases and a 300-second budget per property (inputs\nfor both, plus a seed to replay a finding through FUZZ_SEED). The verdict\ncomes from the TRX counters, so a build or adapter failure fails the run\nwithout filing anything. The log and TRX are uploaded as the fuzz-results\nartifact (the seed is the durable record); a failing property files one\n\"Fuzz finding\" issue, or comments on the open one, and fails the run.\nShape from DateTime-Extensions' fuzz.yaml.\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>",
+          "timestamp": "2026-11-06T13:55:08-05:00",
+          "tree_id": "8e4493cbee8fdc93fa5d962791a4e884caecd7b9",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/8c9135ebc96efb34e4b5774af04b52fcd63db81c"
+        },
+        "date": 1793991816737,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1024)",
+            "value": 1240.1854832967122,
+            "unit": "ns",
+            "range": "± 30.38844405673216"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1024)",
+            "value": 3042.723808288574,
+            "unit": "ns",
+            "range": "± 53.304726298425706"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1048576)",
+            "value": 1186.9655793507893,
+            "unit": "ns",
+            "range": "± 11.81940812712802"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1048576)",
+            "value": 1922449.7643229167,
+            "unit": "ns",
+            "range": "± 7250.178602157927"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 1000)",
+            "value": 3817.928398132324,
+            "unit": "ns",
+            "range": "± 2.069999319173819"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 1000)",
+            "value": 9217.017313639322,
+            "unit": "ns",
+            "range": "± 95.47253737148883"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 1000)",
+            "value": 13792.524007161459,
+            "unit": "ns",
+            "range": "± 194.8807826882336"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 1000)",
+            "value": 7101.697977701823,
+            "unit": "ns",
+            "range": "± 44.10248967100666"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 100000)",
+            "value": 61778.90376790365,
+            "unit": "ns",
+            "range": "± 1080.149607531009"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 100000)",
+            "value": 292046.2311197917,
+            "unit": "ns",
+            "range": "± 24065.040199417832"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 100000)",
+            "value": 684811.515625,
+            "unit": "ns",
+            "range": "± 20018.730164625504"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 100000)",
+            "value": 397134.5615234375,
+            "unit": "ns",
+            "range": "± 8916.33551154258"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 0)",
+            "value": 14459.451334635416,
+            "unit": "ns",
+            "range": "± 232.41060437693554"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 0)",
+            "value": 2257.4896659851074,
+            "unit": "ns",
+            "range": "± 4.596847614176722"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 64)",
+            "value": 906286.9010416666,
+            "unit": "ns",
+            "range": "± 12796.220935793719"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 64)",
+            "value": 9101.76889038086,
+            "unit": "ns",
+            "range": "± 46.618526142406026"
           }
         ]
       }
