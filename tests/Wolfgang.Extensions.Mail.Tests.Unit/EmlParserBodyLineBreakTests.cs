@@ -23,11 +23,9 @@ public class EmlParserBodyLineBreakTests
     [InlineData("\r\n")]
     public void ToMimeString_then_Parse_keeps_the_body_of_a_base64_message(string body)
     {
-        using var original = new MailMessage("sender@example.com", "recipient@example.com")
-        {
-            Body = "Grüße " + body,
-            BodyEncoding = Encoding.UTF8,
-        };
+        using var original = new MailMessage("sender@example.com", "recipient@example.com");
+        original.Body = "Grüße " + body;
+        original.BodyEncoding = Encoding.UTF8;
 
         var mime = original.ToMimeString();
         using var parsed = EmlParser.Parse(mime);
@@ -43,10 +41,8 @@ public class EmlParserBodyLineBreakTests
     [InlineData("Line")]
     public void ToMimeString_then_Parse_keeps_the_body_of_a_quoted_printable_message(string body)
     {
-        using var original = new MailMessage("sender@example.com", "recipient@example.com")
-        {
-            Body = body,
-        };
+        using var original = new MailMessage("sender@example.com", "recipient@example.com");
+        original.Body = body;
 
         var mime = original.ToMimeString();
         using var parsed = EmlParser.Parse(mime);
