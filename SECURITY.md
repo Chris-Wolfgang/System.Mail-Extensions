@@ -65,6 +65,50 @@ Tell us in the report how you would like to be named.
 Your help is greatly appreciated!
 Responsible disclosure of security vulnerabilities helps protect our entire community.
 
+## Verifying a release
+
+A GitHub Release carries the package (`*.nupkg`), its symbols (`*.snupkg`) and, normally, a
+CycloneDX SBOM (`Wolfgang.Extensions.Mail.bom.json`). `release.yaml` also records a SLSA
+build-provenance attestation for each `.nupkg` on GitHub before it pushes to nuget.org. The SBOM
+is best-effort: `release.yaml` warns and continues if CycloneDX fails, and the artifact upload
+does not treat a missing file as an error, so a release can complete without one. Its absence is
+not evidence of tampering. Nothing below needs a key from us - verification uses GitHub's own
+transparency log.
+
+**Provenance - did this package come from this repository's release workflow?**
+
+Download the `.nupkg` (from the GitHub Release or from nuget.org; they are the same bytes) and run:
+
+```bash
+gh attestation verify Wolfgang.Extensions.Mail.0.3.1.nupkg \
+    --repo Chris-Wolfgang/System.Mail-Extensions \
+    --signer-workflow Chris-Wolfgang/System.Mail-Extensions/.github/workflows/release.yaml
+```
+
+`--repo` alone only proves *some* workflow in this repository attested the artifact.
+`--signer-workflow` is what pins it to the release workflow, which is what the heading above
+claims - keep both. A failure here is meaningful: it means the file you hold is not the file that
+workflow produced. Releases published before the attestation step was added have no attestation,
+so the command reports that none was found for them.
+
+**Contents - what does the package depend on?**
+
+The `*.bom.json` asset is a CycloneDX SBOM listing the transitive closure at build time. It is a
+plain JSON document; read it, or feed it to whatever your organisation uses for dependency review.
+The package also carries `THIRD-PARTY-NOTICES.md` at its root, generated at release time from the
+same closure.
+
+Note what the SBOM is **not**: the attestation's subjects are the `.nupkg` files only, so the SBOM
+is co-published alongside the package rather than covered by its provenance. Verifying the package
+does not authenticate the SBOM. If that distinction matters to you, read the SBOM as a convenience
+and derive the dependency set from the verified package itself.
+
+**What this does NOT prove.** The package is not author-signed: `nuget verify` checks an author
+signature, and this package does not carry one - that is blocked on a code-signing certificate
+(#219). Provenance answers *"which workflow built this, from which commit"*; an author signature
+would answer *"who vouches for it"*. They are different claims and only the first is available
+today.
+
 ## Release path & compromise scope
 
 Facts a maintainer would need at 2am if the release identity is compromised. Generic
