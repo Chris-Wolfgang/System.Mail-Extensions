@@ -33,7 +33,7 @@ internal static class MailTraffic
     /// <summary>Raw .eml documents for an ingestion run.</summary>
     internal static IReadOnlyList<string> Inbox(int count, int seed)
     {
-        var random = new Random(seed);
+        var random = new SeededRandom(seed);
         var messages = new List<string>(count);
 
         for (var i = 0; i < count; i++)
@@ -59,7 +59,7 @@ internal static class MailTraffic
     /// <summary>Addresses as they arrive from a CSV import: mostly valid, some not.</summary>
     internal static IReadOnlyList<string> AddressBook(int count, int seed)
     {
-        var random = new Random(seed);
+        var random = new SeededRandom(seed);
         var addresses = new List<string>(count);
 
         for (var i = 0; i < count; i++)
@@ -93,13 +93,13 @@ internal static class MailTraffic
     internal static byte[] Bytes(int length, int seed)
     {
         var bytes = new byte[length];
-        new Random(seed).NextBytes(bytes);
+        new SeededRandom(seed).NextBytes(bytes);
         return bytes;
     }
 
 
 
-    private static string Headers(Random random, int i, string contentType)
+    private static string Headers(SeededRandom random, int i, string contentType)
     {
         var name = Names[random.Next(Names.Length)];
         var subject = Subjects[random.Next(Subjects.Length)];
@@ -123,7 +123,7 @@ internal static class MailTraffic
 
 
 
-    private static string PlainText(Random random, int i)
+    private static string PlainText(SeededRandom random, int i)
     {
         var body = new StringBuilder();
         var lines = random.Next(3, 40);
@@ -139,7 +139,7 @@ internal static class MailTraffic
 
 
 
-    private static string HtmlWithInlineImage(Random random, int i)
+    private static string HtmlWithInlineImage(SeededRandom random, int i)
     {
         var image = Convert.ToBase64String(Bytes(random.Next(1_000, 20_000), i), Base64FormattingOptions.InsertLineBreaks);
 
@@ -154,7 +154,7 @@ internal static class MailTraffic
 
 
 
-    private static string WithAttachment(Random random, int i, int attachmentBytes)
+    private static string WithAttachment(SeededRandom random, int i, int attachmentBytes)
     {
         var attachment = Convert.ToBase64String(Bytes(attachmentBytes, i), Base64FormattingOptions.InsertLineBreaks);
 
@@ -169,7 +169,7 @@ internal static class MailTraffic
 
     // No empty custom header here: the 0.3.1 baseline throws on one (#338), which would make the
     // baseline run fail instead of measuring it.
-    private static string Malformed(Random random, int i)
+    private static string Malformed(SeededRandom random, int i)
     {
         return string.Create
         (
