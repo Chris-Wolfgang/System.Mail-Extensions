@@ -64,7 +64,7 @@ public class MailMessageExtensions_ToMimeString_Tests
 
         var mime = msg.ToMimeString();
 
-        Assert.Contains("from@example.com", mime);
+        Assert.Contains("From: from@example.com\r\n", mime);
     }
 
 
@@ -78,7 +78,7 @@ public class MailMessageExtensions_ToMimeString_Tests
 
         var mime = msg.ToMimeString();
 
-        Assert.Contains("to@example.com", mime);
+        Assert.Contains("To: to@example.com\r\n", mime);
     }
 
 
@@ -92,7 +92,7 @@ public class MailMessageExtensions_ToMimeString_Tests
 
         var mime = msg.ToMimeString();
 
-        Assert.Contains("My Test Subject", mime);
+        Assert.Contains("Subject: My Test Subject\r\n", mime);
     }
 
 
@@ -157,6 +157,6 @@ public class MailMessageExtensions_ToMimeString_Tests
 
         var mime = msg.ToMimeString();
 
-        Assert.Contains("cc@example.com", mime);
+        Assert.Contains("Cc: cc@example.com\r\n", mime);
     }
 }

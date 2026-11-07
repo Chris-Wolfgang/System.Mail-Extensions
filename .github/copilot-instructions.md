@@ -45,8 +45,8 @@ dotnet test --no-build --configuration Release      # or -f net10.0 for a quick 
 
 ## CI
 
-- `pr.yaml` — staged validation: Linux tests + 90% coverage gate, then Windows (.NET Framework matrix), then macOS; plus CodeQL, DevSkim, and gitleaks scans. Test projects are auto-discovered under `tests/`.
-- `release.yaml` — fires on GitHub Release *published*; packs and pushes to NuGet, deploys docs.
+- `pr.yaml` — staged validation on `pull_request`: Linux tests + per-assembly coverage gates (90 % `src/`, 94 % `tests/` repository floor), then Windows (.NET Framework matrix), then macOS; plus CodeQL, DevSkim, and gitleaks scans. Test projects are auto-discovered under `tests/`.
+- `release.yaml` — fires on GitHub Release *published*; packs, pushes to NuGet through OIDC trusted publishing (no API key secret), deploys docs.
 - `benchmarks.yaml` — on push to main touching `src/`/`benchmarks/`; appends a data point to the gh-pages chart.
 - `stryker.yaml` — mutation testing.
-- Protected files (workflows, `Directory.Build.props`, `BannedSymbols.txt`, `.editorconfig`, `.globalconfig`) are guarded by the "Detect .NET Projects" check on PRs to `main`.
+- Protected files (workflows, `Directory.Build.props`, `BannedSymbols.txt`, `.editorconfig`, `.globalconfig`, `coverlet.runsettings`, the CI scripts, ...) are guarded by the "Protected Files Guard" check (`protected-files.yaml`): a PR that changes a protected file together with anything else fails, so put protected files in a PR of their own. The full list is in `docs/WORKFLOW_SECURITY.md`.

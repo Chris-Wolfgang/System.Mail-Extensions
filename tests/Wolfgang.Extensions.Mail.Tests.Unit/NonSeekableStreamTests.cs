@@ -71,7 +71,7 @@ public class NonSeekableStreamTests
     {
         using var sut = new NonSeekableStream(new byte[] { 1 });
 
-        var exception = Record.Exception(() => sut.Flush());
+        var exception = Record.Exception(sut.Flush);
 
         Assert.Null(exception);
     }

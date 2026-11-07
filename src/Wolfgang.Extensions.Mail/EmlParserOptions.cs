@@ -21,7 +21,5 @@ public sealed class EmlParserOptions
     /// the first malformed construct instead of skipping it. When <c>false</c>
     /// (the default), malformed constructs are skipped and parsing continues.
     /// </summary>
-    // ReSharper disable once UnusedAutoPropertyAccessor.Global
-    // ReSharper disable once MemberCanBePrivate.Global
     public bool Strict { get; set; }
 }
