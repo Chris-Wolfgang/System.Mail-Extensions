@@ -704,9 +704,8 @@ public static class EmlParser
     )
     {
         var delimiter = "--" + boundary;
-        var parts = body.Split(new[] { delimiter }, StringSplitOptions.None);
 
-        foreach (var rawPart in parts)
+        foreach (var rawPart in EnumerateParts(body, delimiter))
         {
             var part = rawPart.Trim('\r', '\n');
 
@@ -744,6 +743,32 @@ public static class EmlParser
                 context
             );
         }
+    }
+
+
+
+    /// <summary>
+    /// Yields the text between occurrences of <paramref name="delimiter"/>, exactly like
+    /// <c>body.Split(new[] { delimiter }, StringSplitOptions.None)</c> (ordinal, empty pieces
+    /// kept), but one piece at a time, so a message with large parts does not hold every part's
+    /// copy at once.
+    /// </summary>
+    private static IEnumerable<string> EnumerateParts
+    (
+        string body,
+        string delimiter
+    )
+    {
+        var start = 0;
+        int index;
+
+        while ((index = body.IndexOf(delimiter, start, StringComparison.Ordinal)) >= 0)
+        {
+            yield return body.Substring(start, index - start);
+            start = index + delimiter.Length;
+        }
+
+        yield return body.Substring(start);
     }
 
 
