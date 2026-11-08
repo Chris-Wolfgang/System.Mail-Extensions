@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1792305811886,
+  "lastUpdate": 1794144950282,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "Mutation score": [
@@ -107,6 +107,33 @@ window.BENCHMARK_DATA = {
           {
             "name": "Mutation score",
             "value": 73.27,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang",
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "b7bb92a1028bf76ebc9e746cb067ba0074cfa410",
+          "message": "ci(release): gate publish-nuget on the AOT smoke (protected-only) (#349)\n\n* ci: move the AOT smoke into the canonical aot-smoke.yaml workflow\n\nAdds .github/workflows/aot-smoke.yaml (the fleet-canonical AOT smoke\nworkflow) with this repo's env values and removes the old `aot-smoke`\njob (\"Native AOT Smoke\") from pr.yaml so the smoke does not run twice.\n\n- SMOKE_PROJECT: smoke/Wolfgang.Extensions.Mail.AotSmoke/Wolfgang.Extensions.Mail.AotSmoke.csproj\n  (the path the old pr.yaml job published)\n- LIBRARY_NAMESPACE: Wolfgang.Extensions.Mail (src csproj has no\n  RootNamespace override; every src file is in this namespace)\n- ALLOWED_WARNING_REGEX: '' (the old job had no allowlist)\n\nNothing in pr.yaml needed the removed job; \"Native AOT Smoke\" is not a\nrequired status check in the main ruleset.\n\nRefs #282\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* ci: sync aot-smoke.yaml with the fixed canonical draft\n\nThe warning assertion now strips MSBuild's trailing \" [<path>.csproj]\"\nbefore the namespace match: the smoke project path contains the library\nnamespace, so every IL warning (including third-party ones) matched.\nThe header comment now says there is no push trigger and that the check\nmust be run once on main with workflow_dispatch before it is required.\n\nRefs #282\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* ci(release): gate publish-nuget on the AOT smoke\n\nAdds an `aot-smoke` job (needs validate-release, contents: read) that\ncalls ./.github/workflows/aot-smoke.yaml from the tagged commit, and adds\nit to publish-nuget's needs, so a release whose Native AOT smoke fails is\nnot published to NuGet.org.\n\nRefs #282\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* ci(release): accept zizmor self-repository on the aot-smoke call\n\nactionlint (a required check) rejects the $/ form until rhysd/actionlint#732\nships, so keep ./ with the same inline ignore release.yaml already uses for docfx.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-08T03:14:53Z",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/b7bb92a1028bf76ebc9e746cb067ba0074cfa410"
+        },
+        "date": 1794144946594,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Mutation score",
+            "value": 92.58,
             "unit": "%"
           }
         ]
