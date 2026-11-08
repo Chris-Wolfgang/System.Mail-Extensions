@@ -40,54 +40,15 @@ public class DocExampleCompilationTests
     public void Every_xml_doc_example_compiles()
     {
         var references = BuildReferences();
-        var options = new CSharpCompilationOptions
-        (
-            OutputKind.DynamicallyLinkedLibrary,
-            allowUnsafe: false,
-            nullableContextOptions: NullableContextOptions.Disable
-        );
+        var options = CompilationOptions();
 
         var examples = ExtractExamples().ToList();
         Assert.NotEmpty(examples);   // guard against a broken extractor silently passing
 
-        var failures = new List<string>();
-
-        foreach (var (file, ordinal, code) in examples)
-        {
-            var source = Preamble +
-                $"static class DocExample_{ordinal}\n" +
-                "{\n" +
-                "    static async System.Threading.Tasks.Task Run()\n" +
-                "    {\n" +
-                code + "\n" +
-                "        await System.Threading.Tasks.Task.CompletedTask;\n" +
-                "    }\n" +
-                "}\n";
-
-            var tree = CSharpSyntaxTree.ParseText
-            (
-                source,
-                new CSharpParseOptions(LanguageVersion.Latest)
-            );
-
-            var compilation = CSharpCompilation.Create
-            (
-                $"DocExamples_{ordinal}",
-                new[] { tree },
-                references,
-                options
-            );
-
-            var errors = compilation.GetDiagnostics()
-                .Where(d => d.Severity == DiagnosticSeverity.Error)
-                .ToList();
-
-            if (errors.Count > 0)
-            {
-                var messages = string.Join("; ", errors.Select(e => $"{e.Id}: {e.GetMessage()}"));
-                failures.Add($"{Path.GetFileName(file)} (example #{ordinal}): {messages}");
-            }
-        }
+        var failures = examples
+            .Select(example => CompileExample(example.File, example.Ordinal, example.Code, references, options))
+            .Where(failure => failure != null)
+            .ToList();
 
         Assert.True
         (
@@ -95,6 +56,91 @@ public class DocExampleCompilationTests
             "XML-doc <example> blocks failed to compile (documentation rot):\n" +
                 string.Join("\n", failures)
         );
+    }
+
+
+
+    [Fact]
+    public void CompileExample_when_example_calls_a_missing_member_reports_the_error()
+    {
+        // The guard must be able to fail: an example calling a member that does not exist
+        // has to come back as a failure naming the file, the example and the compiler error.
+        var failure = CompileExample
+        (
+            "Sample.cs",
+            7,
+            "EmlParser.ParseTheWholeInternet();",
+            BuildReferences(),
+            CompilationOptions()
+        );
+
+        Assert.Equal
+        (
+            "Sample.cs (example #7): CS0117: 'EmlParser' does not contain a definition for 'ParseTheWholeInternet'",
+            failure
+        );
+    }
+
+
+
+    private static CSharpCompilationOptions CompilationOptions()
+    {
+        return new CSharpCompilationOptions
+        (
+            OutputKind.DynamicallyLinkedLibrary,
+            allowUnsafe: false,
+            nullableContextOptions: NullableContextOptions.Disable
+        );
+    }
+
+
+
+    /// <summary>
+    /// Compiles one example inside an async method and returns <c>null</c> when it compiles,
+    /// or a one-line failure naming the file, the example ordinal and every compiler error.
+    /// </summary>
+    private static string? CompileExample
+    (
+        string file,
+        int ordinal,
+        string code,
+        IEnumerable<MetadataReference> references,
+        CSharpCompilationOptions options
+    )
+    {
+        var source = Preamble +
+            $"static class DocExample_{ordinal}\n" +
+            "{\n" +
+            "    static async System.Threading.Tasks.Task Run()\n" +
+            "    {\n" +
+            code + "\n" +
+            "        await System.Threading.Tasks.Task.CompletedTask;\n" +
+            "    }\n" +
+            "}\n";
+
+        var tree = CSharpSyntaxTree.ParseText
+        (
+            source,
+            new CSharpParseOptions(LanguageVersion.Latest)
+        );
+
+        var compilation = CSharpCompilation.Create
+        (
+            $"DocExamples_{ordinal}",
+            new[] { tree },
+            references,
+            options
+        );
+
+        var errors = compilation
+            .GetDiagnostics()
+            .Where(d => d.Severity == DiagnosticSeverity.Error)
+            .Select(e => $"{e.Id}: {e.GetMessage(System.Globalization.CultureInfo.InvariantCulture)}")
+            .ToList();
+
+        return errors.Count == 0
+            ? null
+            : $"{Path.GetFileName(file)} (example #{ordinal}): {string.Join("; ", errors)}";
     }
 
 

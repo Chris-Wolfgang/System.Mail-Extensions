@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
@@ -23,7 +24,6 @@ namespace Wolfgang.Extensions.Mail;
 /// message.AlternateViews.Add(builder.Build());
 /// </code>
 /// </example>
-// ReSharper disable once UnusedType.Global
 public sealed class InlineHtmlBuilder
 {
 
@@ -37,10 +37,15 @@ public sealed class InlineHtmlBuilder
     /// Sets the HTML template. Use <c>{0}</c>, <c>{1}</c>, etc. as placeholders for
     /// embedded image Content-IDs, which are filled in order of <see cref="EmbedImage(string)"/> calls.
     /// </summary>
+    /// <remarks>
+    /// The template is a composite format string (<see cref="string.Format(IFormatProvider, string, object[])"/>),
+    /// so a literal brace must be doubled: write <c>{{</c> and <c>}}</c> for <c>{</c> and <c>}</c>, for example
+    /// in an inline <c>&lt;style&gt;</c> block, a <c>&lt;script&gt;</c> or JSON-LD. An undoubled brace makes
+    /// <see cref="Build"/> throw <see cref="FormatException"/>.
+    /// </remarks>
     /// <param name="htmlTemplate">The HTML template string with <c>{n}</c> placeholders for inline images.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="htmlTemplate"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public InlineHtmlBuilder Html
     (
         string htmlTemplate
@@ -64,7 +69,6 @@ public sealed class InlineHtmlBuilder
     /// <param name="filePath">The path to the image file.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public InlineHtmlBuilder EmbedImage
     (
         string filePath
@@ -75,7 +79,7 @@ public sealed class InlineHtmlBuilder
             throw new ArgumentNullException(nameof(filePath));
         }
 
-        var contentType = InferImageContentType(Path.GetExtension(filePath));
+        var contentType = AttachmentFactory.InferContentType(filePath);
         var contentId = GenerateContentId();
 
 #pragma warning disable RS0030 // File I/O — reading image file into memory for embedding
@@ -105,7 +109,6 @@ public sealed class InlineHtmlBuilder
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="imageStream"/> is null.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="fileName"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public InlineHtmlBuilder EmbedImage
     (
         Stream imageStream,
@@ -123,26 +126,10 @@ public sealed class InlineHtmlBuilder
             throw new ArgumentNullException(nameof(fileName));
         }
 
-        var resolvedContentType = contentType ?? InferImageContentType(Path.GetExtension(fileName));
+        var resolvedContentType = contentType ?? AttachmentFactory.InferContentType(fileName);
         var contentId = GenerateContentId();
 
-        var destination = new MemoryStream();
-
-#pragma warning disable RS0030 // In-memory stream copy
-        if (imageStream.CanSeek)
-        {
-            var originalPosition = imageStream.Position;
-            imageStream.Position = 0;
-            imageStream.CopyTo(destination);
-            imageStream.Position = originalPosition;
-        }
-        else
-        {
-            imageStream.CopyTo(destination);
-        }
-#pragma warning restore RS0030
-
-        destination.Position = 0;
+        var destination = StreamCopy.ToMemoryStream(imageStream);
 
         var resource = new LinkedResource(destination, resolvedContentType)
         {
@@ -165,7 +152,6 @@ public sealed class InlineHtmlBuilder
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="imageBytes"/> is null.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="fileName"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public InlineHtmlBuilder EmbedImage
     (
         byte[] imageBytes,
@@ -183,7 +169,7 @@ public sealed class InlineHtmlBuilder
             throw new ArgumentNullException(nameof(fileName));
         }
 
-        var resolvedContentType = contentType ?? InferImageContentType(Path.GetExtension(fileName));
+        var resolvedContentType = contentType ?? AttachmentFactory.InferContentType(fileName);
         var contentId = GenerateContentId();
         var stream = new MemoryStream(imageBytes, writable: false);
 
@@ -206,7 +192,10 @@ public sealed class InlineHtmlBuilder
     /// </summary>
     /// <returns>An <see cref="AlternateView"/> containing the HTML and all linked resources.</returns>
     /// <exception cref="InvalidOperationException">No HTML template has been set via <see cref="Html"/>.</exception>
-    // ReSharper disable once UnusedMember.Global
+    /// <exception cref="FormatException">
+    /// The template contains a literal <c>{</c> or <c>}</c> that is not doubled, or a placeholder
+    /// index with no matching <see cref="EmbedImage(string)"/> call.
+    /// </exception>
     public AlternateView Build()
     {
         if (_htmlTemplate == null)
@@ -217,7 +206,12 @@ public sealed class InlineHtmlBuilder
             );
         }
 
-        var html = string.Format(System.Globalization.CultureInfo.InvariantCulture, _htmlTemplate, _contentIds.Cast<object>().ToArray());
+        var html = string.Format
+        (
+            CultureInfo.InvariantCulture,
+            _htmlTemplate,
+            _contentIds.Cast<object>().ToArray()
+        );
 
         var view = AlternateView.CreateAlternateViewFromString
         (
@@ -239,26 +233,5 @@ public sealed class InlineHtmlBuilder
     private static string GenerateContentId()
     {
         return Guid.NewGuid().ToString("N");
-    }
-
-
-
-    private static string InferImageContentType
-    (
-        string extension
-    )
-    {
-        switch (extension.ToLowerInvariant())
-        {
-            case ".png": return "image/png";
-            case ".jpg":
-            case ".jpeg": return "image/jpeg";
-            case ".gif": return "image/gif";
-            case ".bmp": return "image/bmp";
-            case ".svg": return "image/svg+xml";
-            case ".webp": return "image/webp";
-            case ".ico": return "image/x-icon";
-            default: return MediaTypeNames.Application.Octet;
-        }
     }
 }

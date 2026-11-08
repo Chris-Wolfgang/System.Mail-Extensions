@@ -1,0 +1,21 @@
+MIME-Version: 1.0
+From: sender@example.com
+To: recipient@example.com
+Date: {scrubbed}
+Subject: Alternatives
+Content-Type: multipart/alternative;
+ boundary=--boundary_0_Guid_1
+
+
+----boundary_0_Guid_1
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+
+Plain text version
+----boundary_0_Guid_1
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: base64
+
+PGI+SFRNTCB2ZXJzaW9uPC9iPg==
+----boundary_0_Guid_1--
+

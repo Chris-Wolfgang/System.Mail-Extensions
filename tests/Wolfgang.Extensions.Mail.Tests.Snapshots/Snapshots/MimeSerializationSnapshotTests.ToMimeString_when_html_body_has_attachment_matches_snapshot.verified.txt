@@ -1,0 +1,26 @@
+X-Correlation-Id: abc-123
+MIME-Version: 1.0
+From: sender@example.com
+To: recipient@example.com
+X-Priority: 1
+Priority: urgent
+Importance: high
+Date: {scrubbed}
+Subject: Invoice
+Content-Type: multipart/mixed;
+ boundary=--boundary_1_Guid_1
+
+
+----boundary_1_Guid_1
+Content-Type: text/html; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+
+<p>Your invoice is attached.</p>
+----boundary_1_Guid_1
+Content-Type: application/octet-stream; name=invoice.csv
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment
+
+dG90YWwsNDIK
+----boundary_1_Guid_1--
+

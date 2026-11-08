@@ -1,0 +1,15 @@
+{
+  HasIssues: true,
+  Issues: [
+    Warning: [From] Malformed From address: 'not an address'.,
+    Warning: [To] Malformed To address: 'also bad'.
+  ],
+  Parsed: {
+    To: [
+      good@example.com
+    ],
+    Subject: Broken,
+    IsBodyHtml: false,
+    Body: Body
+  }
+}
