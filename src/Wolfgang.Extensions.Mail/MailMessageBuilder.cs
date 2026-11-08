@@ -16,14 +16,14 @@ namespace Wolfgang.Extensions.Mail;
 /// <code>
 /// using var message = new MailMessageBuilder()
 ///     .From("sender@example.com", "Sender Name")
-///     .To("alice@example.com", "bob@example.com")
+///     .To("alice@example.com")
+///     .To(new MailAddress("bob@example.com", "Bob Jones"))
 ///     .Subject("Monthly Report")
 ///     .HtmlBody("&lt;h1&gt;Report&lt;/h1&gt;")
 ///     .Attach("report.pdf")
 ///     .Build();
 /// </code>
 /// </example>
-// ReSharper disable once UnusedType.Global
 public sealed class MailMessageBuilder
 {
 
@@ -52,7 +52,7 @@ public sealed class MailMessageBuilder
     /// <param name="displayName">Optional display name.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="address"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
+    /// <exception cref="FormatException"><paramref name="address"/> is not a valid email address.</exception>
     public MailMessageBuilder From
     (
         string address,
@@ -79,7 +79,7 @@ public sealed class MailMessageBuilder
     /// <param name="displayName">Optional display name.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="address"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
+    /// <exception cref="FormatException"><paramref name="address"/> is not a valid email address.</exception>
     public MailMessageBuilder SenderAddress
     (
         string address,
@@ -105,7 +105,7 @@ public sealed class MailMessageBuilder
     /// <param name="addresses">The recipient email addresses.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
+    /// <exception cref="FormatException">An entry in <paramref name="addresses"/> is not a valid email address.</exception>
     public MailMessageBuilder To
     (
         params string[] addresses
@@ -129,11 +129,19 @@ public sealed class MailMessageBuilder
     /// <summary>
     /// Adds a To recipient with a display name.
     /// </summary>
+    /// <remarks>
+    /// C# overload resolution prefers this overload over <see cref="To(string[])"/> whenever exactly
+    /// two strings are passed, so <c>.To("alice@example.com", "bob@example.com")</c> adds <b>one</b>
+    /// recipient (alice, with the display name "bob@example.com"), not two. Use
+    /// <see cref="To(MailAddress)"/> to add a recipient with a display name, and
+    /// <see cref="To(string[])"/> (or chained <c>To</c> calls) to add several addresses.
+    /// </remarks>
     /// <param name="address">The recipient email address.</param>
     /// <param name="displayName">The display name.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="address"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
+    /// <exception cref="FormatException"><paramref name="address"/> is not a valid email address.</exception>
+    [Obsolete("A call with two strings binds here, not to To(params string[]), and adds one recipient with a display name. Use To(new MailAddress(address, displayName)) for a display name, or To(new[] { a, b }) / chained To calls for several addresses.")]
     public MailMessageBuilder To
     (
         string address,
@@ -145,7 +153,34 @@ public sealed class MailMessageBuilder
             throw new ArgumentNullException(nameof(address));
         }
 
-        _to.Add(new MailAddress(address, displayName));
+        _to.Add
+        (
+            string.IsNullOrEmpty(displayName)
+                ? new MailAddress(address)
+                : new MailAddress(address, displayName)
+        );
+        return this;
+    }
+
+
+
+    /// <summary>
+    /// Adds a To recipient, keeping its display name.
+    /// </summary>
+    /// <param name="address">The recipient, e.g. <c>new MailAddress("alice@example.com", "Alice Smith")</c>.</param>
+    /// <returns>This builder instance for chaining.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="address"/> is null.</exception>
+    public MailMessageBuilder To
+    (
+        MailAddress address
+    )
+    {
+        if (address == null)
+        {
+            throw new ArgumentNullException(nameof(address));
+        }
+
+        _to.Add(address);
         return this;
     }
 
@@ -157,7 +192,7 @@ public sealed class MailMessageBuilder
     /// <param name="addresses">The CC email addresses.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
+    /// <exception cref="FormatException">An entry in <paramref name="addresses"/> is not a valid email address.</exception>
     public MailMessageBuilder Cc
     (
         params string[] addresses
@@ -184,7 +219,7 @@ public sealed class MailMessageBuilder
     /// <param name="addresses">The BCC email addresses.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
+    /// <exception cref="FormatException">An entry in <paramref name="addresses"/> is not a valid email address.</exception>
     public MailMessageBuilder Bcc
     (
         params string[] addresses
@@ -211,7 +246,7 @@ public sealed class MailMessageBuilder
     /// <param name="addresses">The reply-to email addresses.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="addresses"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
+    /// <exception cref="FormatException">An entry in <paramref name="addresses"/> is not a valid email address.</exception>
     public MailMessageBuilder ReplyTo
     (
         params string[] addresses
@@ -237,7 +272,6 @@ public sealed class MailMessageBuilder
     /// </summary>
     /// <param name="subject">The email subject.</param>
     /// <returns>This builder instance for chaining.</returns>
-    // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder Subject
     (
         string? subject
@@ -254,7 +288,6 @@ public sealed class MailMessageBuilder
     /// </summary>
     /// <param name="body">The plain text body content.</param>
     /// <returns>This builder instance for chaining.</returns>
-    // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder PlainTextBody
     (
         string? body
@@ -271,7 +304,6 @@ public sealed class MailMessageBuilder
     /// </summary>
     /// <param name="body">The HTML body content.</param>
     /// <returns>This builder instance for chaining.</returns>
-    // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder HtmlBody
     (
         string? body
@@ -288,7 +320,6 @@ public sealed class MailMessageBuilder
     /// </summary>
     /// <param name="priority">The priority level.</param>
     /// <returns>This builder instance for chaining.</returns>
-    // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder Priority
     (
         MailPriority priority
@@ -305,7 +336,6 @@ public sealed class MailMessageBuilder
     /// </summary>
     /// <param name="options">The notification options.</param>
     /// <returns>This builder instance for chaining.</returns>
-    // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder DeliveryNotification
     (
         DeliveryNotificationOptions options
@@ -322,7 +352,6 @@ public sealed class MailMessageBuilder
     /// </summary>
     /// <param name="encoding">The encoding for the body.</param>
     /// <returns>This builder instance for chaining.</returns>
-    // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder BodyEncoding
     (
         Encoding encoding
@@ -339,7 +368,6 @@ public sealed class MailMessageBuilder
     /// </summary>
     /// <param name="encoding">The encoding for the subject.</param>
     /// <returns>This builder instance for chaining.</returns>
-    // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder SubjectEncoding
     (
         Encoding encoding
@@ -358,7 +386,6 @@ public sealed class MailMessageBuilder
     /// <param name="value">The header value.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder Header
     (
         string name,
@@ -382,7 +409,9 @@ public sealed class MailMessageBuilder
     /// <param name="filePath">The file path of the attachment.</param>
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
+    /// <exception cref="FileNotFoundException">The file does not exist. The file is opened when this method is called, not at <see cref="Build"/>.</exception>
+    /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
     public MailMessageBuilder Attach
     (
         string filePath
@@ -408,7 +437,6 @@ public sealed class MailMessageBuilder
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="content"/> is null.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder Attach
     (
         Stream content,
@@ -446,7 +474,6 @@ public sealed class MailMessageBuilder
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="content"/> is null.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public MailMessageBuilder Attach
     (
         byte[] content,
@@ -480,12 +507,16 @@ public sealed class MailMessageBuilder
     /// <summary>
     /// Builds a new <see cref="MailMessage"/> from the configured values.
     /// </summary>
+    /// <remarks>
+    /// A builder is single-use. The <see cref="Attachment"/> instances it created are handed to the
+    /// message as they are, not copied, so a second <c>Build()</c> on the same builder returns a
+    /// message that shares them: disposing either message disposes the other's attachments.
+    /// </remarks>
     /// <returns>A fully constructed <see cref="MailMessage"/>.</returns>
     /// <exception cref="InvalidOperationException">
     /// The From address has not been set, or no recipient (To, Cc, or Bcc)
     /// has been added. The exception message reports every missing part.
     /// </exception>
-    // ReSharper disable once UnusedMember.Global
     public MailMessage Build()
     {
         // Collect every composition error before throwing so the caller can
@@ -536,19 +567,40 @@ public sealed class MailMessageBuilder
 
     private void ApplyOptionalProperties(MailMessage message)
     {
-        if (_sender != null) { message.Sender = _sender; }
-        if (_bodyEncoding != null) { message.BodyEncoding = _bodyEncoding; }
-        if (_subjectEncoding != null) { message.SubjectEncoding = _subjectEncoding; }
+        if (_sender != null)
+        {
+            message.Sender = _sender;
+        }
+        if (_bodyEncoding != null)
+        {
+            message.BodyEncoding = _bodyEncoding;
+        }
+        if (_subjectEncoding != null)
+        {
+            message.SubjectEncoding = _subjectEncoding;
+        }
     }
 
 
 
     private void ApplyRecipients(MailMessage message)
     {
-        foreach (var addr in _to) { message.To.Add(addr); }
-        foreach (var addr in _cc) { message.CC.Add(addr); }
-        foreach (var addr in _bcc) { message.Bcc.Add(addr); }
-        foreach (var addr in _replyTo) { message.ReplyToList.Add(addr); }
+        foreach (var addr in _to)
+        {
+            message.To.Add(addr);
+        }
+        foreach (var addr in _cc)
+        {
+            message.CC.Add(addr);
+        }
+        foreach (var addr in _bcc)
+        {
+            message.Bcc.Add(addr);
+        }
+        foreach (var addr in _replyTo)
+        {
+            message.ReplyToList.Add(addr);
+        }
     }
 
 
@@ -584,7 +636,13 @@ public sealed class MailMessageBuilder
 
     private void ApplyHeadersAndAttachments(MailMessage message)
     {
-        foreach (var kvp in _headers) { message.Headers[kvp.Key] = kvp.Value; }
-        foreach (var attachment in _attachments) { message.Attachments.Add(attachment); }
+        foreach (var kvp in _headers)
+        {
+            message.Headers[kvp.Key] = kvp.Value;
+        }
+        foreach (var attachment in _attachments)
+        {
+            message.Attachments.Add(attachment);
+        }
     }
 }

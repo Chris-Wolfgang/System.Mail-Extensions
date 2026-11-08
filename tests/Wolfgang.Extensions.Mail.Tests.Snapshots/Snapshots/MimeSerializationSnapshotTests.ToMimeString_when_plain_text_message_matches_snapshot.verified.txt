@@ -1,0 +1,10 @@
+MIME-Version: 1.0
+From: "Sender Name" <sender@example.com>
+To: first@example.com, second@example.com
+Cc: copy@example.com
+Date: {scrubbed}
+Subject: Quarterly report
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+
+Hello,=0D=0A=0D=0AThe report is attached.=0D=0A

@@ -1,0 +1,2 @@
+# Verify writes *.received.* next to the snapshots when output differs; local iteration only.
+*.received.*
