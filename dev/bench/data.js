@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1793991817879,
+  "lastUpdate": 1794176232256,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "BenchmarkDotNet": [
@@ -960,6 +960,126 @@ window.BENCHMARK_DATA = {
             "value": 9101.76889038086,
             "unit": "ns",
             "range": "± 46.618526142406026"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "71e77cd704319438d9e9f04a89824a2ee7933340",
+          "message": "chore(pack): stop requiring licence acceptance for the MIT package (#381)\n\nPackageRequireLicenseAcceptance=True makes Visual Studio show an\naccept-licence prompt on install. MIT does not require acceptance, so the\nprompt is only friction.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-08T17:07:13-05:00",
+          "tree_id": "959915f92afd3b069f6d47c51d3f4f42a1d15181",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/71e77cd704319438d9e9f04a89824a2ee7933340"
+        },
+        "date": 1794176230933,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1024)",
+            "value": 833.0758169492086,
+            "unit": "ns",
+            "range": "± 8.057879301208722"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1024)",
+            "value": 2488.907283782959,
+            "unit": "ns",
+            "range": "± 86.3312622497535"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1048576)",
+            "value": 847.6525402069092,
+            "unit": "ns",
+            "range": "± 3.112381272219609"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1048576)",
+            "value": 1634791.4244791667,
+            "unit": "ns",
+            "range": "± 2397.1618725299227"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 1000)",
+            "value": 2808.4318466186523,
+            "unit": "ns",
+            "range": "± 8.772563503279926"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 1000)",
+            "value": 6627.351888020833,
+            "unit": "ns",
+            "range": "± 25.0963572332266"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 1000)",
+            "value": 10646.17855834961,
+            "unit": "ns",
+            "range": "± 59.23892886555841"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 1000)",
+            "value": 5184.408594767253,
+            "unit": "ns",
+            "range": "± 16.70759256330853"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 100000)",
+            "value": 45006.83692423502,
+            "unit": "ns",
+            "range": "± 182.41092312859004"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 100000)",
+            "value": 239225.78873697916,
+            "unit": "ns",
+            "range": "± 351.83943108205244"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 100000)",
+            "value": 570896.1663411459,
+            "unit": "ns",
+            "range": "± 24655.053653742394"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 100000)",
+            "value": 307356.6044921875,
+            "unit": "ns",
+            "range": "± 1221.9797324125666"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 0)",
+            "value": 9658.440724690756,
+            "unit": "ns",
+            "range": "± 334.0940875031738"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 0)",
+            "value": 1573.4346917470295,
+            "unit": "ns",
+            "range": "± 10.849154601719649"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 64)",
+            "value": 705203.8177083334,
+            "unit": "ns",
+            "range": "± 2412.042544748327"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 64)",
+            "value": 6536.580581665039,
+            "unit": "ns",
+            "range": "± 30.338274068723244"
           }
         ]
       }
