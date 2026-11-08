@@ -17,7 +17,7 @@ concurrency:
 
 env:
   # Minimum line coverage for PRODUCTION assemblies (anything under src/).
-  CODECOV_MINIMUM: 90
+  CODECOV_MINIMUM: 95
   # Minimum line coverage for TEST assemblies (anything under tests/).
   # Kept in sync with pr.yaml — see the note there.
   CODECOV_TEST_MINIMUM: 100
@@ -227,6 +227,7 @@ jobs:
                   --no-build `
                   --no-restore `
                   --collect:"XPlat Code Coverage" `
+                  --settings coverlet.runsettings `
                   --results-directory "./TestResults" `
                   --logger "console;verbosity=minimal"
 
@@ -241,6 +242,9 @@ jobs:
               Write-Host "Testing framework: $fw" -ForegroundColor Yellow
 
               # Collect coverage only for .NET 5.0+ TFMs; still run tests for all frameworks
+              # --settings coverlet.runsettings: the same coverage settings as pr.yaml, so the test
+              # assemblies are instrumented (IncludeTestAssembly) and the CODECOV_TEST_MINIMUM gate in
+              # "Verify coverage threshold" has test rows to check, and the exclusions match PR CI (#232).
               if ($fw -match '^net([5-9]|[1-9][0-9]+)\.') {
                 dotnet test $testProj.FullName `
                   --configuration Release `
@@ -248,6 +252,7 @@ jobs:
                   --no-build `
                   --no-restore `
                   --collect:"XPlat Code Coverage" `
+                  --settings coverlet.runsettings `
                   --results-directory "./TestResults" `
                   --logger "console;verbosity=minimal"
               } else {
@@ -281,7 +286,7 @@ jobs:
           $coverageFiles = Get-ChildItem -Path "TestResults" -Recurse -Filter "coverage.cobertura.xml" -ErrorAction SilentlyContinue
 
           if ($coverageFiles.Count -eq 0) {
-            Write-Error "❌ No coverage files found - coverage data is required to enforce the 90% threshold"
+            Write-Error "❌ No coverage files found - coverage data is required to enforce the 95% threshold"
             exit 1
           }
 
@@ -302,7 +307,7 @@ jobs:
 
           # Parse coverage and enforce threshold per module (matching pr.yaml)
           $summaryContent = Get-Content CoverageReport/Summary.txt
-          $threshold     = if ($env:CODECOV_MINIMUM) { [int]$env:CODECOV_MINIMUM } else { 90 }
+          $threshold     = if ($env:CODECOV_MINIMUM) { [int]$env:CODECOV_MINIMUM } else { 95 }
           $testThreshold = if ($env:CODECOV_TEST_MINIMUM) { [int]$env:CODECOV_TEST_MINIMUM } else { 100 }
           $failedModules = @()
           $coverageFound = $false
@@ -368,6 +373,17 @@ jobs:
         with:
           name: release-coverage
           path: CoverageReport/
+
+  # Native AOT / trim smoke from the tagged commit; publish-nuget waits on it
+  aot-smoke:
+    name: AOT smoke
+    needs: validate-release
+    permissions:
+      contents: read
+    # GitHub's `$/` self-repository syntax is preferred here, but actionlint
+    # (a required check) rejects it until rhysd/actionlint#732 ships. Switch
+    # to `$/.github/workflows/aot-smoke.yaml` and drop the ignore when it does.
+    uses: ./.github/workflows/aot-smoke.yaml  # zizmor: ignore[self-repository]
 
   # Pack and validate NuGet package
   pack-and-validate:
@@ -705,7 +721,7 @@ jobs:
   # Publish to NuGet (only if validation passed)
   publish-nuget:
     name: Publish to NuGet.org
-    needs: [pack-and-validate, verify-docs-build]
+    needs: [pack-and-validate, verify-docs-build, aot-smoke]
     if: needs.pack-and-validate.outputs.has-packages == 'true'
     runs-on: windows-latest
     permissions:
@@ -823,6 +839,43 @@ jobs:
       - name: Zip coverage report
         run: zip -r release-coverage.zip ./release-coverage
 
+      # Third-party verification input (docs/REPRODUCIBLE-BUILD.md): the SHA-256 of every file a consumer
+      # can compare a rebuild against, for the exact packages attached to this release. It describes
+      # the published bytes; it is not itself signed (the provenance attestation covers the .nupkg).
+      - name: Write reproducible-build manifest
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import glob, hashlib, json, os, zipfile
+
+          def sha(data):
+              return hashlib.sha256(data).hexdigest()
+
+          manifest = {
+              "tag": os.environ["TAG_NAME"],
+              "commit": os.environ["COMMIT_SHA"],
+              "packages": [],
+          }
+          for path in sorted(glob.glob("nuget-packages/*.nupkg") + glob.glob("nuget-packages/*.snupkg")):
+              with open(path, "rb") as f:
+                  package_sha = sha(f.read())
+              files = {}
+              with zipfile.ZipFile(path) as z:
+                  for name in sorted(z.namelist()):
+                      if name.endswith((".dll", ".pdb")):
+                          files[name] = sha(z.read(name))
+              manifest["packages"].append({"file": os.path.basename(path), "sha256": package_sha, "files": files})
+          if not manifest["packages"] or not any(p["files"] for p in manifest["packages"]):
+              raise SystemExit("No package with a .dll or .pdb was found; refusing to write an empty manifest.")
+          with open("nuget-packages/reproducible-build-manifest.json", "w", encoding="utf-8") as out:
+              json.dump(manifest, out, indent=2)
+              out.write("\n")
+          print("Wrote manifest for", len(manifest["packages"]), "package(s)")
+          PY
+
       # `gh` is pre-installed on the runner, so no third-party action is needed
       # to upload release assets (zizmor superfluous-actions).
       - name: Attach artifacts to release
@@ -832,7 +885,7 @@ jobs:
           TAG_NAME: ${{ github.event.release.tag_name }}
         run: |
           shopt -s nullglob
-          files=(./nuget-packages/*.nupkg ./nuget-packages/*.snupkg ./nuget-packages/*.bom.json)
+          files=(./nuget-packages/*.nupkg ./nuget-packages/*.snupkg ./nuget-packages/*.bom.json ./nuget-packages/reproducible-build-manifest.json)
           # nullglob only drops unmatched *patterns*; a literal name stays and would make
           # `gh release upload` fail, so add the coverage zip only when it exists.
           if [ -f release-coverage.zip ]; then files+=(release-coverage.zip); fi

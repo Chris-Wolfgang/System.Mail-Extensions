@@ -5,7 +5,7 @@ using Assert = Xunit.Assert;
 
 // Every `result!.Address` in this file follows an `Assert.NotNull(result)`.
 // On modern TFMs xunit's Assert.NotNull carries the [NotNull] attribute so the
-// `!` is redundant; on net462/netstandard2.0 the attribute isn't present and
+// `!` is redundant; on the .NET Framework TFMs the attribute isn't present and
 // the compiler still sees `result` as nullable — so the `!` is required
 // there. Silence the two "redundant `!`" analyzers file-wide.
 #pragma warning disable S8969                   // Sonar: redundant null-forgiving operator
