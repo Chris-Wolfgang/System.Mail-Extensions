@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794176232256,
+  "lastUpdate": 1794181977750,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "BenchmarkDotNet": [
@@ -1080,6 +1080,126 @@ window.BENCHMARK_DATA = {
             "value": 6536.580581665039,
             "unit": "ns",
             "range": "± 30.338274068723244"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "8b091d4d8be5062b3e369b5b8b1c7ce9946959e9",
+          "message": "chore(editorconfig): VSTHRD111 comment points at CA2007 instead of contradicting it (#380)\n\nThe global comment said ConfigureAwait is \"not needed in library code\ntargeting modern .NET\", while the src/ section enforces it with CA2007\nbecause net462/netstandard2.0 ship. Comment only; severity unchanged. The\nlast open item of #306.\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>",
+          "timestamp": "2026-11-08T18:50:32-05:00",
+          "tree_id": "e8b9be0a08749845b80afc4ff840cc47c37beb77",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/8b091d4d8be5062b3e369b5b8b1c7ce9946959e9"
+        },
+        "date": 1794181976442,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1024)",
+            "value": 928.5433190663656,
+            "unit": "ns",
+            "range": "± 7.234730634742571"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1024)",
+            "value": 2558.369659423828,
+            "unit": "ns",
+            "range": "± 19.544151796863556"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1048576)",
+            "value": 972.1802132924398,
+            "unit": "ns",
+            "range": "± 27.57390670721911"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1048576)",
+            "value": 1654210.0416666667,
+            "unit": "ns",
+            "range": "± 8771.577883902608"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 1000)",
+            "value": 3257.3720105489097,
+            "unit": "ns",
+            "range": "± 27.75552259588802"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 1000)",
+            "value": 6044.077499389648,
+            "unit": "ns",
+            "range": "± 56.569761001281925"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 1000)",
+            "value": 10109.343856811523,
+            "unit": "ns",
+            "range": "± 59.43384815691103"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 1000)",
+            "value": 6039.444338480632,
+            "unit": "ns",
+            "range": "± 217.03970541888208"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 100000)",
+            "value": 46641.84266153971,
+            "unit": "ns",
+            "range": "± 1660.8008157969257"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 100000)",
+            "value": 122420.68595377605,
+            "unit": "ns",
+            "range": "± 1113.2395198688287"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 100000)",
+            "value": 444689.8766276042,
+            "unit": "ns",
+            "range": "± 35070.52298689789"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 100000)",
+            "value": 309558.54410807294,
+            "unit": "ns",
+            "range": "± 12015.057278923976"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 0)",
+            "value": 10646.91103108724,
+            "unit": "ns",
+            "range": "± 101.1420525650968"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 0)",
+            "value": 1679.7538013458252,
+            "unit": "ns",
+            "range": "± 6.830603303615523"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 64)",
+            "value": 737063.0296223959,
+            "unit": "ns",
+            "range": "± 5193.463878576246"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 64)",
+            "value": 7225.866607666016,
+            "unit": "ns",
+            "range": "± 78.92362244032344"
           }
         ]
       }
