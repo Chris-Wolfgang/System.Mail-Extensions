@@ -2,7 +2,7 @@
 
 [![NuGet](https://img.shields.io/nuget/v/Wolfgang.Extensions.Mail.svg?logo=nuget&label=NuGet)](https://www.nuget.org/packages/Wolfgang.Extensions.Mail/)
 [![Downloads](https://img.shields.io/nuget/dt/Wolfgang.Extensions.Mail.svg?logo=nuget&label=downloads)](https://www.nuget.org/packages/Wolfgang.Extensions.Mail/)
-[![PR build](https://img.shields.io/github/actions/workflow/status/Chris-Wolfgang/System.Mail-Extensions/pr.yaml?event=pull_request_target&label=PR%20build&logo=github)](https://github.com/Chris-Wolfgang/System.Mail-Extensions/actions/workflows/pr.yaml)
+[![PR build](https://img.shields.io/github/actions/workflow/status/Chris-Wolfgang/System.Mail-Extensions/pr.yaml?branch=main&label=PR%20build&logo=github)](https://github.com/Chris-Wolfgang/System.Mail-Extensions/actions/workflows/pr.yaml)
 [![release](https://img.shields.io/github/actions/workflow/status/Chris-Wolfgang/System.Mail-Extensions/release.yaml?event=release&label=release&logo=github)](https://github.com/Chris-Wolfgang/System.Mail-Extensions/actions/workflows/release.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-Multi--Targeted-purple.svg)](https://dotnet.microsoft.com/)
@@ -24,11 +24,13 @@ dotnet add package Wolfgang.Extensions.Mail
 ### Build messages fluently — `MailMessageBuilder`
 
 ```csharp
+using System.Net.Mail;
 using Wolfgang.Extensions.Mail;
 
 using var message = new MailMessageBuilder()
     .From("sender@example.com", "Sender Name")
-    .To("alice@example.com", "bob@example.com")
+    .To("alice@example.com", "bob@example.com", "carol@example.com")
+    .To(new MailAddress("dave@example.com", "Dave Jones"))
     .Cc("archive@example.com")
     .Subject("Monthly Report")
     .PlainTextBody("The report is attached.")
@@ -36,6 +38,8 @@ using var message = new MailMessageBuilder()
     .Attach("report.pdf")
     .Build();
 ```
+
+`To` takes any number of addresses, but a call with exactly **two** strings binds to the obsolete `To(address, displayName)` overload and adds one recipient; pass a `MailAddress` for a display name, an array, or chain `To` calls.
 
 `Build()` throws `InvalidOperationException` if the message has no From address or no recipient, reporting every missing part in one message. Also available: `Bcc`, `ReplyTo`, `SenderAddress`, `Priority`, `DeliveryNotification`, `BodyEncoding`, `SubjectEncoding`, `Header`, and `Attach` overloads for byte arrays and streams.
 
@@ -116,7 +120,7 @@ using var clone = original.Clone();
 clone.To.Add("extra@example.com");   // original is unchanged
 ```
 
-Copies addresses, headers, bodies, alternate views, linked resources, and attachments (with independent streams).
+Copies addresses, headers, bodies, alternate views, linked resources, and attachments (with independent streams). A non-seekable attachment stream is read to its end by the copy, so the original attachment cannot be sent afterwards; seekable streams are rewound and left where they were.
 
 ### Create attachments — `AttachmentFactory`
 
@@ -223,6 +227,14 @@ pwsh ./scripts/format.ps1
 # Run the PR workflow's Windows stage locally (build, tests on every TFM, coverage gates, DevSkim, gitleaks)
 pwsh ./scripts/build-pr.ps1
 ```
+
+### Verify the build
+
+Releases are reproducible: rebuilding a release tag on Windows with the same .NET SDK feature band
+produces byte-identical DLLs and PDBs, and every GitHub Release carries a
+`reproducible-build-manifest.json` with their expected SHA-256 hashes. The procedure (tooling,
+build command, comparison script, how to report a mismatch or publish a verification attestation)
+is in [docs/REPRODUCIBLE-BUILD.md](docs/REPRODUCIBLE-BUILD.md).
 
 
 

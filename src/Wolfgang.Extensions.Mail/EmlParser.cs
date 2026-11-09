@@ -34,7 +34,6 @@ namespace Wolfgang.Extensions.Mail;
 /// Console.WriteLine(message.Subject);
 /// </code>
 /// </example>
-// ReSharper disable once UnusedType.Global
 public static class EmlParser
 {
 
@@ -85,6 +84,33 @@ public static class EmlParser
         RegexTimeout
     );
 
+    // RFC 2047 section 6.2: whitespace between two adjacent encoded words is not part of the
+    // text. MailMessage folds a long non-ASCII header into several encoded words separated by
+    // whitespace, so it is removed before decoding.
+    // One or more encoded words with nothing between them (after the whitespace removal above).
+    private static readonly Regex EncodedWordRunRegex = new Regex
+    (
+        @"(?:=\?[^?]+\?[BbQq]\?[^?]+\?=)+",
+        DefaultRegexOptionsNoCase | RegexOptions.Compiled,
+        RegexTimeout
+    );
+
+    private static readonly Regex WhitespaceBetweenEncodedWordsRegex = new Regex
+    (
+        @"(?<=\?=)\s+(?==\?[^?]+\?[BbQq]\?[^?]+\?=)",
+        DefaultRegexOptionsNoCase | RegexOptions.Compiled,
+        RegexTimeout
+    );
+
+    // A quoted display name may contain '<', '>' and ',' (RFC 5322 3.2.4), which the
+    // unquoted pattern below would take for the start of the address. Tried first.
+    private static readonly Regex QuotedDisplayNameAddressRegex = new Regex
+    (
+        @"^""(?<name>[^""]*)""\s*<(?<email>[^>]+)>$",
+        DefaultRegexOptionsNoCase | RegexOptions.Compiled,
+        RegexTimeout
+    );
+
     private static readonly Regex DisplayNameAddressRegex = new Regex
     (
         @"^""?(?<name>[^""<]+?)""?\s*<(?<email>[^>]+)>$",
@@ -98,6 +124,11 @@ public static class EmlParser
         DefaultRegexOptionsNoCase | RegexOptions.Compiled,
         RegexTimeout
     );
+
+    // Shared by Parse(string): the parser only reads options, and the instance never escapes
+    // this class, so one default instance replaces an allocation per call. EmlParserOptions is
+    // mutable, which is why this stays private.
+    private static readonly EmlParserOptions DefaultOptions = new EmlParserOptions();
 
     private static readonly HashSet<string> StandardHeaderNames =
         new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -116,7 +147,6 @@ public static class EmlParser
     /// <param name="emlContent">The EML content string.</param>
     /// <returns>A new <see cref="MailMessage"/> populated from the EML content.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="emlContent"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static MailMessage Parse
     (
         string emlContent
@@ -127,7 +157,7 @@ public static class EmlParser
             throw new ArgumentNullException(nameof(emlContent));
         }
 
-        return ParseCore(emlContent, new ParseContext(new EmlParserOptions()));
+        return ParseCore(emlContent, new ParseContext(DefaultOptions));
     }
 
 
@@ -141,7 +171,6 @@ public static class EmlParser
     /// <returns>A new <see cref="MailMessage"/> populated from the EML content.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="emlContent"/> or <paramref name="options"/> is null.</exception>
     /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static MailMessage Parse
     (
         string emlContent,
@@ -172,7 +201,6 @@ public static class EmlParser
     /// <returns>A <see cref="ParseResult"/> containing the message and any diagnostics.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="emlContent"/> is null.</exception>
     /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static ParseResult ParseWithDiagnostics
     (
         string emlContent,
@@ -184,7 +212,7 @@ public static class EmlParser
             throw new ArgumentNullException(nameof(emlContent));
         }
 
-        var context = new ParseContext(options ?? new EmlParserOptions());
+        var context = new ParseContext(options ?? DefaultOptions);
         var message = ParseCore(emlContent, context);
         return new ParseResult(message, context.Issues);
     }
@@ -218,7 +246,7 @@ public static class EmlParser
             ApplyAddressHeaders(message, headers, context);
             ApplySubject(message, headers, context);
             ApplyBodyOrMultipart(message, headers, bodySection, context);
-            ApplyCustomHeaders(message, headers);
+            ApplyCustomHeaders(message, headers, context);
             ApplyPriority(message, headers);
         }
         catch
@@ -238,7 +266,9 @@ public static class EmlParser
     /// <param name="filePath">The path to the EML file.</param>
     /// <returns>A new <see cref="MailMessage"/> populated from the file.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
+    /// <exception cref="FileNotFoundException">The file does not exist.</exception>
+    /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
     public static MailMessage ParseFile
     (
         string filePath
@@ -266,8 +296,10 @@ public static class EmlParser
     /// <param name="options">Parsing options. Set <see cref="EmlParserOptions.Strict"/> to reject malformed input.</param>
     /// <returns>A new <see cref="MailMessage"/> populated from the file.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="filePath"/> or <paramref name="options"/> is null.</exception>
+    /// <exception cref="FileNotFoundException">The file does not exist.</exception>
+    /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
     /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static MailMessage ParseFile
     (
         string filePath,
@@ -300,7 +332,9 @@ public static class EmlParser
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A task containing the parsed <see cref="MailMessage"/>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
-    // ReSharper disable once UnusedMember.Global
+    /// <exception cref="FileNotFoundException">The file does not exist.</exception>
+    /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
     public static async Task<MailMessage> ParseFileAsync
     (
         string filePath,
@@ -337,8 +371,10 @@ public static class EmlParser
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A task containing the parsed <see cref="MailMessage"/>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="filePath"/> or <paramref name="options"/> is null.</exception>
+    /// <exception cref="FileNotFoundException">The file does not exist.</exception>
+    /// <exception cref="DirectoryNotFoundException">The directory in <paramref name="filePath"/> does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller cannot read the file.</exception>
     /// <exception cref="EmlParseException">A malformed construct was encountered and <see cref="EmlParserOptions.Strict"/> is set.</exception>
-    // ReSharper disable once UnusedMember.Global
     public static async Task<MailMessage> ParseFileAsync
     (
         string filePath,
@@ -385,7 +421,7 @@ public static class EmlParser
     {
         if (headers.TryGetValue("from", out var from) && !string.IsNullOrWhiteSpace(from))
         {
-            if (TryParseMailAddress(from, out var fromAddress))
+            if (TryParseMailAddress(from, context, out var fromAddress))
             {
                 message.From = fromAddress;
             }
@@ -459,17 +495,24 @@ public static class EmlParser
         {
             var isHtml = contentType.IndexOf("text/html", StringComparison.OrdinalIgnoreCase) >= 0;
             message.IsBodyHtml = isHtml;
-            message.Body = TrimFinalLineBreak(DecodeBody(bodySection, transferEncoding, context));
+            var decoded = DecodeBody(bodySection, transferEncoding, context);
+
+            // The writer's final line break is outside base64's encoded bytes, so every byte of a
+            // decoded base64 body is content and a trailing line break there is the sender's.
+            message.Body = string.Equals(transferEncoding, "base64", StringComparison.Ordinal)
+                ? decoded
+                : TrimFinalLineBreak(decoded);
         }
     }
 
 
 
     /// <summary>
-    /// Removes exactly one trailing CRLF (or bare LF) from a decoded body.
-    /// MIME writers terminate the final body line with a line break that is
-    /// part of the wire format, not the content; keeping it made every
-    /// serialize→parse round trip grow the body by one blank line.
+    /// Removes exactly one trailing CRLF (or bare LF) from a decoded quoted-printable
+    /// or 7bit/8bit body. MIME writers terminate the final body line with a line
+    /// break that is part of the wire format, not the content; keeping it made every
+    /// serialize→parse round trip grow the body by one blank line. Not applied to
+    /// base64, whose decoded bytes are all content.
     /// </summary>
     private static string TrimFinalLineBreak
     (
@@ -494,14 +537,42 @@ public static class EmlParser
     private static void ApplyCustomHeaders
     (
         MailMessage message,
-        Dictionary<string, string> headers
+        Dictionary<string, string> headers,
+        ParseContext context
     )
     {
-        var customHeaders = headers.Where(kvp => !StandardHeaderNames.Contains(kvp.Key));
-
-        foreach (var kvp in customHeaders)
+        foreach (var kvp in headers)
         {
-            message.Headers[kvp.Key] = kvp.Value;
+            if (StandardHeaderNames.Contains(kvp.Key))
+            {
+                continue;
+            }
+
+            // RFC 5322 allows an empty value, but MailMessage.Headers rejects one with
+            // ArgumentException. There is nothing to keep, so the header is dropped.
+            if (string.IsNullOrWhiteSpace(kvp.Value))
+            {
+                continue;
+            }
+
+            // A line that starts with whitespace other than space or tab (so it is not a folded
+            // continuation), such as a bare CR or a form feed, yields a name that trims to
+            // nothing. MailMessage.Headers rejects an empty name with ArgumentException.
+            if (kvp.Key.Length == 0)
+            {
+                context.Report("Header with an empty field name; header skipped.", "Headers");
+                continue;
+            }
+
+            try
+            {
+                message.Headers[kvp.Key] = kvp.Value;
+            }
+            catch (FormatException)
+            {
+                // A field name outside printable ASCII (RFC 5322 section 2.2) is malformed.
+                context.Report($"Malformed header name '{kvp.Key}'; header skipped.", "Headers");
+            }
         }
     }
 
@@ -544,10 +615,16 @@ public static class EmlParser
     {
         // Headers and body are separated by a blank line (\r\n\r\n or \n\n)
         var idx = content.IndexOf("\r\n\r\n", StringComparison.Ordinal);
-        if (idx >= 0) return idx + 4;
+        if (idx >= 0)
+        {
+            return idx + 4;
+        }
 
         idx = content.IndexOf("\n\n", StringComparison.Ordinal);
-        if (idx >= 0) return idx + 2;
+        if (idx >= 0)
+        {
+            return idx + 2;
+        }
 
         return -1;
     }
@@ -627,9 +704,8 @@ public static class EmlParser
     )
     {
         var delimiter = "--" + boundary;
-        var parts = body.Split(new[] { delimiter }, StringSplitOptions.None);
 
-        foreach (var rawPart in parts)
+        foreach (var rawPart in EnumerateParts(body, delimiter))
         {
             var part = rawPart.Trim('\r', '\n');
 
@@ -639,7 +715,10 @@ public static class EmlParser
             }
 
             var partHeaderEnd = FindHeaderBodySeparator(part);
-            if (partHeaderEnd < 0) continue;
+            if (partHeaderEnd < 0)
+            {
+                continue;
+            }
 
             var partHeaders = ParseHeaders(part.Substring(0, partHeaderEnd));
             var partBody = part.Substring(partHeaderEnd).TrimStart('\r', '\n');
@@ -664,6 +743,32 @@ public static class EmlParser
                 context
             );
         }
+    }
+
+
+
+    /// <summary>
+    /// Yields the text between occurrences of <paramref name="delimiter"/>, exactly like
+    /// <c>body.Split(new[] { delimiter }, StringSplitOptions.None)</c> (ordinal, empty pieces
+    /// kept), but one piece at a time, so a message with large parts does not hold every part's
+    /// copy at once.
+    /// </summary>
+    private static IEnumerable<string> EnumerateParts
+    (
+        string body,
+        string delimiter
+    )
+    {
+        var start = 0;
+        int index;
+
+        while ((index = body.IndexOf(delimiter, start, StringComparison.Ordinal)) >= 0)
+        {
+            yield return body.Substring(start, index - start);
+            start = index + delimiter.Length;
+        }
+
+        yield return body.Substring(start);
     }
 
 
@@ -791,7 +896,10 @@ public static class EmlParser
         if (contentDisposition != null)
         {
             var match = FileNameRegex.Match(contentDisposition);
-            if (match.Success) return match.Groups["filename"].Value;
+            if (match.Success)
+            {
+                return match.Groups["filename"].Value;
+            }
         }
 
         var nameMatch = NameRegex.Match(contentType);
@@ -958,77 +1066,132 @@ public static class EmlParser
     )
     {
         // RFC 2047: =?charset?encoding?encoded-text?=
-        return EncodedWordRegex.Replace(input, m => DecodeEncodedWordMatch(m, context));
+        var joined = WhitespaceBetweenEncodedWordsRegex.Replace(input, string.Empty);
+        return EncodedWordRunRegex.Replace(joined, m => DecodeEncodedWordRun(m.Value, context));
     }
 
 
 
-    private static string DecodeEncodedWordMatch
+    /// <summary>
+    /// Decodes a run of directly adjacent encoded words. The bytes of consecutive words in the same
+    /// charset are decoded together: RFC 2047 says each word must stand alone, but .NET Framework's
+    /// MailWriter splits a multi-byte UTF-8 character across two words when it folds a long header,
+    /// and decoding the halves separately would yield two replacement characters.
+    /// </summary>
+    private static string DecodeEncodedWordRun
     (
-        Match m,
+        string run,
         ParseContext context
     )
     {
-        var charset = m.Groups["charset"].Value;
-        var encoding = m.Groups["encoding"].Value.ToUpperInvariant();
-        var encodedText = m.Groups["text"].Value;
+        var result = new StringBuilder(run.Length);
+        var pending = new List<byte>();
+        Encoding? pendingEncoding = null;
 
-        try
+        foreach (Match word in EncodedWordRegex.Matches(run))
         {
-            var enc = Encoding.GetEncoding(charset);
-
-            if (string.Equals(encoding, "B", StringComparison.Ordinal))
+            if (!TryDecodeEncodedWordBytes(word, out var encoding, out var bytes))
             {
-                var bytes = Convert.FromBase64String(encodedText);
-                return enc.GetString(bytes);
+                FlushPending();
+                context.Report($"Malformed RFC 2047 encoded word: '{word.Value}'; kept verbatim.", propertyName: null);
+                result.Append(word.Value);
+                continue;
             }
 
-            return DecodeQEncoding(encodedText, enc);
+            if (pendingEncoding != null && !pendingEncoding.Equals(encoding))
+            {
+                FlushPending();
+            }
+
+            pendingEncoding = encoding;
+            pending.AddRange(bytes);
         }
-        catch (FormatException)
+
+        FlushPending();
+        return result.ToString();
+
+        void FlushPending()
         {
-            context.Report($"Malformed RFC 2047 encoded word: '{m.Value}'; kept verbatim.", propertyName: null);
-            return m.Value;
-        }
-        catch (ArgumentException)
-        {
-            context.Report($"Malformed RFC 2047 encoded word: '{m.Value}'; kept verbatim.", propertyName: null);
-            return m.Value;
+            if (pendingEncoding != null)
+            {
+                result.Append(pendingEncoding.GetString(pending.ToArray()));
+                pending.Clear();
+                pendingEncoding = null;
+            }
         }
     }
 
 
 
-    private static string DecodeQEncoding
+    private static bool TryDecodeEncodedWordBytes
+    (
+        Match word,
+        out Encoding encoding,
+        out byte[] bytes
+    )
+    {
+        var transferEncoding = word.Groups["encoding"].Value;
+        var encodedText = word.Groups["text"].Value;
+
+        try
+        {
+            encoding = Encoding.GetEncoding(word.Groups["charset"].Value);
+            bytes = string.Equals(transferEncoding, "B", StringComparison.OrdinalIgnoreCase)
+                ? Convert.FromBase64String(encodedText)
+                : DecodeQEncoding(encodedText, encoding);
+            return true;
+        }
+        catch (FormatException)
+        {
+            encoding = Encoding.UTF8;
+            bytes = Array.Empty<byte>();
+            return false;
+        }
+        catch (ArgumentException)
+        {
+            encoding = Encoding.UTF8;
+            bytes = Array.Empty<byte>();
+            return false;
+        }
+    }
+
+
+
+    private static byte[] DecodeQEncoding
     (
         string encodedText,
         Encoding enc
     )
     {
-        var qText = encodedText.Replace('_', ' ');
-        var byteList = new List<byte>();
+        // One pre-sized buffer (the encoding's worst case per character), like
+        // DecodeQuotedPrintable: =XX escapes are written as raw bytes, '_' is a space
+        // (RFC 2047 4.2), and any other character is encoded with the charset in place.
+        // checked: fail explicitly rather than allocate a wrong-sized buffer on overflow.
+        var buffer = new byte[checked(encodedText.Length * enc.GetMaxByteCount(1))];
+        var byteCount = 0;
         var i = 0;
 
-        while (i < qText.Length)
+        while (i < encodedText.Length)
         {
-            if (qText[i] == '=' && i + 2 < qText.Length
-                && IsHexChar(qText[i + 1]) && IsHexChar(qText[i + 2]))
+            var current = encodedText[i];
+
+            if (current == '=' && i + 2 < encodedText.Length
+                && IsHexChar(encodedText[i + 1]) && IsHexChar(encodedText[i + 2]))
             {
-                byteList.Add(Convert.ToByte(qText.Substring(i + 1, 2), 16));
+                buffer[byteCount++] = (byte)((HexValue(encodedText[i + 1]) << 4) | HexValue(encodedText[i + 2]));
                 i += 3;
             }
             else
             {
-                foreach (var b in enc.GetBytes(new[] { qText[i] }))
-                {
-                    byteList.Add(b);
-                }
-
+                byteCount += current == '_'
+                    ? enc.GetBytes(" ", 0, 1, buffer, byteCount)
+                    : enc.GetBytes(encodedText, i, 1, buffer, byteCount);
                 i++;
             }
         }
 
-        return enc.GetString(byteList.ToArray());
+        Array.Resize(ref buffer, byteCount);
+        return buffer;
     }
 
 
@@ -1042,6 +1205,7 @@ public static class EmlParser
     private static bool TryParseMailAddress
     (
         string addressString,
+        ParseContext context,
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
         [NotNullWhen(true)]
 #endif
@@ -1050,7 +1214,7 @@ public static class EmlParser
     {
         try
         {
-            result = ParseMailAddress(addressString);
+            result = ParseMailAddress(addressString, context);
             return true;
         }
         catch (FormatException)
@@ -1064,16 +1228,25 @@ public static class EmlParser
 
     private static MailAddress ParseMailAddress
     (
-        string addressString
+        string addressString,
+        ParseContext context
     )
     {
         var trimmed = addressString.Trim();
 
-        // Handle "Display Name" <email@example.com> format
-        var match = DisplayNameAddressRegex.Match(trimmed);
+        // Handle "Display Name" <email@example.com> and Display Name <email@example.com>
+        var match = QuotedDisplayNameAddressRegex.Match(trimmed);
+        if (!match.Success)
+        {
+            match = DisplayNameAddressRegex.Match(trimmed);
+        }
+
         if (match.Success)
         {
-            return new MailAddress(match.Groups["email"].Value.Trim(), match.Groups["name"].Value.Trim());
+            // MailMessage writes a non-ASCII display name as an RFC 2047 encoded word, and so
+            // do most mail clients; decode it the same way as the subject (#364).
+            var displayName = DecodeEncodedWords(match.Groups["name"].Value.Trim(), context);
+            return new MailAddress(match.Groups["email"].Value.Trim(), displayName);
         }
 
         // Handle bare <email@example.com>
@@ -1102,9 +1275,12 @@ public static class EmlParser
         foreach (var addr in addresses)
         {
             var trimmed = addr.Trim();
-            if (string.IsNullOrWhiteSpace(trimmed)) continue;
+            if (string.IsNullOrWhiteSpace(trimmed))
+            {
+                continue;
+            }
 
-            if (TryParseMailAddress(trimmed, out var parsed))
+            if (TryParseMailAddress(trimmed, context, out var parsed))
             {
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
                 collection.Add(parsed);
