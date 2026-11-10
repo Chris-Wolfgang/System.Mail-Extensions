@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/Chris-Wolfgang/System.Mail-Extensions/blob/v0.3.1/docfx_project/docs/getting-started.md/#L1">
+      
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -76,21 +76,54 @@
 <p>This guide will help you quickly get up and running with Wolfgang.Extensions.Mail.</p>
 <h2 id="prerequisites">Prerequisites</h2>
 <ul>
-<li>.NET Framework 4.6.2+ or .NET 6.0+ or .NET Standard 2.0 compatible runtime</li>
+<li>A runtime supported by one of the package's targets: .NET Framework 4.6.2+, .NET Standard 2.0 / 2.1 (which covers .NET Core 2.0+ and .NET 5-7), or .NET 8.0 / 9.0 / 10.0</li>
 <li>Visual Studio 2022, Rider, or Visual Studio Code</li>
 </ul>
 <h2 id="installation">Installation</h2>
-<h3 id="via-nuget-package-manager">Via NuGet Package Manager</h3>
+<h3 id="via-the-net-cli">Via the .NET CLI</h3>
 <pre><code class="lang-bash">dotnet add package Wolfgang.Extensions.Mail
 </code></pre>
 <h3 id="via-package-manager-console">Via Package Manager Console</h3>
 <pre><code class="lang-powershell">Install-Package Wolfgang.Extensions.Mail
 </code></pre>
 <h2 id="quick-start">Quick Start</h2>
-<pre><code class="lang-csharp">using System.Net.Mail;
+<h3 id="build-validate-and-save-a-message">Build, validate and save a message</h3>
+<pre><code class="lang-csharp">using System;
+using System.IO;
+using System.Net.Mail;
 using Wolfgang.Extensions.Mail;
 
-// Create a mail message
+using var message = new MailMessageBuilder()
+    .From(&quot;sender@example.com&quot;, &quot;Sender Name&quot;)
+    .To(&quot;alice@example.com&quot;)
+    .Cc(&quot;bob@example.com&quot;, &quot;carol@example.com&quot;)
+    .Subject(&quot;Monthly Report&quot;)
+    .PlainTextBody(&quot;The report is attached.&quot;)
+    .Attach(&quot;report.pdf&quot;)
+    .Build();
+
+var result = message.Validate();
+if (!result.IsValid)
+{
+    foreach (var issue in result.Errors)
+    {
+        Console.WriteLine($&quot;{issue.PropertyName}: {issue.Message}&quot;);
+    }
+}
+
+await File.WriteAllTextAsync(&quot;message.eml&quot;, message.ToMimeString());
+</code></pre>
+<h3 id="parse-an-eml-file">Parse an EML file</h3>
+<pre><code class="lang-csharp">using Wolfgang.Extensions.Mail;
+
+using var parsed = await EmlParser.ParseFileAsync(&quot;message.eml&quot;, cancellationToken);
+Console.WriteLine(parsed.Subject);
+</code></pre>
+<h3 id="collection-helpers-on-an-existing-message">Collection helpers on an existing message</h3>
+<pre><code class="lang-csharp">using System.Collections.Generic;
+using System.Net.Mail;
+using Wolfgang.Extensions.Mail;
+
 using var message = new MailMessage();
 message.From = new MailAddress(&quot;sender@example.com&quot;);
 
@@ -107,13 +140,15 @@ message.Attachments.AddRange(&quot;report.pdf&quot;, &quot;data.csv&quot;);
 <h2 id="next-steps">Next Steps</h2>
 <ul>
 <li>Explore the <a href="../api/index.md">API Reference</a> for detailed documentation</li>
-<li>Read the <a href="introduction.html">Introduction</a> to learn more about Wolfgang.Extensions.Mail</li>
-<li>Check out example projects in the <a href="https://github.com/Chris-Wolfgang/System.Mail-Extensions">GitHub repository</a></li>
+<li>Read the <a href="introduction.html">Introduction</a> for the full feature list</li>
+<li>The <a href="https://github.com/Chris-Wolfgang/System.Mail-Extensions#readme">README</a> has a short example for every feature</li>
 </ul>
 <h2 id="common-issues">Common Issues</h2>
 <ul>
-<li>Ensure file paths passed to <code>AttachmentCollection.AddRange</code> exist on disk, or a <code>FileNotFoundException</code> will be thrown.</li>
-<li><code>MailAddressCollection.AddRange</code> with string addresses will throw <code>FormatException</code> for invalid email formats.</li>
+<li><code>MailMessageBuilder.Build()</code> throws <code>InvalidOperationException</code> when the message has no From address or no recipient.</li>
+<li>File paths passed to <code>AttachmentCollection.AddRange</code> or <code>MailMessageBuilder.Attach</code> must exist, or a <code>FileNotFoundException</code> is thrown.</li>
+<li><code>MailAddressCollection.AddRange</code> with string addresses throws <code>FormatException</code> for an invalid address; use <code>MailAddress.TryParse</code> to check first.</li>
+<li><code>EmlParser</code> is lenient: a malformed address is skipped rather than reported. Use <code>EmlParser.ParseWithDiagnostics</code> to see what was skipped, or <code>new EmlParserOptions { Strict = true }</code> to throw instead.</li>
 </ul>
 <h2 id="additional-resources">Additional Resources</h2>
 <ul>
@@ -125,7 +160,6 @@ message.Attachments.AddRange(&quot;report.pdf&quot;, &quot;data.csv&quot;);
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/Chris-Wolfgang/System.Mail-Extensions/blob/v0.3.1/docfx_project/docs/getting-started.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

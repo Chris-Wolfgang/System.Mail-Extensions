@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/Chris-Wolfgang/System.Mail-Extensions/blob/v0.3.0/docfx_project/docs/introduction.md/#L1">
+      
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -75,13 +75,18 @@
 
 <p>Welcome to Wolfgang.Extensions.Mail!</p>
 <h2 id="overview">Overview</h2>
-<p>A collection of extension methods for working with email and mail-related functionality in System.Net.Mail.</p>
+<p>Extension methods and helpers for <code>System.Net.Mail</code>: a fluent message builder, an EML parser and serializer, message validation and cloning, attachment factories with content-type inference, inline-HTML image embedding, and collection conveniences.</p>
 <h2 id="key-features">Key Features</h2>
 <ul>
-<li><code>AddRange</code> extensions for <code>AttachmentCollection</code> — add multiple attachments in a single call</li>
-<li><code>AddRange</code> extensions for <code>MailAddressCollection</code> — add multiple email addresses to To, CC, or BCC</li>
-<li>Supports <code>params</code> arrays and <code>IEnumerable&lt;T&gt;</code> overloads for flexibility</li>
-<li>Full null-checking with descriptive <code>ArgumentNullException</code> messages</li>
+<li><strong><code>MailMessageBuilder</code></strong> — build a <code>MailMessage</code> fluently; <code>Build()</code> reports every missing part (From, recipients) in one <code>InvalidOperationException</code>.</li>
+<li><strong><code>EmlParser</code></strong> — parse RFC 2822 / MIME content (multipart bodies, base64 and quoted-printable, attachments, RFC 2047 encoded words) from a string or a file. Lenient by default; <code>EmlParserOptions { Strict = true }</code> throws <code>EmlParseException</code> instead, and <code>ParseWithDiagnostics</code> returns the skipped constructs alongside the message.</li>
+<li><strong><code>ToMimeString()</code></strong> — serialize a <code>MailMessage</code> to an EML document that round-trips through <code>EmlParser.Parse</code>. It is the one API that is not trim/AOT-safe (it reflects over the framework's internal MIME writer).</li>
+<li><strong><code>Validate()</code></strong> — check a message against <code>ValidationOptions</code> (required subject/body, per-attachment and total size limits) and get a <code>ValidationResult</code> with errors and warnings.</li>
+<li><strong><code>Clone()</code></strong> — deep-copy a message, including alternate views, linked resources and attachments with independent streams.</li>
+<li><strong><code>AttachmentFactory</code></strong> — create attachments from bytes, base64 or streams with the content type inferred from the file extension; the extension registry is extensible and thread-safe.</li>
+<li><strong><code>InlineHtmlBuilder</code></strong> — build an HTML <code>AlternateView</code> with embedded images wired up through Content-IDs.</li>
+<li><strong><code>MailAddress.TryParse</code></strong> — a non-throwing address parser on every target framework (delegates to <code>MailAddress.TryCreate</code> on .NET 5+).</li>
+<li><strong>Collection helpers</strong> — <code>AddRange</code> for <code>AttachmentCollection</code> and <code>MailAddressCollection</code>, <code>TotalSize</code> / <code>ExceedsLimit</code> for attachments, and <code>ToFormattedString</code> / <code>FormatMailAddress</code> for addresses.</li>
 </ul>
 <h2 id="getting-help">Getting Help</h2>
 <p>If you need help with Wolfgang.Extensions.Mail, please:</p>
@@ -95,7 +100,6 @@
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/Chris-Wolfgang/System.Mail-Extensions/blob/v0.3.0/docfx_project/docs/introduction.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>
