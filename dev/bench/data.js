@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794181977750,
+  "lastUpdate": 1794336692327,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "BenchmarkDotNet": [
@@ -1200,6 +1200,126 @@ window.BENCHMARK_DATA = {
             "value": 7225.866607666016,
             "unit": "ns",
             "range": "± 78.92362244032344"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "564efa372cb1a5bf0ae2c1a8267c6b2a6abf5167",
+          "message": "fix(parser): treat an empty angle-bracket address as malformed in lenient mode (#416)\n\n* fix(parser): treat an empty angle-bracket address as malformed in lenient mode\n\nMailAddress throws ArgumentException (not FormatException) for an empty\naddress, so Cc: -@=_< > escaped Parse's lenient path. Found by the\nscheduled fuzz run (seed 3mx1jzLAnQC1); refs #415.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* docs(changelog): fragment for the empty angle-bracket address fix\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-10T13:48:10-05:00",
+          "tree_id": "48cd42785f732293ec7618ff58e314f0ff066368",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/564efa372cb1a5bf0ae2c1a8267c6b2a6abf5167"
+        },
+        "date": 1794336690657,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1024)",
+            "value": 1219.212547938029,
+            "unit": "ns",
+            "range": "± 9.595198760657611"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1024)",
+            "value": 3103.5520617167153,
+            "unit": "ns",
+            "range": "± 25.80688008521117"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1048576)",
+            "value": 1230.5687376658123,
+            "unit": "ns",
+            "range": "± 19.317196835654574"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1048576)",
+            "value": 1964983.9114583333,
+            "unit": "ns",
+            "range": "± 21926.26606139682"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 1000)",
+            "value": 3956.5900700887046,
+            "unit": "ns",
+            "range": "± 15.619979242030547"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 1000)",
+            "value": 7533.527229309082,
+            "unit": "ns",
+            "range": "± 34.42644329386655"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 1000)",
+            "value": 12387.118611653646,
+            "unit": "ns",
+            "range": "± 118.02373608189701"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 1000)",
+            "value": 6982.954182942708,
+            "unit": "ns",
+            "range": "± 93.21646954542372"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 100000)",
+            "value": 59461.108154296875,
+            "unit": "ns",
+            "range": "± 545.6293216221745"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 100000)",
+            "value": 159581.2042643229,
+            "unit": "ns",
+            "range": "± 16106.189052479373"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 100000)",
+            "value": 561056.3697916666,
+            "unit": "ns",
+            "range": "± 28121.221107668378"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 100000)",
+            "value": 395488.2692057292,
+            "unit": "ns",
+            "range": "± 22861.400250865798"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 0)",
+            "value": 14132.055541992188,
+            "unit": "ns",
+            "range": "± 317.92821485656646"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 0)",
+            "value": 2291.291695912679,
+            "unit": "ns",
+            "range": "± 24.935589187014205"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 64)",
+            "value": 908659.5872395834,
+            "unit": "ns",
+            "range": "± 5277.285699580876"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 64)",
+            "value": 9480.104654947916,
+            "unit": "ns",
+            "range": "± 225.8440061212388"
           }
         ]
       }
