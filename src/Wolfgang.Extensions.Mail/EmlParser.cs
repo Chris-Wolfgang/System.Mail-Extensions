@@ -1222,6 +1222,13 @@ public static class EmlParser
             result = null;
             return false;
         }
+        catch (ArgumentException)
+        {
+            // An empty address, e.g. "Name: <>" or "<  >", makes MailAddress throw
+            // ArgumentException rather than FormatException; it is just as malformed.
+            result = null;
+            return false;
+        }
     }
 
 
