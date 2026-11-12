@@ -12,7 +12,6 @@
     <File Path="LICENSE" />
     <File Path="README.md" />
     <File Path="SECURITY.md" />
-    <File Path="stryker-config.json" />
   </Folder>
   <Folder Name="/.root/.github/">
     <File Path=".github/CODEOWNERS" />
@@ -53,6 +52,7 @@
     <Project Path="src/Wolfgang.Extensions.Mail/Wolfgang.Extensions.Mail.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <File Path="tests/Wolfgang.Extensions.Mail.Tests.Unit/stryker-config.json" />
     <Project Path="tests/Wolfgang.Extensions.Mail.Tests.Concurrency/Wolfgang.Extensions.Mail.Tests.Concurrency.csproj" />
     <Project Path="tests/Wolfgang.Extensions.Mail.Tests.Fuzz/Wolfgang.Extensions.Mail.Tests.Fuzz.csproj" />
     <Project Path="tests/Wolfgang.Extensions.Mail.Tests.Integration/Wolfgang.Extensions.Mail.Tests.Integration.csproj" />
