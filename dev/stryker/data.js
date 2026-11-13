@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794144950282,
+  "lastUpdate": 1794590420732,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "Mutation score": [
@@ -134,6 +134,33 @@ window.BENCHMARK_DATA = {
           {
             "name": "Mutation score",
             "value": 92.58,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang",
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "ed202251713a1710afe7fba2275525d331d8fb44",
+          "message": "docs(adr): Architecture Decision Records with six retroactive ADRs (#355)\n\n* docs(adr): add Architecture Decision Records with six retroactive ADRs\n\ndocs/adr/ with a Nygard TEMPLATE.md and an index.md that lists every ADR\nwith its status and states the process (an ADR lands in the PR that makes the\ndecision; superseded ADRs are kept). Six existing non-obvious choices are\nrecorded retroactively, dated by the commit that introduced each:\nAssemblyVersion pin, ToMimeString's reflection into MailWriter, the lenient\ndependency-free parser, static compiled regexes with timeouts, implicit usings\noff on every TFM, and the Package Validation baseline.\n\nCo-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>\n\n* docs(migrations): establish the major-version migration guide convention (#356)\n\ndocs/migrations/README.md says when a guide is required (every major, or a\nminor that deprecates a large surface), that it is written in the release-prep\nPR that bumps the major, how it is named (v<MAJOR>.md), and that the GitHub\nRelease notes of the major link it as their first line.\nTEMPLATE-major-version-migration.md carries the breaking-change inventory,\nbefore/after samples and the deprecation timeline, adapted to this library.\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>",
+          "timestamp": "2026-11-13T15:48:49Z",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/ed202251713a1710afe7fba2275525d331d8fb44"
+        },
+        "date": 1794590415820,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Mutation score (tests/Wolfgang.Extensions.Mail.Tests.Unit)",
+            "value": 92.19,
             "unit": "%"
           }
         ]
