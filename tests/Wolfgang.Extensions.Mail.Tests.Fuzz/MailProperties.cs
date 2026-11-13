@@ -25,7 +25,7 @@ public sealed class MailProperties
 
 
     private static readonly Gen<string> Domain = Gen.String[Gen.Char["abcdefghijklmnopqrstuvwxyz"], 1, 12]
-        .Select(Gen.OneOfConst("com", "org", "example", "co.uk"), (label, tld) => $"{label}.{tld}");
+        .Select(Gen.OneOf("com", "org", "example", "co.uk"), (label, tld) => $"{label}.{tld}");
 
 
 
