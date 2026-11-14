@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;       // [NotNullWhen(true)] on TFMs that ship it
 #endif
 using System.IO;
-using System.Linq;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Text;
