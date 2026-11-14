@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net462;netstandard2.0;netstandard2.1;net8.0;net9.0;net10.0</TargetFrameworks>
+		<TargetFrameworks>net462;netstandard2.0;netstandard2.1;net8.0;net9.0;net10.0;net11.0</TargetFrameworks>
 		<!-- Pinned to C# 14 (not Directory.Build.props' latestMajor) for the extension(MailAddress)
 		     block in MailAddressExtensions.cs; keep it when the SDK moves on. -->
 		<LangVersion>14</LangVersion>
@@ -52,7 +52,7 @@
 	     [RequiresDynamicCode] so consumers get a compile-time warning instead of
 	     a publish-time failure; everything else is trim/AOT-safe. Modern TFMs
 	     only — the analyzers do not apply to net462 / netstandard. -->
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0' OR '$(TargetFramework)' == 'net9.0' OR '$(TargetFramework)' == 'net10.0'">
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0' OR '$(TargetFramework)' == 'net9.0' OR '$(TargetFramework)' == 'net10.0' OR '$(TargetFramework)' == 'net11.0'">
 		<IsAotCompatible>true</IsAotCompatible>
 	</PropertyGroup>
 
