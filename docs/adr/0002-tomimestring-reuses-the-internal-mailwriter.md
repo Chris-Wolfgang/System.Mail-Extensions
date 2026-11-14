@@ -34,6 +34,11 @@ shape is found it throws `InvalidOperationException` rather than guessing.
 
 - The output is what `System.Net.Mail` itself produces on that runtime, so it round-trips with
   `SmtpClient` and with `EmlParser`.
+- It inherits `MailWriter`'s quirks as well. A display name containing `"` or `\` is written
+  inside quotes without the RFC 5322 quoted-pair escape, so `"x"y" <x@example.com>` cannot be
+  parsed back (#366). The output is kept identical to what `SmtpClient` sends rather than patched;
+  the limitation is documented in the `ToMimeString` remarks, and `FormatMailAddress` escapes both
+  characters for callers who format addresses themselves.
 - The method depends on private implementation details of the BCL. A runtime update can rename
   or remove them; the test suite runs `ToMimeString` on every target framework to catch that, and
   the failure mode is a clear `InvalidOperationException`, not corrupt output.
