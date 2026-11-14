@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794670403693,
+  "lastUpdate": 1794694108601,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "BenchmarkDotNet": [
@@ -1560,6 +1560,126 @@ window.BENCHMARK_DATA = {
             "value": 7613.255605061849,
             "unit": "ns",
             "range": "± 126.37341282969746"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "5b22f8f9c02b5d9f0d01f5d23ba5666ca0d6e931",
+          "message": "build: add net11.0 to the package and the test projects (#440)\n\n* build: add net11.0 to the package and the test projects\n\n.NET 11 is GA (2026-11-10). Append net11.0 after net10.0 in the library,\nTests.Unit and Tests.Integration TargetFrameworks, extend the net8+-only\nconditions (IsAotCompatible, the Roslyn doc-example test reference) to\nit, and move global.json to the 11.0 SDK (latestFeature), which net11.0\nneeds. Changelog fragment added; the version bump happens at release cut.\n\nRefs #422\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* fix: find SyncReadWriteAdapter in its .NET 11 namespace\n\n.NET 11 moved IReadWriteAdapter and SyncReadWriteAdapter from System.Net to\nSystem (dotnet/runtime release/11.0, Common/src/System/ReadWriteAdapter.cs),\nso GetType(\"System.Net.SyncReadWriteAdapter\") returned null and every MIME\nserialization threw on net11.0 (10 of 15 integration tests). Read the\nnamespace from SendAsync<TIOAdapter>'s IReadWriteAdapter constraint instead.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-14T17:04:52-05:00",
+          "tree_id": "fa797292d1c181088a7e6dc820331992ad0e5b63",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/5b22f8f9c02b5d9f0d01f5d23ba5666ca0d6e931"
+        },
+        "date": 1794694106312,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1024)",
+            "value": 584.8718210856119,
+            "unit": "ns",
+            "range": "± 1.1445424808767968"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1024)",
+            "value": 1565.4939606984456,
+            "unit": "ns",
+            "range": "± 5.857635034349076"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1048576)",
+            "value": 644.1476023991903,
+            "unit": "ns",
+            "range": "± 102.98576995428292"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1048576)",
+            "value": 1026674.4388020834,
+            "unit": "ns",
+            "range": "± 4098.976222361956"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 1000)",
+            "value": 1966.9727160135906,
+            "unit": "ns",
+            "range": "± 9.414102844864932"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 1000)",
+            "value": 3655.8595962524414,
+            "unit": "ns",
+            "range": "± 41.06823520509771"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 1000)",
+            "value": 5962.735221862793,
+            "unit": "ns",
+            "range": "± 20.726976666117984"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 1000)",
+            "value": 3553.171070098877,
+            "unit": "ns",
+            "range": "± 29.44082695982579"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 100000)",
+            "value": 31984.335774739582,
+            "unit": "ns",
+            "range": "± 1396.0724784708334"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 100000)",
+            "value": 80044.26871744792,
+            "unit": "ns",
+            "range": "± 8569.996942938953"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 100000)",
+            "value": 284957.4407552083,
+            "unit": "ns",
+            "range": "± 8137.579122590951"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 100000)",
+            "value": 219307.87272135416,
+            "unit": "ns",
+            "range": "± 7864.217096224405"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 0)",
+            "value": 7047.581878662109,
+            "unit": "ns",
+            "range": "± 20.662457375458484"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 0)",
+            "value": 1135.897720336914,
+            "unit": "ns",
+            "range": "± 5.402343728444563"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 64)",
+            "value": 490158.4983723958,
+            "unit": "ns",
+            "range": "± 2989.169326190884"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 64)",
+            "value": 4231.626792907715,
+            "unit": "ns",
+            "range": "± 11.033909605763629"
           }
         ]
       }
