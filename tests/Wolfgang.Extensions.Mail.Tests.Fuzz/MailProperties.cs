@@ -243,30 +243,49 @@ public sealed class MailProperties
         Gen.OneOf(AnyAddress, Gen.String, Gen.String[Gen.Char["a@<>\" .,;:"], 0, 30])
             .Sample
             (
-                text =>
-                {
-                    var parsed = MailAddress.TryParse(text, out var result);
-                    bool constructed;
-                    try
-                    {
-                        _ = new MailAddress(text);
-                        constructed = !string.IsNullOrWhiteSpace(text);
-                    }
-                    catch (FormatException)
-                    {
-                        constructed = false;
-                    }
-                    catch (ArgumentException)
-                    {
-                        constructed = false;
-                    }
-
-                    return parsed == constructed && parsed == (result != null);
-                },
+                TryParseAgreesWithConstructor,
                 seed: FuzzSettings.Seed,
                 iter: FuzzSettings.Iterations,
                 time: FuzzSettings.TimeSeconds
             );
+    }
+
+
+
+    /// <summary>
+    /// Pins the inputs the generators reach only by chance: the empty string (the constructor
+    /// throws <see cref="ArgumentException"/>) and white space (it throws
+    /// <see cref="FormatException"/>), so both branches of the property run on every test run.
+    /// </summary>
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    public void TryParse_when_text_is_empty_or_white_space_agrees_with_the_MailAddress_constructor(string text)
+    {
+        Assert.True(TryParseAgreesWithConstructor(text));
+    }
+
+
+
+    private static bool TryParseAgreesWithConstructor(string text)
+    {
+        var parsed = MailAddress.TryParse(text, out var result);
+        bool constructed;
+        try
+        {
+            _ = new MailAddress(text);
+            constructed = !string.IsNullOrWhiteSpace(text);
+        }
+        catch (FormatException)
+        {
+            constructed = false;
+        }
+        catch (ArgumentException)
+        {
+            constructed = false;
+        }
+
+        return parsed == constructed && parsed == (result != null);
     }
 
 
