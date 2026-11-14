@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794509949047,
+  "lastUpdate": 1794670403693,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "BenchmarkDotNet": [
@@ -1440,6 +1440,126 @@ window.BENCHMARK_DATA = {
             "value": 14138.963734944662,
             "unit": "ns",
             "range": "± 259.7442247865087"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "cc037bc5acf26d1965bedf4120c90592c49b6a1e",
+          "message": "fix(builder): scope an S1133 suppression to the obsolete To(string, string) (#432)\n\n* fix(builder): scope an S1133 suppression to the obsolete To(string, string)\n\nTo(string, string) is [Obsolete] since the To-overload trap fix (#330):\ncallers get a compiler warning now and the member goes in the next major\nversion. Sonar S1133 ('deprecated code should be removed') flags it\n(code-scanning alert 426). Removing it in a minor release would break\ncallers with no warning period, so suppress S1133 on that one member\nwith the reason, rather than removing the API or suppressing the rule\nproject-wide.\n\nRefs #408\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* changelog: fragment for the scoped S1133 suppression on To(string, string)\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* test(fuzz): pin the empty and white-space inputs of the TryParse property\n\nThe never-throw property only reached its catch (ArgumentException) branch\nwhen CsCheck happened to generate an empty string, so Tests.Fuzz line\ncoverage swung between 98.6% and 100% from run to run (run 43598099325\nmissed lines 259-262 and failed the 100% gate). The property body moves to\na helper that the fuzz Fact samples and a new Theory runs on \"\" and \" \",\nwhich reach the ArgumentException and FormatException branches every time.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-14T10:23:54-05:00",
+          "tree_id": "537ab1e8c034caa5204d8bfd1aeb320cb2991b42",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/cc037bc5acf26d1965bedf4120c90592c49b6a1e"
+        },
+        "date": 1794670400426,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1024)",
+            "value": 893.3455338478088,
+            "unit": "ns",
+            "range": "± 2.2255962470852313"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1024)",
+            "value": 2475.5191186269126,
+            "unit": "ns",
+            "range": "± 6.7672297435801925"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1048576)",
+            "value": 998.6925716400146,
+            "unit": "ns",
+            "range": "± 24.93342437258399"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1048576)",
+            "value": 1641506.1555989583,
+            "unit": "ns",
+            "range": "± 14941.520799079428"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 1000)",
+            "value": 2994.94900004069,
+            "unit": "ns",
+            "range": "± 72.52021643803978"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 1000)",
+            "value": 5838.211776733398,
+            "unit": "ns",
+            "range": "± 154.24914626125815"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 1000)",
+            "value": 9193.992248535156,
+            "unit": "ns",
+            "range": "± 96.40851613021343"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 1000)",
+            "value": 5621.300061543782,
+            "unit": "ns",
+            "range": "± 148.92477428895165"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 100000)",
+            "value": 47586.196350097656,
+            "unit": "ns",
+            "range": "± 1224.1332963485156"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 100000)",
+            "value": 122424.62377929688,
+            "unit": "ns",
+            "range": "± 8773.512231837509"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 100000)",
+            "value": 449101.5465494792,
+            "unit": "ns",
+            "range": "± 25457.247941729776"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 100000)",
+            "value": 312623.69547526044,
+            "unit": "ns",
+            "range": "± 11409.229586721442"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 0)",
+            "value": 10695.161295572916,
+            "unit": "ns",
+            "range": "± 213.9271421424588"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 0)",
+            "value": 1682.8994026184082,
+            "unit": "ns",
+            "range": "± 3.540853513954999"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 64)",
+            "value": 770020.1087239584,
+            "unit": "ns",
+            "range": "± 5212.025085104994"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 64)",
+            "value": 7613.255605061849,
+            "unit": "ns",
+            "range": "± 126.37341282969746"
           }
         ]
       }
