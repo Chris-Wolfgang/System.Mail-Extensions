@@ -8,7 +8,7 @@ namespace Wolfgang.Extensions.Mail.Tests.Unit;
 
 /// <summary>
 /// An address whose angle brackets hold nothing must be reported as malformed, not thrown:
-/// <see cref="System.Net.Mail.MailAddress"/> raises <see cref="ArgumentException"/> for an empty
+/// <see cref="System.Net.Mail.MailAddress"/> raises <see cref="System.ArgumentException"/> for an empty
 /// address, which lenient parsing has to treat like any other bad address (found by the fuzz run).
 /// </summary>
 public class EmlParserEmptyAddressTests
