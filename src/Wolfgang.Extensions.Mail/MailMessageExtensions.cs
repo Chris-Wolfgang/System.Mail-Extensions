@@ -152,6 +152,16 @@ public static class MailMessageExtensions
     /// The output is the message only: Bcc recipients are not written, and neither is the SMTP
     /// pickup-directory envelope (<c>X-Sender</c> / <c>X-Receiver</c>). Non-ASCII header values are
     /// RFC 2047-encoded.
+    /// <para>
+    /// The text is what <see cref="System.Net.Mail.SmtpClient"/> would send for the same message,
+    /// quirks included. One of them: an ASCII display name is written inside quotes without escaping a
+    /// double quote (<c>"</c>) or backslash (<c>\</c>) in it. <c>new MailAddress("x@example.com", "x\"y")</c>
+    /// becomes <c>"x"y" &lt;x@example.com&gt;</c>, which RFC 5322 readers, <see cref="EmlParser"/>
+    /// included, reject as malformed. An unescaped backslash is read by strict RFC 5322 readers as an
+    /// escape and dropped (<see cref="EmlParser"/> keeps it). Keep those characters out of display
+    /// names, or format the address with
+    /// <see cref="MailAddressCollectionExtensions.FormatMailAddress"/>, which escapes them.
+    /// </para>
     /// </remarks>
     /// <param name="source">The <see cref="MailMessage"/> to serialize.</param>
     /// <returns>A string containing the complete MIME representation of the message.</returns>
