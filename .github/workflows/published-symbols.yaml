@@ -55,7 +55,9 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: |
+            10.0.x
+            11.0.x
 
       - name: Restore CI tools (sourcelink)
         # Pinned in .config/dotnet-tools.json; never installed unversioned.
@@ -68,8 +70,9 @@ jobs:
           id_lower="${PACKAGE_ID,,}"
           version="${INPUT_VERSION:-}"
           if [ -z "$version" ]; then
+            # jq, not a pipe into python3: Scorecard reads `curl | <interpreter>` as download-then-run.
             version=$(curl -fsS "https://api.nuget.org/v3-flatcontainer/${id_lower}/index.json" \
-              | python3 -c "import sys,json;v=[x for x in json.load(sys.stdin)['versions'] if '-' not in x];print(v[-1])")
+              | jq -r '[.versions[] | select(contains("-") | not)] | last')
           fi
           echo "Checking ${PACKAGE_ID} ${version}"
           mkdir -p published/dll published/snupkg

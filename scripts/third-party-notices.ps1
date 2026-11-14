@@ -137,8 +137,10 @@ foreach ($proj in $projects) {
     foreach ($e in $entries) {
         if ($buildOnly.Contains($e.PackageId)) { continue }
         # SourceLink's build tasks flow in through a PrivateAssets="all" reference and
-        # are never distributed either.
-        if ($e.PackageId -like 'Microsoft.SourceLink.*' -or $e.PackageId -eq 'Microsoft.Build.Tasks.Git') { continue }
+        # are never distributed either. Nor are the .NET Framework reference assemblies:
+        # Microsoft.NETFramework.ReferenceAssemblies pulls in a per-TFM package
+        # (.net462, .net48, ...) that is only compiled against, never shipped.
+        if ($e.PackageId -like 'Microsoft.SourceLink.*' -or $e.PackageId -eq 'Microsoft.Build.Tasks.Git' -or $e.PackageId -like 'Microsoft.NETFramework.ReferenceAssemblies*') { continue }
         $key = "$($e.PackageId)|$($e.License)"
         if (-not $rows.ContainsKey($key)) {
             $rows[$key] = [ordered]@{

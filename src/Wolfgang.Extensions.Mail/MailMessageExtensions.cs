@@ -536,9 +536,14 @@ public static class MailMessageExtensions
             "This runtime version may not support MIME serialization via reflection."
         );
 
+        // SyncReadWriteAdapter sits next to the IReadWriteAdapter that constrains TIOAdapter, and
+        // that namespace moved from System.Net (.NET 10) to System (.NET 11), so read it from the
+        // constraint rather than naming it.
+        var adapterInterface = sendAsyncMethod.GetGenericArguments()[0].GetGenericParameterConstraints()[0];
+
         var syncAdapterType = RequireReflectionTarget
         (
-            typeof(SmtpClient).Assembly.GetType("System.Net.SyncReadWriteAdapter"),
+            adapterInterface.Assembly.GetType(adapterInterface.Namespace + ".SyncReadWriteAdapter"),
             "Unable to locate the internal SyncReadWriteAdapter type. " +
             "This runtime version may not support MIME serialization via reflection."
         );
