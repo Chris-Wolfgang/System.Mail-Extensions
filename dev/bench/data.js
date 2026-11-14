@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794694108601,
+  "lastUpdate": 1794699794133,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "BenchmarkDotNet": [
@@ -1680,6 +1680,126 @@ window.BENCHMARK_DATA = {
             "value": 4231.626792907715,
             "unit": "ns",
             "range": "± 11.033909605763629"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "d7ef43ec90bd9f52c4f91f4499c32f49602fdc28",
+          "message": "docs(mime): document that ToMimeString keeps MailWriter's unescaped quoted display names (#434)\n\n* docs(mime): document that ToMimeString keeps MailWriter's unescaped quoted display names\n\nToMimeString writes what SmtpClient would send (ADR-0002), and MailWriter\nquotes an ASCII display name without escaping a double quote or a\nbackslash inside it, so 'From: \"x\"y\" <x@example.com>' cannot be parsed\nback. Keep the SmtpClient-identical output and document the limitation in\nthe ToMimeString remarks and in ADR-0002's consequences, pointing at\nFormatMailAddress, which escapes both characters.\n\nCloses #366\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* docs: add changelog fragment for the ToMimeString display-name remarks\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-14T18:41:11-05:00",
+          "tree_id": "be08137cc820542be64c1fe550feec25adf470cb",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/d7ef43ec90bd9f52c4f91f4499c32f49602fdc28"
+        },
+        "date": 1794699791356,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1024)",
+            "value": 585.8455034891764,
+            "unit": "ns",
+            "range": "± 3.0738800694896495"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1024)",
+            "value": 1665.36070505778,
+            "unit": "ns",
+            "range": "± 39.9027307629745"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBytes(PayloadSizeBytes: 1048576)",
+            "value": 593.8803132375082,
+            "unit": "ns",
+            "range": "± 25.047256444669223"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.AttachmentFactoryBenchmarks.FromBase64(PayloadSizeBytes: 1048576)",
+            "value": 1036103.962890625,
+            "unit": "ns",
+            "range": "± 5868.1613481646245"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 1000)",
+            "value": 2037.8093096415203,
+            "unit": "ns",
+            "range": "± 60.14618784370097"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 1000)",
+            "value": 3869.574666341146,
+            "unit": "ns",
+            "range": "± 97.9094191363554"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 1000)",
+            "value": 6151.295572916667,
+            "unit": "ns",
+            "range": "± 62.2265834188496"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 1000)",
+            "value": 3733.1897735595703,
+            "unit": "ns",
+            "range": "± 29.553830891809007"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParsePlainText(PayloadSizeBytes: 100000)",
+            "value": 31068.46044921875,
+            "unit": "ns",
+            "range": "± 517.8763306647053"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseMultipartAlternative(PayloadSizeBytes: 100000)",
+            "value": 82432.4624633789,
+            "unit": "ns",
+            "range": "± 12383.605598855738"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseWithBase64Attachment(PayloadSizeBytes: 100000)",
+            "value": 280952.46728515625,
+            "unit": "ns",
+            "range": "± 3928.848803926957"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.EmlParserBenchmarks.ParseQuotedPrintable(PayloadSizeBytes: 100000)",
+            "value": 205652.43294270834,
+            "unit": "ns",
+            "range": "± 8649.891315116489"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 0)",
+            "value": 7706.495676676433,
+            "unit": "ns",
+            "range": "± 495.588585113819"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 0)",
+            "value": 1259.3417504628499,
+            "unit": "ns",
+            "range": "± 35.42967034163096"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.ToMimeString(AttachmentSizeKb: 64)",
+            "value": 518241.4654947917,
+            "unit": "ns",
+            "range": "± 34732.8472652856"
+          },
+          {
+            "name": "Wolfgang.Extensions.Mail.Benchmarks.MimeSerializationBenchmarks.Clone(AttachmentSizeKb: 64)",
+            "value": 4513.443323771159,
+            "unit": "ns",
+            "range": "± 72.1392779438049"
           }
         ]
       }
