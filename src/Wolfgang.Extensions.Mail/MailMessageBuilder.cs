@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -141,6 +142,12 @@ public sealed class MailMessageBuilder
     /// <returns>This builder instance for chaining.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="address"/> is null.</exception>
     /// <exception cref="FormatException"><paramref name="address"/> is not a valid email address.</exception>
+    [SuppressMessage
+    (
+        "Major Code Smell",
+        "S1133:Deprecated code should be removed",
+        Justification = "Deprecated in a minor release so callers get a warning first; removal is reserved for the next major version."
+    )]
     [Obsolete("A call with two strings binds here, not to To(params string[]), and adds one recipient with a display name. Use To(new MailAddress(address, displayName)) for a display name, or To(new[] { a, b }) / chained To calls for several addresses.")]
     public MailMessageBuilder To
     (
