@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794590420732,
+  "lastUpdate": 1794751253793,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "Mutation score": [
@@ -161,6 +161,33 @@ window.BENCHMARK_DATA = {
           {
             "name": "Mutation score (tests/Wolfgang.Extensions.Mail.Tests.Unit)",
             "value": 92.19,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang",
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "d7ef43ec90bd9f52c4f91f4499c32f49602fdc28",
+          "message": "docs(mime): document that ToMimeString keeps MailWriter's unescaped quoted display names (#434)\n\n* docs(mime): document that ToMimeString keeps MailWriter's unescaped quoted display names\n\nToMimeString writes what SmtpClient would send (ADR-0002), and MailWriter\nquotes an ASCII display name without escaping a double quote or a\nbackslash inside it, so 'From: \"x\"y\" <x@example.com>' cannot be parsed\nback. Keep the SmtpClient-identical output and document the limitation in\nthe ToMimeString remarks and in ADR-0002's consequences, pointing at\nFormatMailAddress, which escapes both characters.\n\nCloses #366\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* docs: add changelog fragment for the ToMimeString display-name remarks\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-14T23:41:11Z",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/d7ef43ec90bd9f52c4f91f4499c32f49602fdc28"
+        },
+        "date": 1794751248638,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Mutation score (tests/Wolfgang.Extensions.Mail.Tests.Unit)",
+            "value": 93.48,
             "unit": "%"
           }
         ]
