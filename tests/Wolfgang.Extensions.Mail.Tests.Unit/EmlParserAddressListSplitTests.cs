@@ -1,4 +1,3 @@
-using System.Linq;
 using Xunit;
 using Assert = Xunit.Assert;
 
@@ -24,7 +23,11 @@ public class EmlParserAddressListSplitTests
         );
         using var msg = result.Message;
 
-        var issue = Assert.Single(result.Issues.Where(i => string.Equals(i.PropertyName, "To", System.StringComparison.Ordinal)));
+        var issue = Assert.Single
+        (
+            result.Issues,
+            i => string.Equals(i.PropertyName, "To", System.StringComparison.Ordinal)
+        );
         Assert.Contains("'Name <a,b@example.com>'", issue.Message, System.StringComparison.Ordinal);
     }
 
