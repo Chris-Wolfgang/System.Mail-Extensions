@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794751253793,
+  "lastUpdate": 1795358138106,
   "repoUrl": "https://github.com/Chris-Wolfgang/System.Mail-Extensions",
   "entries": {
     "Mutation score": [
@@ -188,6 +188,33 @@ window.BENCHMARK_DATA = {
           {
             "name": "Mutation score (tests/Wolfgang.Extensions.Mail.Tests.Unit)",
             "value": 93.48,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang",
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "1a2c4cac26043e1f63d9df8b16edea37f8a64f5e",
+          "message": "test(parser): use the filtering Assert.Single overload in the address-list split test (#449)\n\nFixes InspectCode xUnit2031 (code-scanning alert 485).\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-21T00:09:45Z",
+          "url": "https://github.com/Chris-Wolfgang/System.Mail-Extensions/commit/1a2c4cac26043e1f63d9df8b16edea37f8a64f5e"
+        },
+        "date": 1795358132814,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Mutation score (tests/Wolfgang.Extensions.Mail.Tests.Unit)",
+            "value": 93.69,
             "unit": "%"
           }
         ]
