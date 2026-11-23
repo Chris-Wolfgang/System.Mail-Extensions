@@ -17,6 +17,7 @@ otherwise be re-derived - usually worse - six months later. The format is Michae
 
 | ADR | Decision | Status | Date |
 |---|---|---|---|
+| [ADR-0000](0000-record-architecture-decisions.md) | Record architecture decisions | Accepted | 2026-11-20 |
 | [ADR-0001](0001-pin-assemblyversion.md) | Pin `AssemblyVersion` at `1.0.0.0` | Accepted | 2026-05-28 |
 | [ADR-0002](0002-tomimestring-reuses-the-internal-mailwriter.md) | `ToMimeString` reuses System.Net.Mail's internal `MailWriter` through reflection | Accepted | 2026-04-15 |
 | [ADR-0003](0003-lenient-dependency-free-eml-parser.md) | `EmlParser` is a lenient, dependency-free parser with opt-in strict mode | Accepted | 2026-07-06 |
