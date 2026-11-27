@@ -13,14 +13,18 @@ answers the stronger question: do the published binaries follow from the publish
 - The **DLLs and PDBs inside the packages** are reproducible: `Directory.Build.props` sets
   `Deterministic`, and `ContinuousIntegrationBuild` (with `CI=true`) maps source paths, so two
   builds of the same commit on the same OS produce byte-identical files.
-  `.github/workflows/reproducible-build.yaml` checks that on every pull request by building twice
-  from two directories on Linux and on Windows.
+  `.github/workflows/reproducible-build.yaml` checks that on every pull request: its
+  `Reproducible build` job packs the commit twice on Ubuntu, with a full `git clean` in between,
+  and fails unless every `.dll`/`.pdb` is byte-identical and every package matches entry by entry;
+  its `Reproducible build (Windows report)` job packs once on Windows and reports, without failing,
+  how its hashes compare with the Ubuntu ones.
 - The **`.nupkg` / `.snupkg` files themselves are not**: the zip container carries timestamps and
   per-pack identifiers, and nuget.org adds its repository signature to every package it serves. Do
   not compare package hashes; compare the files inside.
 - **Same OS only.** The SDK writes generated `obj/*.AssemblyInfo.cs` files with the OS newline and
-  the PDB records their checksums, so a Linux build does not match a Windows build byte-for-byte
-  even though the IL is identical. Releases are built on **Windows** (`release.yaml`'s
+  the PDB records their checksums. `Directory.Build.targets` rewrites them to LF
+  (`NormalizeGeneratedLineEndings`), but cross-OS identity is only reported (by the Windows report
+  job above), not promised. Releases are built on **Windows** (`release.yaml`'s
   `pack-and-validate` job runs on `windows-latest`), so rebuild on Windows.
 
 ## Expected hashes: `reproducible-build-manifest.json`
@@ -49,12 +53,33 @@ The `files` map is what you compare against: one SHA-256 per `.dll` and `.pdb` i
 `.nupkg` and `.snupkg`. Releases published before the manifest step was added do not have this
 asset; for those, compare against the files inside the package downloaded from nuget.org.
 
+## Expected hashes: `SHA256SUMS.txt` and `BUILD-MANIFEST.txt`
+
+Releases cut after these assets were added also carry two text files, written by `release.yaml`
+in `pack-and-validate` right after packing:
+
+| Asset | Contents |
+|---|---|
+| `SHA256SUMS.txt` | `<sha256>  <tfm>/<file>` for every `.dll`/`.pdb` in `src/*/bin/Release/<tfm>/` (the files that were packed), and `<sha256>  <package-file>` for every `.nupkg`/`.snupkg` as built |
+| `BUILD-MANIFEST.txt` | tag, commit, workflow run URL, exact SDK version (`dotnet --version`), runner OS and image, and the `CI` / `ContinuousIntegrationBuild` / `Deterministic` values |
+
+Use the `dotnet-sdk:` line of `BUILD-MANIFEST.txt` as the SDK to install. The package hashes in
+`SHA256SUMS.txt` are of the packages before nuget.org signed them, so, as above, compare the
+`.dll`/`.pdb` lines, not the package lines, with your rebuild.
+
+Both files, like the `.nupkg` files, are subjects of the release's build-provenance attestation:
+
+```powershell
+gh attestation verify SHA256SUMS.txt --repo Chris-Wolfgang/System.Mail-Extensions
+gh attestation verify BUILD-MANIFEST.txt --repo Chris-Wolfgang/System.Mail-Extensions
+```
+
 ## Tooling
 
 | Tool | Version |
 |---|---|
 | OS | Windows (x64) |
-| .NET SDK | The `10.0.x` SDK the release used. The repository has no `global.json`, so `release.yaml` takes the newest 10.0 SDK `actions/setup-dotnet` installs that day; the exact version is printed in the release run's "Setup .NET" step (linked from the GitHub Release's workflow run). Use the same feature band (for example `10.0.4xx`). |
+| .NET SDK | The SDK the release used: the `dotnet-sdk:` line of the release's `BUILD-MANIFEST.txt`. `global.json` pins the major and feature band (`rollForward: latestFeature`); install that exact version and check that `dotnet --version` prints it from inside the clone. For a release without `BUILD-MANIFEST.txt`, the version is printed in the release run's "Setup .NET" step (linked from the GitHub Release's workflow run). |
 | Git | Any; the clone must have `origin` set to `https://github.com/Chris-Wolfgang/System.Mail-Extensions.git`, because SourceLink embeds the remote URL in the PDB. |
 | PowerShell 7 | Only if you use the comparison snippet below. |
 
@@ -98,6 +123,23 @@ foreach ($pkg in $manifest.packages) {
 
 Download `reproducible-build-manifest.json` from the release's assets first (for example
 `gh release download v0.4.0 --repo Chris-Wolfgang/System.Mail-Extensions --pattern reproducible-build-manifest.json`).
+
+For a release that carries `SHA256SUMS.txt`, the same rebuild can also be checked against it. Step
+2 leaves the assemblies in `src/*/bin/Release/<tfm>/`, keyed exactly as in the file:
+
+```powershell
+# 4. Compare the rebuilt .dll/.pdb files with SHA256SUMS.txt (download it from the release first).
+$mismatch = 0
+foreach ($line in Get-Content SHA256SUMS.txt) {
+    $expected, $name = $line -split '  ', 2
+    if ($name -notmatch '\.(dll|pdb)$') { continue }   # package lines: see "What is reproducible"
+    $found = Get-ChildItem src -Recurse -File -Filter (Split-Path $name -Leaf) |
+        Where-Object { $_.FullName.Replace('\', '/') -like "*/bin/Release/$name" }
+    $hash = if ($found) { (Get-FileHash $found[0].FullName -Algorithm SHA256).Hash.ToLowerInvariant() }
+    if ($hash -ne $expected) { $mismatch++; Write-Host "DIFFERS  $name" } else { Write-Host "matches  $name" }
+}
+"$mismatch file(s) differ"
+```
 
 ## Reporting a discrepancy
 
